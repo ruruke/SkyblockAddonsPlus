@@ -1,7 +1,8 @@
-package moe.ruruke.skyblock.utils.data;
+package moe.ruruke.skyblock.utils.data
 
-class DataConstants {
-    static final String CDN_BASE_URL = "https://cdn.jsdelivr.net/gh/BiscuitDevelopment/SkyblockAddons-Data@%s/";
-    static final String FALLBACK_CDN_BASE_URL = "https://fastly.jsdelivr.net/gh/BiscuitDevelopment/SkyblockAddons-Data@%s/";
-    static final String GITHUB_BASE_URL = "https://raw.githubusercontent.com/BiscuitDevelopment/SkyblockAddons-Data/main/";
+internal object DataConstants {
+    const val CDN_BASE_URL: String = "https://cdn.jsdelivr.net/gh/BiscuitDevelopment/SkyblockAddons-Data@%s/"
+    const val FALLBACK_CDN_BASE_URL: String =
+        "https://fastly.jsdelivr.net/gh/BiscuitDevelopment/SkyblockAddons-Data@%s/"
+    const val GITHUB_BASE_URL: String = "https://raw.githubusercontent.com/BiscuitDevelopment/SkyblockAddons-Data/main/"
 }

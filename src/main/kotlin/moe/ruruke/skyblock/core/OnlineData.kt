@@ -29,6 +29,10 @@ class OnlineData {
 
     private val hypixelBrands: HashSet<Pattern>? = null
 
+    fun getDisabledFeatures(): HashMap<String, List<Int>>? {
+        return disabledFeatures
+    }
+
     class DropSettings {
         //        private ItemRarity minimumInventoryRarity;
         //        private ItemRarity minimumHotbarRarity;

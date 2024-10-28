@@ -3,13 +3,13 @@ package moe.ruruke.skyblock.utils
 import com.google.common.collect.Sets
 import moe.ruruke.skyblock.SkyblockAddonsPlus
 import net.minecraft.client.Minecraft
-import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.client.multiplayer.WorldClient
 import net.minecraft.util.ChatComponentText
 import net.minecraft.world.WorldSettings
 import net.minecraft.world.WorldType
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.common.MinecraftForge
+import java.awt.Color
 import java.util.regex.Pattern
 
 
@@ -49,6 +49,8 @@ class Utils {
      */
     private val SLAYER_PROGRESS_REGEX: Pattern =
         Pattern.compile("(?<progress>[0-9.k]*)/(?<total>[0-9.k]*) (?:Kills|Combat XP)$")
+    private val profileName = "Unknown"
+    fun getProfileName(): String {return profileName}
 
     /**
      * A dummy world object used for spawning fake entities for GUI features without affecting the actual world
@@ -88,6 +90,10 @@ class Utils {
         }
     }
 
+    fun getDefaultColor(alphaFloat: Float): Int {
+        val alpha = alphaFloat.toInt()
+        return Color(150, 236, 255, alpha).rgb
+    }
     //TODO: まだ移植できない。
 //    fun isOnHypiel():  Boolean {
 //        var player: EntityPlayerSP = Minecraft.getMinecraft().thePlayer as EntityPlayerSP ?: return false;

@@ -1,38 +1,29 @@
-package moe.ruruke.skyblock.utils.data;
+package moe.ruruke.skyblock.utils.data
 
-import org.apache.http.concurrent.FutureCallback;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.net.URI;
+import org.apache.http.concurrent.FutureCallback
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
+import java.net.URI
 
 /**
- * This is a simple {@link FutureCallback} to log the result of a request for debugging.
+ * This is a simple [FutureCallback] to log the result of a request for debugging.
  *
  * @param <T> the type of the result, unused
- */
-public class DataFetchCallback<T> implements FutureCallback<T> {
-    private final Logger LOGGER;
-    private final String URL_STRING;
+</T> */
+class DataFetchCallback<T>(url: URI) : FutureCallback<T> {
+    private val LOGGER: Logger = LogManager.getLogger()
+    private val URL_STRING = url.toString()
 
-    public DataFetchCallback(URI url) {
-        LOGGER = LogManager.getLogger();
-        this.URL_STRING = url.toString();
+    override fun completed(result: T) {
+        LOGGER.debug("Successfully fetched {}", URL_STRING)
     }
 
-    @Override
-    public void completed(T result) {
-        LOGGER.debug("Successfully fetched {}", URL_STRING);
+    override fun failed(ex: Exception) {
+        LOGGER.error("Failed to fetch {}", URL_STRING)
+        LOGGER.error(ex.message)
     }
 
-    @Override
-    public void failed(Exception ex) {
-        LOGGER.error("Failed to fetch {}", URL_STRING);
-        LOGGER.error(ex.getMessage());
-    }
-
-    @Override
-    public void cancelled() {
-        LOGGER.debug("Cancelled fetching {}", URL_STRING);
+    override fun cancelled() {
+        LOGGER.debug("Cancelled fetching {}", URL_STRING)
     }
 }

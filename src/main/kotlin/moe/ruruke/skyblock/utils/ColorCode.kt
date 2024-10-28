@@ -7,7 +7,7 @@ import java.util.*
 /**
  * @author Brian Graham (CraftedFury)
  */
-enum class ColorCode @JvmOverloads constructor(
+enum class ColorCode(
     val code: Char,
     val isFormat: Boolean,
     private val jsonName: String?,
@@ -38,7 +38,7 @@ enum class ColorCode @JvmOverloads constructor(
     CHROMA('z', 0xFFFFFE);
 
     private val toString: String
-    val color: Int
+    private val color: Int
 
     @JvmOverloads
     constructor(code: Char, rgb: Int = -1) : this(code, false, rgb)
@@ -53,9 +53,13 @@ enum class ColorCode @JvmOverloads constructor(
 
     val colorObject: Color
         get() = Color(color)
-
     fun getColor(alpha: Int): Int {
         return ColorUtils.setColorAlpha(color, alpha)
+    }
+
+    @JvmName("getColor")
+    fun getColor(): Int {
+        return color
     }
 
     fun getJsonName(): String {

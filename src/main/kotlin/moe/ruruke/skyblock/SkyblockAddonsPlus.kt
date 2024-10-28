@@ -1,16 +1,23 @@
 package moe.ruruke.skyblock
 
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import moe.ruruke.skyblock.command.SkyblockAddonsPlusCommand
+import moe.ruruke.skyblock.config.ConfigValues
 import moe.ruruke.skyblock.config.TestConfig
 import moe.ruruke.skyblock.core.OnlineData
 import moe.ruruke.skyblock.utils.SkyblockAddonsMessageFactory
 import moe.ruruke.skyblock.utils.Utils
 import moe.ruruke.skyblock.utils.data.DataUtils
+import moe.ruruke.skyblock.utils.gson.GsonInitializableTypeAdapter
+import moe.ruruke.skyblock.utils.gson.PatternAdapter
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import java.util.*
+import java.util.regex.Pattern
 
 
 /**
@@ -29,7 +36,17 @@ class SkyblockAddonsPlus() {
         const val NAME: String = "SkyblockAddonsPlus"
         const val VERSION: String = "1.0.0"
 
+        @kotlin.jvm.JvmField
+        var registeredFeatureIDs: MutableSet<Int> = HashSet()
+        val configValues: ConfigValues? = null
+        private val GSON: Gson = GsonBuilder()
+            .setPrettyPrinting()
+            .registerTypeAdapterFactory(GsonInitializableTypeAdapter())
+            .registerTypeAdapter(Pattern::class.java, PatternAdapter())
+            .create()
         var utils: Utils? = null;
+
+//        private val inventoryUtils: InventoryUtils? = null
         var instance: SkyblockAddonsPlus? = null
         var onlineData: OnlineData? = null
 
@@ -42,6 +59,9 @@ class SkyblockAddonsPlus() {
             val simpleClassName = fullClassName.substring(fullClassName.lastIndexOf('.') + 1)
 
             return LogManager.getLogger(fullClassName, SkyblockAddonsMessageFactory(simpleClassName))
+        }
+        fun getGson(): Gson {
+            return GSON
         }
 
     }
@@ -57,7 +77,6 @@ class SkyblockAddonsPlus() {
 //        CommandManager.INSTANCE.registerCommand(ExampleCommand())
 //        CommandManager.INSTANCE.registerCommand(ExampleCommand())
     }
-
     init {
         instance = this
         utils = Utils()

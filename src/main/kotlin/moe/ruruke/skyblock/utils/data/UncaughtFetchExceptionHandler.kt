@@ -1,23 +1,18 @@
-package moe.ruruke.skyblock.utils.data;
+package moe.ruruke.skyblock.utils.data
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 
 /**
- * A simple {@link Thread.UncaughtExceptionHandler} that prints the thread name,
+ * A simple [Thread.UncaughtExceptionHandler] that prints the thread name,
  * exception message, and list of incomplete fetch requests when a data fetching thread in
- * {@link DataUtils} throws an uncaught exception.
+ * [DataUtils] throws an uncaught exception.
  */
-public class UncaughtFetchExceptionHandler implements Thread.UncaughtExceptionHandler {
-    private final Logger logger;
+class UncaughtFetchExceptionHandler : Thread.UncaughtExceptionHandler {
+    private val logger: Logger = LogManager.getLogger()
 
-    public UncaughtFetchExceptionHandler() {
-        this.logger = LogManager.getLogger();
-    }
-
-    @Override
-    public void uncaughtException(Thread t, Throwable e) {
-        logger.error("Exception in thread \"{}\"", t.getName());
-        logger.error(e.getMessage());
+    override fun uncaughtException(t: Thread, e: Throwable) {
+        logger.error("Exception in thread \"{}\"", t.name)
+        logger.error(e.message)
     }
 }

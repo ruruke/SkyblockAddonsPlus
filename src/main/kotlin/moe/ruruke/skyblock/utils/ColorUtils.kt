@@ -90,27 +90,34 @@ object ColorUtils {
 
     fun getColor(r: Int, g: Int, b: Int, a: Int): Int {
         return a shl 24 or (r shl 16) or (g shl 8) or b
-    } //    public static SkyblockColor getDummySkyblockColor(int color) {
-    //        return getDummySkyblockColor(SkyblockColor.ColorAnimation.NONE, color);
-    //    }
-    //
-    //    public static SkyblockColor getDummySkyblockColor(int r, int g, int b, int a) {
-    //        return getDummySkyblockColor(SkyblockColor.ColorAnimation.NONE, getColor(r, g, b, a));
-    //    }
-    //
-    //    public static SkyblockColor getDummySkyblockColor(int r, int g, int b, float a) {
-    //        return getDummySkyblockColor(r, g, b, getAlphaIntFromFloat(a));
-    //    }
-    //
-    //    public static SkyblockColor getDummySkyblockColor(SkyblockColor.ColorAnimation colorAnimation) {
-    //        return getDummySkyblockColor(colorAnimation, -1);
-    //    }
-    //
-    //    public static SkyblockColor getDummySkyblockColor(int color, boolean chroma) {
-    //        return getDummySkyblockColor(chroma ? SkyblockColor.ColorAnimation.CHROMA : SkyblockColor.ColorAnimation.NONE, color);
-    //    }
-    //
-    //    public static SkyblockColor getDummySkyblockColor(SkyblockColor.ColorAnimation colorAnimation, int color) {
-    //        return SKYBLOCK_COLOR.setColorAnimation(colorAnimation).setColor(color);
-    //    }
+    }
+
+
+    fun getDummySkyblockColor(color: Int): SkyblockColor {
+        return getDummySkyblockColor(SkyblockColor.ColorAnimation.NONE, color)
+    }
+
+    fun getDummySkyblockColor(r: Int, g: Int, b: Int, a: Int): SkyblockColor {
+        return getDummySkyblockColor(SkyblockColor.ColorAnimation.NONE, getColor(r, g, b, a))
+    }
+
+    fun getDummySkyblockColor(r: Int, g: Int, b: Int, a: Float): SkyblockColor {
+        return getDummySkyblockColor(r, g, b, getAlphaIntFromFloat(a))
+    }
+
+    fun getDummySkyblockColor(colorAnimation: SkyblockColor.ColorAnimation?): SkyblockColor {
+        return getDummySkyblockColor(colorAnimation, -1)
+    }
+
+    fun getDummySkyblockColor(color: Int, chroma: Boolean): SkyblockColor {
+        return getDummySkyblockColor(
+            if (chroma) SkyblockColor.ColorAnimation.CHROMA else SkyblockColor.ColorAnimation.NONE,
+            color
+        )
+    }
+
+    private val SKYBLOCK_COLOR: SkyblockColor = SkyblockColor()
+    fun getDummySkyblockColor(colorAnimation: SkyblockColor.ColorAnimation?, color: Int): SkyblockColor {
+        return SKYBLOCK_COLOR.setColorAnimation(colorAnimation).setColor(color)
+    }
 }

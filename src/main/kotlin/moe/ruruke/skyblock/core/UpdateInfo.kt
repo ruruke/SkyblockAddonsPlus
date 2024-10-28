@@ -1,16 +1,18 @@
-package moe.ruruke.skyblock.core;
+package moe.ruruke.skyblock.core
 
 
-public class UpdateInfo {
-    private String latestRelease;
-    private String releaseDownload;
+class UpdateInfo {
+    private val latestRelease: String? = null
+    private val releaseDownload: String? = null
+
     // Unused for now
-    private String releaseChangelog;
-    private String releaseShowcase;
+    private val releaseChangelog: String? = null
+    private val releaseShowcase: String? = null
 
-    private String latestBeta;
-    private String betaDownload;
+    private val latestBeta: String? = null
+    private val betaDownload: String? = null
+
     // Unused for now
-    private String betaChangelog;
-    private String betaShowcase;
+    private val betaChangelog: String? = null
+    private val betaShowcase: String? = null
 }

@@ -1,45 +1,39 @@
-package moe.ruruke.skyblock.core;
+package moe.ruruke.skyblock.core
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.regex.Pattern;
+import java.util.regex.Pattern
 
-public class OnlineData {
+class OnlineData {
+    private val bannerImageURL: String? = null
+    private val bannerLink: String? = null
 
-    private String bannerImageURL;
-    private String bannerLink;
+    private val updateInfo: UpdateInfo? = null
 
-    private UpdateInfo updateInfo;
-
-    private String languageJSONFormat;
+    private val languageJSONFormat: String? = null
 
     /**
      * This is the list of features in the mod that should be disabled. Features in this list will be disabled for all
      * versions of the mod v1.5.5 and above. The first key in this map is "all". It contains a list of features to be disabled
      * in all mod versions. Version numbers can be added as additional keys to disable features in specific mod versions.
      * An example of this is shown below:
-     * <br><br>
-     * {@code "1.5.5": [3]}
-     * <br><br>
-     * Versions must follow the semver format (e.g. {@code 1.6.0}) and cannot be pre-release versions (e.g. {@code 1.6.0-beta.10}).
+     * <br></br><br></br>
+     * `"1.5.5": [3]`
+     * <br></br><br></br>
+     * Versions must follow the semver format (e.g. `1.6.0`) and cannot be pre-release versions (e.g. `1.6.0-beta.10`).
      * Pre-release versions of the mod adhere to the disabled features list of their release version. For example, the version
-     * {@code 1.6.0-beta.10} will adhere to the list with the key {@code 1.6.0}. Disabling features for unique pre-release
+     * `1.6.0-beta.10` will adhere to the list with the key `1.6.0`. Disabling features for unique pre-release
      * versions is not supported.
      */
-    private HashMap<String, List<Integer>> disabledFeatures;
+    private val disabledFeatures: HashMap<String, List<Int>>? = null
 
-    private DropSettings dropSettings;
+    private val dropSettings: DropSettings? = null
 
-    private HashSet<Pattern> hypixelBrands;
+    private val hypixelBrands: HashSet<Pattern>? = null
 
-    public static class DropSettings {
+    class DropSettings {
+        //        private ItemRarity minimumInventoryRarity;
+        //        private ItemRarity minimumHotbarRarity;
+        private val dontDropTheseItems: List<String>? = null
 
-//        private ItemRarity minimumInventoryRarity;
-//        private ItemRarity minimumHotbarRarity;
-
-        private List<String> dontDropTheseItems;
-
-        private List<String> allowDroppingTheseItems;
+        private val allowDroppingTheseItems: List<String>? = null
     }
 }

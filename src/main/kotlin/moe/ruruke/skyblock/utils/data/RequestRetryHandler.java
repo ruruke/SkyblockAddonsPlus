@@ -17,7 +17,7 @@ public class RequestRetryHandler implements HttpRequestRetryHandler {
         if (executionCount >= MAX_RETRY_COUNT)  {
             DataUtils.useFallbackCDN = true;
         }
-    
+
         return executionCount <= MAX_RETRY_COUNT;
     }
 }

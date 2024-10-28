@@ -31,7 +31,7 @@ class SkyblockAddonsPlus() {
 
         var utils: Utils? = null;
         var instance: SkyblockAddonsPlus? = null
-//        var onlineData: OnlineData? = null
+        var onlineData: OnlineData? = null
 
         @Mod.Instance(MODID)
         var INSTANCE: SkyblockAddonsPlus? = null // Adds the instance of the mod, so we can access other variables.
@@ -50,9 +50,9 @@ class SkyblockAddonsPlus() {
     fun onInit(event: FMLInitializationEvent?) {
         config = TestConfig()
         ClientCommandHandler.instance.registerCommand(SkyblockAddonsPlusCommand())
-//        if (DataUtils.USE_ONLINE_DATA) {
-//            DataUtils.loadOnlineData();
-//        }
+        if (DataUtils.USE_ONLINE_DATA) {
+            DataUtils.loadOnlineData();
+        }
 
 //        CommandManager.INSTANCE.registerCommand(ExampleCommand())
 //        CommandManager.INSTANCE.registerCommand(ExampleCommand())

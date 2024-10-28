@@ -8,15 +8,11 @@ import net.minecraftforge.common.MinecraftForge
 
 
 class Utils {
+
     private var main = SkyblockAddonsPlus.instance;
-    static
-    val MESSAGE_PREFIX: String =
-        (ColorCode.GRAY + "[" + ColorCode.AQUA + SkyblockAddons.MOD_NAME + ColorCode.GRAY).toString() + "] "
-    static
-    val MESSAGE_PREFIX_SHORT: String =
-        ((ColorCode.GRAY + "[" + ColorCode.AQUA).toString() + "SBA" + ColorCode.GRAY).toString() + "] " + ColorCode.RESET
-
-
+    private val MESSAGE_PREFIX: String = ("§"+ColorCode.GRAY.code + "[" + ColorCode.AQUA + SkyblockAddonsPlus.NAME + ColorCode.GRAY) + "] "
+    private val MESSAGE_PREFIX_SHORT: String =
+        (("§"+ColorCode.GRAY.code + "[" + ColorCode.AQUA) + "SBA" + ColorCode.GRAY) + "] " + ColorCode.RESET
     fun sendMessage(text: String, prefix: Boolean) {
         val event = ClientChatReceivedEvent(1.toByte(), ChatComponentText((if (prefix) MESSAGE_PREFIX else "") + text))
         MinecraftForge.EVENT_BUS.post(event) // Let other mods pick up the new message
@@ -43,5 +39,4 @@ class Utils {
             Minecraft.getMinecraft().thePlayer.addChatMessage(event.message) // Just for logs
         }
     }
-
 }

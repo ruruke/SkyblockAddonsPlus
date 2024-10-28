@@ -23,15 +23,13 @@ class TestConfig : Config(Mod(SkyblockAddonsPlus.NAME, ModType.UTIL_QOL), Skyblo
         initialize()
     }
 
-    companion object {
-        @Switch(name = "Example Switch", size = OptionSize.SINGLE)
-        var exampleSwitch: Boolean = false // The default value for the boolean Switch.
+    @Switch(name = "Example Switch", size = OptionSize.SINGLE)
+    var exampleSwitch: Boolean = false // The default value for the boolean Switch.
 
-        @Slider(name = "Example Slider", min = 0f, max = 100f, step = 10)
-        var exampleSlider: Float = 50f // The default value for the float Slider.
+    @Slider(name = "Example Slider", min = 0f, max = 100f, step = 10)
+    var exampleSlider: Float = 50f // The default value for the float Slider.
 
-        @Dropdown(name = "Example Dropdown", options = ["Option 1", "Option 2", "Option 3", "Option 4"])
-        var exampleDropdown: Int = 1 // Default option (in this case "Option 2")
-    }
+    @Dropdown(name = "Example Dropdown", options = ["Option 1", "Option 2", "Option 3", "Option 4"])
+    var exampleDropdown: Int = 1 // Default option (in this case "Option 2")
 }
 

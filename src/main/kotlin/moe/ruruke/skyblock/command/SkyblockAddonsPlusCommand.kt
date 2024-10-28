@@ -4,10 +4,10 @@ import moe.ruruke.skyblock.SkyblockAddonsPlus
 import net.minecraft.command.CommandBase
 import net.minecraft.command.ICommandSender
 
-public class SkyblockAddonsPlusCommand : CommandBase {
+public class SkyblockAddonsPlusCommand : CommandBase() {
     private val HEADER: String = "§7§m----------------§7[ §b§lSkyblockAddonsPlus §7]§7§m----------------"
     private val FOOTER: String = "§7§m-----------------------------------------------------"
-    private val main = SkyblockAddonsPlus.instance
+    private val main = SkyblockAddonsPlus
     override fun getCommandName(): String {
         return "skyblockaddonsplus"
     }
@@ -30,5 +30,6 @@ public class SkyblockAddonsPlusCommand : CommandBase {
     }
 
     override fun processCommand(sender: ICommandSender?, args: Array<out String>?) {
+        main.utils!!.sendMessage("skyblockaddonsplus")
     }
 }

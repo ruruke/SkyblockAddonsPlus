@@ -45,7 +45,7 @@ object Translations {
 
 
             // Handle RTL text...
-            if ((SkyblockAddonsPlus.configValues.getLanguage() == Language.HEBREW || SkyblockAddonsPlus.configValues.getLanguage() == Language.ARABIC) &&
+            if ((SkyblockAddonsPlus.configValues!!.getLanguage() == Language.HEBREW || SkyblockAddonsPlus.configValues!!.getLanguage() == Language.ARABIC) &&
                 !Minecraft.getMinecraft().fontRendererObj.getBidiFlag()) {
                 text = bidiReorder(text);
             }

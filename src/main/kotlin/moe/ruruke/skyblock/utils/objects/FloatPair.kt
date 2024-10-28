@@ -1,57 +1,52 @@
-package moe.ruruke.skyblock.utils.objects;
+package moe.ruruke.skyblock.utils.objects
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.mutable.MutableFloat;
+import org.apache.commons.lang3.builder.EqualsBuilder
+import org.apache.commons.lang3.builder.HashCodeBuilder
+import org.apache.commons.lang3.mutable.MutableFloat
 
-public class FloatPair {
+class FloatPair(x: Float, y: Float) {
+    var x = x.toFloat()
+    var y = y.toFloat()
 
-    private MutableFloat x;
-    private MutableFloat y;
+//    fun getX(): Float {
+//        return x
+//    }
+//
+//    fun getY(): Float {
+//        return y
+//    }
+//
+//    fun setY(y: Float) {
+//        this.y = y
+//    }
+//
+//    fun setX(x: Float) {
+//        this.x = x
+//    }
 
-    public FloatPair(float x, float y) {
-        this.x = new MutableFloat(x);
-        this.y = new MutableFloat(y);
-    }
-
-    public float getX() {
-        return x.getValue();
-    }
-
-    public float getY() {
-        return y.getValue();
-    }
-
-    public void setY(float y) {
-        this.y.setValue(y);
-    }
-
-    public void setX(float x) {
-        this.x.setValue(x);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == null) { return false; }
-        if (other == this) { return true; }
-        if (other.getClass() != getClass()) {
-            return false;
+    override fun equals(other: Any?): Boolean {
+        if (other == null) {
+            return false
         }
-        FloatPair otherFloatPair = (FloatPair)other;
-        return new EqualsBuilder().append(getX(), otherFloatPair.getX()).append(getY(), otherFloatPair.getY()).isEquals();
+        if (other === this) {
+            return true
+        }
+        if (other.javaClass != javaClass) {
+            return false
+        }
+        val otherFloatPair = other as FloatPair
+        return EqualsBuilder().append(x, otherFloatPair.x).append(y, otherFloatPair.y).isEquals
     }
 
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(83, 11).append(getX()).append(getY()).toHashCode();
+    override fun hashCode(): Int {
+        return HashCodeBuilder(83, 11).append(x).append(y).toHashCode()
     }
 
-    @Override
-    public String toString() {
-        return getX()+"|"+getY();
+    override fun toString(): String {
+        return x.toString() + "|" + y
     }
 
-    public FloatPair cloneCoords() {
-        return new FloatPair(getX(), getY());
+    fun cloneCoords(): FloatPair {
+        return FloatPair(x, y)
     }
 }

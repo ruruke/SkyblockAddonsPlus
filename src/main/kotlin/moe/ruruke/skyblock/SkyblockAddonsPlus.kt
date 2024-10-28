@@ -14,6 +14,7 @@ import moe.ruruke.skyblock.utils.gson.PatternAdapter
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import java.util.*
@@ -38,7 +39,7 @@ class SkyblockAddonsPlus() {
 
         @kotlin.jvm.JvmField
         var registeredFeatureIDs: MutableSet<Int> = HashSet()
-        val configValues: ConfigValues? = null
+        var configValues: ConfigValues? = null
         private val GSON: Gson = GsonBuilder()
             .setPrettyPrinting()
             .registerTypeAdapterFactory(GsonInitializableTypeAdapter())
@@ -76,6 +77,15 @@ class SkyblockAddonsPlus() {
 
 //        CommandManager.INSTANCE.registerCommand(ExampleCommand())
 //        CommandManager.INSTANCE.registerCommand(ExampleCommand())
+    }
+
+    @Mod.EventHandler
+    fun preInit(e: FMLPreInitializationEvent) {
+        configValues = ConfigValues(e.suggestedConfigurationFile)
+//        persistentValuesManager = PersistentValuesManager(e.modConfigurationDirectory)
+        configValues!!.loadValues()
+//        DataUtils.readLocalAndFetchOnline()
+//        persistentValuesManager.loadValues()
     }
     init {
         instance = this

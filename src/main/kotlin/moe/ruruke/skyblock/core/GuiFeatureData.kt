@@ -5,11 +5,11 @@ import moe.ruruke.skyblock.utils.EnumUtils
 
 
 class GuiFeatureData {
-    private var defaultColor: ColorCode? = null
+    private var defaultColor: ColorCode? = ColorCode.RED
     private var drawType: EnumUtils.DrawType? = null
 
-    fun getDefaultColor(): ColorCode {
-        return defaultColor!!
+    fun getDefaultColor(): ColorCode? {
+        return defaultColor
     }
 
     fun getDrawType(): EnumUtils.DrawType {

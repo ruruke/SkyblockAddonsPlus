@@ -149,7 +149,7 @@ object EnchantManager {
             insertEnchants = ArrayList()
 
             // Get format for comma
-            val comma = Objects.requireNonNull(configValues).getRestrictedColor(Feature.ENCHANTMENT_COMMA_COLOR)
+            val comma = Objects.requireNonNull(configValues)!!.getRestrictedColor(Feature.ENCHANTMENT_COMMA_COLOR)
                 .toString() + COMMA
             val commaLength = fontRenderer.getStringWidth(comma)
 
@@ -177,7 +177,7 @@ object EnchantManager {
             insertEnchants = ArrayList()
             if (config.isEnabled(Feature.ENCHANTMENTS_HIGHLIGHT)) {
                 // Get format for comma
-                val comma = configValues.getRestrictedColor(Feature.ENCHANTMENT_COMMA_COLOR).toString() + COMMA
+                val comma = configValues!!.getRestrictedColor(Feature.ENCHANTMENT_COMMA_COLOR).toString() + COMMA
 
                 // Process each line of enchants
                 var i = 0
@@ -268,7 +268,7 @@ object EnchantManager {
                 val stackedEnchantNum = extraAttributes.getInteger(enchant.nbtNum)
                 val nextLevel = enchant.stackLevel!!.higher(stackedEnchantNum)
                 val statLabel = getMessage("enchants." + enchant.statLabel)
-                val colorCode = configValues.getRestrictedColor(Feature.SHOW_STACKING_ENCHANT_PROGRESS)
+                val colorCode = configValues!!.getRestrictedColor(Feature.SHOW_STACKING_ENCHANT_PROGRESS)
                 val b = StringBuilder()
                 b.append("§7").append(statLabel).append(": ").append(colorCode)
                 if (nextLevel == null) {

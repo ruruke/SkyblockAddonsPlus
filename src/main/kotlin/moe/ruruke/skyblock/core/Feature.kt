@@ -654,7 +654,7 @@ enum class Feature(
 
     val isColorFeature: Boolean
         get() {
-            return guiFeatureData != null && guiFeatureData.getDefaultColor() != null
+            return guiFeatureData?.getDefaultColor() != null
         }
 
 //    fun draw(scale: Float, mc: Minecraft?, buttonLocation: ButtonLocation?) {
@@ -874,8 +874,10 @@ enum class Feature(
         private const val ID_AT_PREVIOUS_UPDATE: Int = 199
 
         fun fromId(id: Int): Feature? {
+            print("ReqFromID : $id")
             for (feature: Feature in entries) {
-                if (feature.getId() === id) {
+                println("ReqFromID : $id == ${feature.getId()} == ${(feature.getId() == id)}")
+                if (feature.getId() == id) {
                     return feature
                 }
             }

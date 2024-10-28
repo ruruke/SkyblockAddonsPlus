@@ -93,7 +93,7 @@ repositories {
 dependencies {
     // Adds the OneConfig library, so we can develop with it.
     modCompileOnly("cc.polyfrost:oneconfig-$platform:0.2.2-alpha+")
-
+    compileOnly("org.jetbrains.kotlin:kotlin-reflect:1.9.10")
     // Adds DevAuth, which we can use to log in to Minecraft in development.
     modRuntimeOnly("me.djtheredstoner:DevAuth-${if (platform.isFabric) "fabric" else if (platform.isLegacyForge) "forge-legacy" else "forge-latest"}:1.2.0")
 //    shade("com.ibm.icu.text:normalizer:1.3.1")

@@ -2,10 +2,15 @@ package moe.ruruke.skyblock
 
 import moe.ruruke.skyblock.command.SkyblockAddonsPlusCommand
 import moe.ruruke.skyblock.config.TestConfig
+import moe.ruruke.skyblock.core.OnlineData
+import moe.ruruke.skyblock.utils.SkyblockAddonsMessageFactory
 import moe.ruruke.skyblock.utils.Utils
+import moe.ruruke.skyblock.utils.data.DataUtils
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 
 
 /**
@@ -26,16 +31,29 @@ class SkyblockAddonsPlus() {
 
         var utils: Utils? = null;
         var instance: SkyblockAddonsPlus? = null
+//        var onlineData: OnlineData? = null
 
         @Mod.Instance(MODID)
         var INSTANCE: SkyblockAddonsPlus? = null // Adds the instance of the mod, so we can access other variables.
         var config: TestConfig? = null
+
+        fun getLogger(): Logger {
+            val fullClassName = Throwable().stackTrace[1].className
+            val simpleClassName = fullClassName.substring(fullClassName.lastIndexOf('.') + 1)
+
+            return LogManager.getLogger(fullClassName, SkyblockAddonsMessageFactory(simpleClassName))
+        }
+
     }
     // Register the config and commands.
     @Mod.EventHandler
     fun onInit(event: FMLInitializationEvent?) {
         config = TestConfig()
         ClientCommandHandler.instance.registerCommand(SkyblockAddonsPlusCommand())
+//        if (DataUtils.USE_ONLINE_DATA) {
+//            DataUtils.loadOnlineData();
+//        }
+
 //        CommandManager.INSTANCE.registerCommand(ExampleCommand())
 //        CommandManager.INSTANCE.registerCommand(ExampleCommand())
     }

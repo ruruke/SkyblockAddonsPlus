@@ -52,7 +52,7 @@ loom {
 
     // Adds the tweak class if we are building legacy version of forge as per the documentation (https://docs.polyfrost.org)
     forge {
-        accessTransformer("./../../src/src/main/resources/META-INF/accesstransformer.cfg")
+        accessTransformer("./../../src/main/resources/META-INF/accesstransformer.cfg")
     }
     if (project.platform.isLegacyForge) {
         runConfigs {
@@ -85,9 +85,9 @@ val modShade: Configuration by configurations.creating {
 sourceSets {
     main {
         java.srcDir("src/main/kotlin")
-//        output.setResourcesDir(sourceSets.main.flatMap { it.java.classesDirectory })
-        output.setResourcesDir("./../../src/")
-        println("OUTPUTTTT!!!!!!!!!!!! "+output.resourcesDir)
+        output.setResourcesDir(sourceSets.main.flatMap { it.java.classesDirectory })
+//        output.setResourcesDir("./../../src/")
+//        println("OUTPUTTTT!!!!!!!!!!!! "+output.resourcesDir)
         kotlin.destinationDirectory.set(java.destinationDirectory)
     }
 }

@@ -100,5 +100,8 @@ class SkyblockAddonsTransformer : IClassTransformer {
         @kotlin.jvm.JvmField
         val isDeobfuscated: Boolean = Launch.blackboard["fml.deobfuscatedEnvironment"] as Boolean
         private val usingNotchMappings = !isDeobfuscated
+        fun isUsingNotchMappings(): Boolean {
+            return usingNotchMappings
+        }
     }
 }

@@ -21,7 +21,12 @@ enum class InventoryType(private val inventoryName: String, regex: String) {
     ENDER_CHEST("EnderChest", "Ender Chest \\((?<page>\\d+)/\\d+\\)");
 
     private val inventoryPattern: Pattern
-
+    fun  getInventoryPattern(): Pattern {
+        return inventoryPattern
+    }
+    fun getInventoryName(): String {
+        return inventoryName
+    }
     init {
         this.inventoryPattern = Pattern.compile(regex)
     }

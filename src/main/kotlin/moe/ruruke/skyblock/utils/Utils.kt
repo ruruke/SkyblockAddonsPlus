@@ -55,7 +55,7 @@ class Utils {
     /**
      * Get a player's attributes. This includes health, mana, and defence.
      */
-    private var attributes: MutableMap<Attribute, MutableFloat> = mutableMapOf()
+    var attributes: MutableMap<Attribute, MutableFloat> = mutableMapOf()
         get() = field
         set(value) {
             field = value

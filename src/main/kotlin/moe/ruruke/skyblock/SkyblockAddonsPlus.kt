@@ -13,6 +13,7 @@ import moe.ruruke.skyblock.core.OnlineData
 import moe.ruruke.skyblock.gui.listeners.PlayerListener
 import moe.ruruke.skyblock.misc.scheduler.NewScheduler
 import moe.ruruke.skyblock.misc.scheduler.Scheduler
+import moe.ruruke.skyblock.utils.InventoryUtils
 import moe.ruruke.skyblock.utils.SkyblockAddonsMessageFactory
 import moe.ruruke.skyblock.utils.Utils
 import moe.ruruke.skyblock.utils.data.DataUtils
@@ -73,6 +74,7 @@ class SkyblockAddonsPlus() {
 
         var scheduler: Scheduler? = null
         var newScheduler: NewScheduler? = null
+        private var inventoryUtils: InventoryUtils? = null
         val THREAD_EXECUTOR: ThreadPoolExecutor = ThreadPoolExecutor(
             0, 1, 60L, TimeUnit.SECONDS,
             LinkedBlockingDeque(), ThreadFactoryBuilder().setNameFormat(NAME + " - #%d").build()
@@ -80,8 +82,14 @@ class SkyblockAddonsPlus() {
         fun getNewConfigValue(): NewConfigValue {
             return config!!;
         }
+        fun getInventoryUtil(): InventoryUtils {
+            return inventoryUtils!!
+        }
         fun getOnlineData(): OnlineData? {
             return onlineData;
+        }
+        fun getPlayerListener(): PlayerListener {
+            return playerListener!!;
         }
         fun setOnlineData(_onlineData: OnlineData) {
             onlineData =  _onlineData
@@ -104,7 +112,6 @@ class SkyblockAddonsPlus() {
     // Register the config and commands.
     @Mod.EventHandler
     fun onInit(event: FMLInitializationEvent?) {
-
         config = NewConfigValue()
         ClientCommandHandler.instance.registerCommand(SkyblockAddonsPlusCommand())
         if (DataUtils.USE_ONLINE_DATA) {
@@ -126,7 +133,7 @@ class SkyblockAddonsPlus() {
         configValues = ConfigValues(e.suggestedConfigurationFile)
 //        persistentValuesManager = PersistentValuesManager(e.modConfigurationDirectory)
 //        configValues!!.loadValues()
-//        DataUtils.readLocalAndFetchOnline()
+        DataUtils.readLocalAndFetchOnline()
 //        persistentValuesManager.loadValues()
     }
 
@@ -134,6 +141,7 @@ class SkyblockAddonsPlus() {
         playerListener = PlayerListener()
         scheduler = Scheduler()
         newScheduler = NewScheduler()
+        inventoryUtils = InventoryUtils()
         utils = Utils()
     }
 }

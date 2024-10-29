@@ -5,7 +5,6 @@ import moe.ruruke.skyblock.SkyblockAddonsPlus
 import moe.ruruke.skyblock.config.ConfigValues
 import moe.ruruke.skyblock.utils.ColorCode
 import moe.ruruke.skyblock.utils.EnumUtils
-import net.minecraft.client.Minecraft
 import java.util.*
 
 
@@ -706,26 +705,43 @@ enum class Feature(
             return id > ID_AT_PREVIOUS_UPDATE
         }
 
-    var isEnabled: Boolean
-        get() {
-            val values: ConfigValues? = SkyblockAddonsPlus.configValues
-            return values != null && values.isEnabled(this)
-        }
+
+//    var isEnabled: Boolean
+//        get() {
+//            val values: ConfigValues? = SkyblockAddonsPlus.configValues
+//            return values != null && values.isEnabled(this)
+//        }
         /**
          * Sets whether the current feature is enabled.
          *
          * @param enabled `true` to enable the feature, `false` to disable it
          */
-        set(enabled) {
-            //TODO:
-//            if (enabled) {
-//                SkyblockAddonsPlus.configValues!!.discordDetails.remove(this)
-//            } else {
-//                SkyblockAddonsPlus.configValues!!.discordDetails.add(this)
-//            }
-            onToggle()
-        }
+//        set(enabled) {
+//            //TODO:
+////            if (enabled) {
+////                SkyblockAddonsPlus.configValues!!.discordDetails.remove(this)
+////            } else {
+////                SkyblockAddonsPlus.configValues!!.discordDetails.add(this)
+////            }
+//            onToggle()
+//        }
 
+    /**
+     * Sets whether the current feature is enabled.
+     *
+     * @param enabled `true` to enable the feature, `false` to disable it
+     */
+    fun setEnabled(enabled: Boolean) {
+        if (enabled) {
+//            SkyblockAddonsPlus.configValues!!.discordDetails.remove(this)
+        } else {
+//            SkyblockAddonsPlus.configValues!!.discordDetails.add(this)
+        }
+        onToggle()
+    }
+    fun isEnabled(): Boolean {
+        return false
+    }
     companion object {
         /**
          * These are "features" that are not actually features, but just hold the place of a setting. If you are adding any new settings and create

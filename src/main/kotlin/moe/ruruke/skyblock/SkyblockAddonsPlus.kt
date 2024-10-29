@@ -4,14 +4,16 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import moe.ruruke.skyblock.command.SkyblockAddonsPlusCommand
 import moe.ruruke.skyblock.config.ConfigValues
-import moe.ruruke.skyblock.config.TestConfig
+import moe.ruruke.skyblock.config.NewConfigValue
 import moe.ruruke.skyblock.core.OnlineData
+import moe.ruruke.skyblock.gui.listeners.PlayerListener
 import moe.ruruke.skyblock.utils.SkyblockAddonsMessageFactory
 import moe.ruruke.skyblock.utils.Utils
 import moe.ruruke.skyblock.utils.data.DataUtils
 import moe.ruruke.skyblock.utils.gson.GsonInitializableTypeAdapter
 import moe.ruruke.skyblock.utils.gson.PatternAdapter
 import net.minecraftforge.client.ClientCommandHandler
+import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
@@ -37,6 +39,7 @@ class SkyblockAddonsPlus() {
         const val NAME: String = "SkyblockAddonsPlus"
         const val VERSION: String = "1.0.0"
 
+        private var playerListener: PlayerListener? = null
         @kotlin.jvm.JvmField
         var registeredFeatureIDs: MutableSet<Int> = HashSet()
         var configValues: ConfigValues? = null
@@ -53,8 +56,11 @@ class SkyblockAddonsPlus() {
 
         @Mod.Instance(MODID)
         var INSTANCE: SkyblockAddonsPlus? = null // Adds the instance of the mod, so we can access other variables.
-        var config: TestConfig? = null
+        var config: NewConfigValue? = null
 
+        fun getNewConfigValue(): NewConfigValue {
+            return config!!;
+        }
         fun getLogger(): Logger {
             val fullClassName = Throwable().stackTrace[1].className
             val simpleClassName = fullClassName.substring(fullClassName.lastIndexOf('.') + 1)
@@ -65,15 +71,17 @@ class SkyblockAddonsPlus() {
             return GSON
         }
 
+
     }
     // Register the config and commands.
     @Mod.EventHandler
     fun onInit(event: FMLInitializationEvent?) {
-        config = TestConfig()
+        config = NewConfigValue()
         ClientCommandHandler.instance.registerCommand(SkyblockAddonsPlusCommand())
         if (DataUtils.USE_ONLINE_DATA) {
             DataUtils.loadOnlineData();
         }
+        MinecraftForge.EVENT_BUS.register(playerListener);
 
 //        CommandManager.INSTANCE.registerCommand(ExampleCommand())
 //        CommandManager.INSTANCE.registerCommand(ExampleCommand())
@@ -89,6 +97,7 @@ class SkyblockAddonsPlus() {
     }
     init {
         instance = this
+        playerListener = PlayerListener()
         utils = Utils()
     }
 }

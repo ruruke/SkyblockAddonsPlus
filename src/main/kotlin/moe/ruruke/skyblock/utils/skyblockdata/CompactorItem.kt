@@ -72,7 +72,7 @@ class CompactorItem : GsonInitializable {
         try {
             if (itemId != null) {
                 if (itemId == "skull") {
-                    itemStack = ItemUtils.createSkullItemStack(displayName, "", skullId, texture)
+                    itemStack = ItemUtils.createSkullItemStack(displayName, "", skullId, texture.toString())
                 } else {
                     val minecraftIdArray = itemId!!.split(":".toRegex(), limit = 2).toTypedArray()
                     val meta = if (minecraftIdArray.size == 2) minecraftIdArray[1].toInt() else 0

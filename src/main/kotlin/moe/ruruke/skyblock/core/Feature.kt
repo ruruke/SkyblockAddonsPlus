@@ -874,9 +874,7 @@ enum class Feature(
         private const val ID_AT_PREVIOUS_UPDATE: Int = 199
 
         fun fromId(id: Int): Feature? {
-            print("ReqFromID : $id")
             for (feature: Feature in entries) {
-                println("ReqFromID : $id == ${feature.getId()} == ${(feature.getId() == id)}")
                 if (feature.getId() == id) {
                     return feature
                 }

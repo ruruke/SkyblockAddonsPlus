@@ -53,6 +53,13 @@ class Utils {
     fun getProfileName(): String {return profileName}
 
     /**
+     * Whether the player is on skyblock.
+     */
+    private val onSkyblock = true // TODO: DEBUG でtrueにしてる
+    fun isOnSkyblock(): Boolean {
+        return onSkyblock
+    }
+    /**
      * A dummy world object used for spawning fake entities for GUI features without affecting the actual world
      */
     private val DUMMY_WORLD: WorldClient = WorldClient(

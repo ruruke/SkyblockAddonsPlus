@@ -1,93 +1,87 @@
-package moe.ruruke.skyblock.utils;
+package moe.ruruke.skyblock.utils
 
-import moe.ruruke.skyblock.SkyblockAddonsPlus;
-import moe.ruruke.skyblock.core.ItemRarity;
-import moe.ruruke.skyblock.core.ItemType;
-import moe.ruruke.skyblock.features.backpacks.BackpackColor;
-import moe.ruruke.skyblock.utils.skyblockdata.CompactorItem;
-import moe.ruruke.skyblock.utils.skyblockdata.ContainerData;
-import moe.ruruke.skyblock.utils.skyblockdata.PetInfo;
-import moe.ruruke.skyblock.utils.skyblockdata.Rune;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemPickaxe;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.*;
-import org.apache.commons.lang3.text.WordUtils;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static net.minecraftforge.common.util.Constants.NBT.*;
+import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.getGson
+import moe.ruruke.skyblock.core.ItemRarity
+import moe.ruruke.skyblock.core.ItemType
+import moe.ruruke.skyblock.features.backpacks.BackpackColor
+import moe.ruruke.skyblock.utils.TextUtils.Companion.encodeSkinTextureURL
+import moe.ruruke.skyblock.utils.TextUtils.Companion.stripColor
+import moe.ruruke.skyblock.utils.skyblockdata.CompactorItem
+import moe.ruruke.skyblock.utils.skyblockdata.ContainerData
+import moe.ruruke.skyblock.utils.skyblockdata.PetInfo
+import moe.ruruke.skyblock.utils.skyblockdata.Rune
+import net.minecraft.enchantment.Enchantment
+import net.minecraft.init.Items
+import net.minecraft.item.Item
+import net.minecraft.item.ItemPickaxe
+import net.minecraft.item.ItemStack
+import net.minecraft.nbt.*
+import net.minecraftforge.common.util.Constants.NBT
+import org.apache.commons.lang3.text.WordUtils
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.util.*
+import java.util.regex.Pattern
 
 /**
  * Utility methods for Skyblock Items
  */
-public class ItemUtils {
+object ItemUtils {
+    const val NBT_INTEGER: Int = 3
+    const val NBT_STRING: Int = 8
+    const val NBT_LIST: Int = 9
 
-    public static final int NBT_INTEGER = 3;
-    public static final int NBT_STRING = 8;
-    public static final int NBT_LIST = 9;
     /**
      * This expression matches the line with a Skyblock item's rarity and item type that's at the end of its lore.
      */
-    private static final Pattern ITEM_TYPE_AND_RARITY_PATTERN = Pattern.compile("§l(?<rarity>[A-Z]+) ?(?<type>[A-Z ]+)?(?:§[0-9a-f]§l§ka)?$");
-    @SuppressWarnings({"FieldMayBeFinal", "MismatchedQueryAndUpdateOfCollection"})
-    private static Map<String, CompactorItem> compactorItems;
+    private val ITEM_TYPE_AND_RARITY_PATTERN: Pattern =
+        Pattern.compile("§l(?<rarity>[A-Z]+) ?(?<type>[A-Z ]+)?(?:§[0-9a-f]§l§ka)?$")
+    private var compactorItems: Map<String, CompactorItem>? = null
 
-    public static void setCompactorItems(Map<String, CompactorItem> compactorItems) {
-        ItemUtils.compactorItems = compactorItems;
+    fun setCompactorItems(compactorItems: Map<String, CompactorItem>?) {
+        ItemUtils.compactorItems = compactorItems
     }
 
-    @SuppressWarnings({"FieldMayBeFinal", "MismatchedQueryAndUpdateOfCollection"})
-    private static Map<String, ContainerData> containers;
+    private var containers: Map<String?, ContainerData>? = null
 
-    public static void setContainers(Map<String, ContainerData> containers) {
-        ItemUtils.containers = containers;
+    fun setContainers(containers: Map<String?, ContainerData>?) {
+        ItemUtils.containers = containers
     }
 
     /**
      * Returns the rarity of a given Skyblock item. The rarity is read from the item's lore.
-     * The item must not be {@code null}.
+     * The item must not be `null`.
      *
-     * @param item the Skyblock item to check, can't be {@code null}
-     * @return the rarity of the item if a valid rarity is found, or {@code null} if item is {@code null} or no valid rarity is found
+     * @param item the Skyblock item to check, can't be `null`
+     * @return the rarity of the item if a valid rarity is found, or `null` if item is `null` or no valid rarity is found
      */
-    public static ItemRarity getRarity(ItemStack item) {
+    fun getRarity(item: ItemStack): ItemRarity? {
         if (item == null) {
-            throw new NullPointerException("The item cannot be null!");
+            throw NullPointerException("The item cannot be null!")
         }
-        if (!item.hasTagCompound())  {
-            return null;
+        if (!item.hasTagCompound()) {
+            return null
         }
 
-        return getRarity(getItemLore(item));
+        return getRarity(getItemLore(item))
     }
 
     /**
      * Returns the item type of a given Skyblock item.
-     * The item must not be {@code null}.
+     * The item must not be `null`.
      *
-     * @param item the Skyblock item to check, can't be {@code null}
-     * @return the item type of the item or {@code null} if no item type was found
+     * @param item the Skyblock item to check, can't be `null`
+     * @return the item type of the item or `null` if no item type was found
      */
-    public static ItemType getItemType(ItemStack item) {
+    fun getItemType(item: ItemStack): ItemType? {
         if (item == null) {
-            throw new NullPointerException("The item cannot be null!");
+            throw NullPointerException("The item cannot be null!")
         }
-        if (!item.hasTagCompound())  {
-            return null;
+        if (!item.hasTagCompound()) {
+            return null
         }
 
-        return getType(getItemLore(item));
+        return getType(getItemLore(item))
     }
 
     /**
@@ -97,93 +91,95 @@ public class ItemUtils {
      * @param personalCompactorSkyblockID The personal compactor skyblock ID (ex. ENCHANTED_ACACIA_LOG)
      * @return The itemstack that this personal compactor skyblock ID represents
      */
-    public static ItemStack getPersonalCompactorItemStack(String personalCompactorSkyblockID) {
-        CompactorItem compactorItem = compactorItems.get(personalCompactorSkyblockID);
-        return compactorItem != null ? compactorItem.getItemStack() : ItemUtils.createSkullItemStack("§7Unknown (" + personalCompactorSkyblockID + ")", Collections.singletonList("§6also biscut was here hi!!"), personalCompactorSkyblockID,
-                "724c64a2-fc8b-4842-852b-6b4c2c6ef241", "e0180f4aeb6929f133c9ff10476ab496f74c46cf8b3be6809798a974929ccca3");
+    fun getPersonalCompactorItemStack(personalCompactorSkyblockID: String): ItemStack? {
+        val compactorItem = compactorItems!![personalCompactorSkyblockID]
+        return if (compactorItem != null) compactorItem.itemStack else createSkullItemStack(
+            "§7Unknown ($personalCompactorSkyblockID)",
+            listOf("§6also biscut was here hi!!"),
+            personalCompactorSkyblockID,
+            "724c64a2-fc8b-4842-852b-6b4c2c6ef241",
+            "e0180f4aeb6929f133c9ff10476ab496f74c46cf8b3be6809798a974929ccca3"
+        )
     }
 
     /**
      * Returns data about the container that is passed in.
      *
      * @param skyblockID The skyblock ID of the container
-     * @return A {@link ContainerData} object containing info about the container in general
+     * @return A [ContainerData] object containing info about the container in general
      */
-    public static ContainerData getContainerData(String skyblockID) {
-        return containers.get(skyblockID);
+    fun getContainerData(skyblockID: String?): ContainerData? {
+        return containers!![skyblockID]
     }
 
     /**
      * Returns the Skyblock Item ID of a given Skyblock item
      *
      * @param item the Skyblock item to check
-     * @return the Skyblock Item ID of this item or {@code null} if this isn't a valid Skyblock item
+     * @return the Skyblock Item ID of this item or `null` if this isn't a valid Skyblock item
      */
-    public static String getSkyblockItemID(ItemStack item) {
+    fun getSkyblockItemID(item: ItemStack?): String? {
         if (item == null) {
-            return null;
+            return null
         }
 
-        NBTTagCompound extraAttributes = getExtraAttributes(item);
-        if (extraAttributes == null) {
-            return null;
+        val extraAttributes = getExtraAttributes(item) ?: return null
+
+        if (!extraAttributes.hasKey("id", NBT_STRING)) {
+            return null
         }
 
-        if (!extraAttributes.hasKey("id", ItemUtils.NBT_STRING)) {
-            return null;
-        }
-
-        return extraAttributes.getString("id");
+        return extraAttributes.getString("id")
     }
 
     /**
-     * Returns the {@code ExtraAttributes} compound tag from the item's NBT data. The item must not be {@code null}.
+     * Returns the `ExtraAttributes` compound tag from the item's NBT data. The item must not be `null`.
      *
      * @param item the item to get the tag from
-     * @return the item's {@code ExtraAttributes} compound tag or {@code null} if the item doesn't have one
+     * @return the item's `ExtraAttributes` compound tag or `null` if the item doesn't have one
      */
-    public static NBTTagCompound getExtraAttributes(ItemStack item) {
+    fun getExtraAttributes(item: ItemStack): NBTTagCompound? {
         if (item == null) {
-            throw new NullPointerException("The item cannot be null!");
+            throw NullPointerException("The item cannot be null!")
         }
         if (!item.hasTagCompound()) {
-            return null;
+            return null
         }
 
-        return item.getSubCompound("ExtraAttributes", false);
+        return item.getSubCompound("ExtraAttributes", false)
     }
 
 
     /**
-     * Returns the {@code enchantments} compound tag from the item's NBT data.
+     * Returns the `enchantments` compound tag from the item's NBT data.
      *
      * @param item the item to get the tag from
-     * @return the item's {@code enchantments} compound tag or {@code null} if the item doesn't have one
+     * @return the item's `enchantments` compound tag or `null` if the item doesn't have one
      */
-    public static NBTTagCompound getEnchantments(ItemStack item) {
-        NBTTagCompound extraAttributes = getExtraAttributes(item);
-        return extraAttributes == null ? null : extraAttributes.getCompoundTag("enchantments");
+    fun getEnchantments(item: ItemStack): NBTTagCompound? {
+        val extraAttributes = getExtraAttributes(item)
+        return extraAttributes?.getCompoundTag("enchantments")
     }
 
     /**
      * @return The Skyblock reforge of a given itemstack
      */
-    public static String getReforge(ItemStack item) {
+    fun getReforge(item: ItemStack): String? {
         if (item.hasTagCompound()) {
-            NBTTagCompound extraAttributes = item.getTagCompound();
+            var extraAttributes = item.tagCompound
             if (extraAttributes.hasKey("ExtraAttributes")) {
-                extraAttributes = extraAttributes.getCompoundTag("ExtraAttributes");
+                extraAttributes = extraAttributes.getCompoundTag("ExtraAttributes")
                 if (extraAttributes.hasKey("modifier")) {
-                    String reforge = WordUtils.capitalizeFully(extraAttributes.getString("modifier"));
+                    var reforge = WordUtils.capitalizeFully(extraAttributes.getString("modifier"))
 
-                    reforge = reforge.replace("_sword", ""); //fixes reforges like "Odd_sword"
-                    reforge = reforge.replace("_bow", "");
+                    reforge = reforge.replace("_sword", "") //fixes reforges like "Odd_sword"
+                    reforge = reforge.replace("_bow", "")
 
-                    return reforge;
+                    return reforge
                 }
             }
         }
-        return null;
+        return null
     }
 
     /**
@@ -191,49 +187,45 @@ public class ItemUtils {
      * since they are used to make dragon armor.
      *
      * @param itemStack the item to check
-     * @return {@code true} if this item is a material, {@code false} otherwise
+     * @return `true` if this item is a material, `false` otherwise
      */
     //TODO: Fix for Hypixel localization
-    public static boolean isMaterialForRecipe(ItemStack itemStack) {
-        List<String> lore = ItemUtils.getItemLore(itemStack);
-        for (String loreLine : lore) {
-            if ("Right-click to view recipes!".equals(TextUtils.Companion.stripColor(loreLine))) {
-                return true;
+    fun isMaterialForRecipe(itemStack: ItemStack?): Boolean {
+        val lore = getItemLore(itemStack)
+        for (loreLine in lore) {
+            if ("Right-click to view recipes!" == stripColor(loreLine)) {
+                return true
             }
         }
-        return false;
+        return false
     }
 
     /**
      * Checks if the given item is a mining tool (pickaxe or drill).
      *
      * @param itemStack the item to check
-     * @return {@code true} if this item is a pickaxe/drill, {@code false} otherwise
+     * @return `true` if this item is a pickaxe/drill, `false` otherwise
      */
-    public static boolean isMiningTool(ItemStack itemStack) {
-        return itemStack.getItem() instanceof ItemPickaxe || isDrill(itemStack);
+    fun isMiningTool(itemStack: ItemStack): Boolean {
+        return itemStack.item is ItemPickaxe || isDrill(itemStack)
     }
 
 
     /**
-     * Checks if the given {@code ItemStack} is a drill. It works by checking for the presence of the {@code drill_fuel} NBT tag,
+     * Checks if the given `ItemStack` is a drill. It works by checking for the presence of the `drill_fuel` NBT tag,
      * which only drills have.
      *
      * @param itemStack the item to check
-     * @return {@code true} if this item is a drill, {@code false} otherwise
+     * @return `true` if this item is a drill, `false` otherwise
      */
-    public static boolean isDrill(ItemStack itemStack) {
+    fun isDrill(itemStack: ItemStack?): Boolean {
         if (itemStack == null) {
-            return false;
+            return false
         }
 
-        NBTTagCompound extraAttributes = getExtraAttributes(itemStack);
+        val extraAttributes = getExtraAttributes(itemStack)
 
-        if (extraAttributes != null) {
-            return extraAttributes.hasKey("drill_fuel", TAG_INT);
-        } else {
-            return false;
-        }
+        return extraAttributes?.hasKey("drill_fuel", NBT.TAG_INT) ?: false
     }
 
 
@@ -241,401 +233,410 @@ public class ItemUtils {
      * Returns the Skyblock Item ID of a given Skyblock Extra Attributes NBT Compound
      *
      * @param extraAttributes the NBT to check
-     * @return the Skyblock Item ID of this item or {@code null} if this isn't a valid Skyblock NBT
+     * @return the Skyblock Item ID of this item or `null` if this isn't a valid Skyblock NBT
      */
-    public static String getSkyblockItemID(NBTTagCompound extraAttributes) {
+    fun getSkyblockItemID(extraAttributes: NBTTagCompound?): String? {
         if (extraAttributes == null) {
-            return null;
+            return null
         }
 
-        String itemId = extraAttributes.getString("id");
-        if (itemId.equals("")) {
-            return null;
+        val itemId = extraAttributes.getString("id")
+        if (itemId == "") {
+            return null
         }
 
-        return itemId;
+        return itemId
     }
 
     /**
-     * Checks if the given {@code ItemStack} is a backpack
+     * Checks if the given `ItemStack` is a backpack
      *
-     * @param stack the {@code ItemStack} to check
-     * @return {@code true} if {@code stack} is a backpack, {@code false} otherwise
+     * @param stack the `ItemStack` to check
+     * @return `true` if `stack` is a backpack, `false` otherwise
      */
-    public static boolean isBackpack(ItemStack stack) {
-        NBTTagCompound extraAttributes = getExtraAttributes(stack);
-        ContainerData containerData = containers.get(getSkyblockItemID(extraAttributes));
-        return containerData != null && containerData.isBackpack();
+    fun isBackpack(stack: ItemStack): Boolean {
+        val extraAttributes = getExtraAttributes(stack)
+        val containerData = containers!![getSkyblockItemID(extraAttributes)]
+        return containerData != null && containerData.isBackpack
     }
 
-    public static boolean isBuildersWand(ItemStack stack) {
-        NBTTagCompound extraAttributes = getExtraAttributes(stack);
-        ContainerData containerData = containers.get(getSkyblockItemID(extraAttributes));
-        return containerData != null && containerData.isBuildersWand();
+    fun isBuildersWand(stack: ItemStack): Boolean {
+        val extraAttributes = getExtraAttributes(stack)
+        val containerData = containers!![getSkyblockItemID(extraAttributes)]
+        return containerData != null && containerData.isBuildersWand
     }
 
     /**
-     * Gets the color of the backpack in the given {@code ItemStack}
+     * Gets the color of the backpack in the given `ItemStack`
      *
-     * @param stack the {@code ItemStack} containing the backpack
-     * @return The color of the backpack; or {@code WHITE} if there is no color; or {@code null} if it is not a container
+     * @param stack the `ItemStack` containing the backpack
+     * @return The color of the backpack; or `WHITE` if there is no color; or `null` if it is not a container
      */
-    public static BackpackColor getBackpackColor(ItemStack stack) {
-        NBTTagCompound extraAttributes = getExtraAttributes(stack);
-        ContainerData containerData = containers.get(getSkyblockItemID(extraAttributes));
+    fun getBackpackColor(stack: ItemStack): BackpackColor? {
+        val extraAttributes = getExtraAttributes(stack)
+        val containerData = containers!![getSkyblockItemID(extraAttributes)]
         if (extraAttributes != null) {
             if (containerData != null) {
                 try {
-                    return BackpackColor.valueOf(extraAttributes.getString(containerData.getColorTag()));
-                } catch (IllegalArgumentException ignored) {
+                    return BackpackColor.valueOf(extraAttributes.getString(containerData.colorTag))
+                } catch (ignored: IllegalArgumentException) {
                 }
-                return BackpackColor.WHITE;
+                return BackpackColor.WHITE
             } else if (extraAttributes.hasKey("backpack_color")) {
                 try {
-                    return BackpackColor.valueOf(extraAttributes.getString("backpack_color"));
-                } catch (IllegalArgumentException ignored) {
+                    return BackpackColor.valueOf(extraAttributes.getString("backpack_color"))
+                } catch (ignored: IllegalArgumentException) {
                 }
-                return BackpackColor.WHITE;
+                return BackpackColor.WHITE
             }
         }
 
-        return null;
+        return null
     }
 
     /**
      * Returns the Skyblock Reforge of a given Skyblock Extra Attributes NBT Compound
      *
      * @param extraAttributes the NBT to check
-     * @return the Reforge (in lowercase) of this item or {@code null} if this isn't a valid Skyblock NBT or reforge
+     * @return the Reforge (in lowercase) of this item or `null` if this isn't a valid Skyblock NBT or reforge
      */
-    public static String getReforge(NBTTagCompound extraAttributes) {
+    fun getReforge(extraAttributes: NBTTagCompound?): String? {
         if (extraAttributes != null && extraAttributes.hasKey("modifier", NBT_STRING)) {
-            return extraAttributes.getString("modifier");
+            return extraAttributes.getString("modifier")
         }
 
-        return null;
+        return null
     }
 
     /**
-     * Returns a {@link Rune} from the ExtraAttributes Skyblock data
+     * Returns a [Rune] from the ExtraAttributes Skyblock data
      * This can ge retrieved from a rune itself or an infused item
      *
      * @param extraAttributes the Skyblock Data to check
-     * @return A {@link Rune} or {@code null} if it doesn't have it
+     * @return A [Rune] or `null` if it doesn't have it
      */
-    public static Rune getRuneData(NBTTagCompound extraAttributes) {
+    fun getRuneData(extraAttributes: NBTTagCompound?): Rune? {
         if (extraAttributes != null) {
             if (!extraAttributes.hasKey("runes")) {
-                return null;
+                return null
             }
 
-            return new Rune(extraAttributes.getCompoundTag("runes"));
+            return Rune(extraAttributes.getCompoundTag("runes"))
         }
 
-        return null;
+        return null
     }
 
     /**
-     * Returns a {@link PetInfo} from the ExtraAttributes Skyblock data
+     * Returns a [PetInfo] from the ExtraAttributes Skyblock data
      *
      * @param extraAttributes the Skyblock Data to check
-     * @return A {@link PetInfo} or {@code null} if it isn't a pet
+     * @return A [PetInfo] or `null` if it isn't a pet
      */
-    public static PetInfo getPetInfo(NBTTagCompound extraAttributes) {
+    fun getPetInfo(extraAttributes: NBTTagCompound?): PetInfo? {
         if (extraAttributes != null) {
-            String itemId = extraAttributes.getString("id");
+            val itemId = extraAttributes.getString("id")
 
-            if (!itemId.equals("PET") || !extraAttributes.hasKey("petInfo")) {
-                return null;
+            if (itemId != "PET" || !extraAttributes.hasKey("petInfo")) {
+                return null
             }
 
-            return SkyblockAddonsPlus.Companion.getGson().fromJson(extraAttributes.getString("petInfo"), PetInfo.class);
+            return getGson().fromJson(
+                extraAttributes.getString("petInfo"),
+                PetInfo::class.java
+            )
         }
 
-        return null;
+        return null
     }
 
     /**
-     * Returns a string list containing the NBT lore of an {@code ItemStack}, or
+     * Returns a string list containing the NBT lore of an `ItemStack`, or
      * an empty list if this item doesn't have a lore tag.
-     * The itemStack argument must not be {@code null}. The returned lore list is unmodifiable since it has been
-     * converted from an {@code NBTTagList}.
+     * The itemStack argument must not be `null`. The returned lore list is unmodifiable since it has been
+     * converted from an `NBTTagList`.
      *
      * @param itemStack the ItemStack to get the lore from
      * @return the lore of an ItemStack as a string list
      */
-    public static List<String> getItemLore(ItemStack itemStack) {
+    fun getItemLore(itemStack: ItemStack?): List<String> {
         if (itemStack != null) {
             if (itemStack.hasTagCompound()) {
-                NBTTagCompound display = itemStack.getSubCompound("display", false);
+                val display = itemStack.getSubCompound("display", false)
 
-                if (display != null && display.hasKey("Lore", ItemUtils.NBT_LIST)) {
-                    NBTTagList lore = display.getTagList("Lore", ItemUtils.NBT_STRING);
+                if (display != null && display.hasKey("Lore", NBT_LIST)) {
+                    val lore = display.getTagList("Lore", NBT_STRING)
 
-                    List<String> loreAsList = new ArrayList<>();
-                    for (int lineNumber = 0; lineNumber < lore.tagCount(); lineNumber++) {
-                        loreAsList.add(lore.getStringTagAt(lineNumber));
+                    val loreAsList: MutableList<String> = ArrayList()
+                    for (lineNumber in 0 until lore.tagCount()) {
+                        loreAsList.add(lore.getStringTagAt(lineNumber))
                     }
 
-                    return Collections.unmodifiableList(loreAsList);
+                    return Collections.unmodifiableList(loreAsList)
                 }
             }
 
-            return Collections.emptyList();
+            return emptyList()
         } else {
-            throw new NullPointerException("Cannot get lore from null item!");
+            throw NullPointerException("Cannot get lore from null item!")
         }
     }
 
     /**
-     * Sets the lore text of a given {@code ItemStack}.
+     * Sets the lore text of a given `ItemStack`.
      *
-     * @param itemStack the {@code ItemStack} to set the lore for
+     * @param itemStack the `ItemStack` to set the lore for
      * @param lore the new lore
      */
-    public static void setItemLore(ItemStack itemStack, List<String> lore) {
-        NBTTagCompound display = itemStack.getSubCompound("display", true);
+    fun setItemLore(itemStack: ItemStack, lore: List<String>) {
+        val display = itemStack.getSubCompound("display", true)
 
-        NBTTagList loreTagList = new NBTTagList();
-        for (String loreLine : lore) {
-            loreTagList.appendTag(new NBTTagString(loreLine));
+        val loreTagList = NBTTagList()
+        for (loreLine in lore) {
+            loreTagList.appendTag(NBTTagString(loreLine))
         }
 
-        display.setTag("Lore", loreTagList);
+        display.setTag("Lore", loreTagList)
     }
 
     /**
-     * Check if the given {@code ItemStack} is an item shown in a menu as a preview or placeholder
+     * Check if the given `ItemStack` is an item shown in a menu as a preview or placeholder
      * (e.g. items in the recipe book).
      *
-     * @param itemStack the {@code ItemStack} to check
-     * @return {@code true} if {@code itemStack} is an item shown in a menu as a preview or placeholder, {@code false} otherwise
+     * @param itemStack the `ItemStack` to check
+     * @return `true` if `itemStack` is an item shown in a menu as a preview or placeholder, `false` otherwise
      */
-    public static boolean isMenuItem(ItemStack itemStack) {
+    fun isMenuItem(itemStack: ItemStack): Boolean {
         if (itemStack == null) {
-            throw new NullPointerException("Item stack cannot be null!");
+            throw NullPointerException("Item stack cannot be null!")
         }
 
-        NBTTagCompound extraAttributes = getExtraAttributes(itemStack);
-        if (extraAttributes != null) {
+        val extraAttributes = getExtraAttributes(itemStack)
+        return if (extraAttributes != null) {
             // If this item stack is a menu item, it won't have this key.
-            return !extraAttributes.hasKey("uuid");
+            !extraAttributes.hasKey("uuid")
         } else {
-            return false;
+            false
         }
     }
 
     /**
-     * Creates a new {@code ItemStack} instance with the given item and a fake enchantment to enable the enchanted "glint"
-     * effect if {@code enchanted} is true. This method should be used when you want to create a bare-bones {@code ItemStack}
+     * Creates a new `ItemStack` instance with the given item and a fake enchantment to enable the enchanted "glint"
+     * effect if `enchanted` is true. This method should be used when you want to create a bare-bones `ItemStack`
      * to render as part of a GUI.
      *
-     * @param item the {@code Item} the created {@code ItemStack} should be
-     * @param enchanted the item has the enchanted "glint" effect enabled if {@code true}, disabled if {@code false}
-     * @return a new {@code ItemStack} instance with the given item and a fake enchantment if applicable
+     * @param item the `Item` the created `ItemStack` should be
+     * @param enchanted the item has the enchanted "glint" effect enabled if `true`, disabled if `false`
+     * @return a new `ItemStack` instance with the given item and a fake enchantment if applicable
      */
-    public static ItemStack createItemStack(Item item, boolean enchanted) {
-        return createItemStack(item, 0, null, null, enchanted);
+    fun createItemStack(item: Item?, enchanted: Boolean): ItemStack {
+        return createItemStack(item, 0, null, null, enchanted)
     }
 
-    public static ItemStack createItemStack(Item item, String name, String skyblockID, boolean enchanted) {
-        return createItemStack(item, 0, name, skyblockID, enchanted);
+    fun createItemStack(item: Item?, name: String?, skyblockID: String?, enchanted: Boolean): ItemStack {
+        return createItemStack(item, 0, name, skyblockID, enchanted)
     }
 
-    public static ItemStack createItemStack(Item item, int meta, String name, String skyblockID, boolean enchanted) {
-        ItemStack stack = new ItemStack(item, 1, meta);
+    fun createItemStack(item: Item?, meta: Int, name: String?, skyblockID: String?, enchanted: Boolean): ItemStack {
+        val stack = ItemStack(item, 1, meta)
 
         if (name != null) {
-            stack.setStackDisplayName(name);
+            stack.setStackDisplayName(name)
         }
 
         if (enchanted) {
-            stack.addEnchantment(Enchantment.protection, 0);
+            stack.addEnchantment(Enchantment.protection, 0)
         }
 
         if (skyblockID != null) {
-            setItemStackSkyblockID(stack, skyblockID);
+            setItemStackSkyblockID(stack, skyblockID)
         }
 
-        return stack;
+        return stack
     }
 
-    public static ItemStack createEnchantedBook(String name, String skyblockID, String enchantName, int enchantLevel) {
-        ItemStack stack = createItemStack(Items.enchanted_book, name, skyblockID, false);
+    fun createEnchantedBook(name: String?, skyblockID: String?, enchantName: String?, enchantLevel: Int): ItemStack {
+        val stack = createItemStack(Items.enchanted_book, name, skyblockID, false)
 
-        NBTTagCompound enchantments = new NBTTagCompound();
-        enchantments.setInteger(enchantName, enchantLevel);
+        val enchantments = NBTTagCompound()
+        enchantments.setInteger(enchantName, enchantLevel)
 
-        NBTTagCompound extraAttributes = stack.getTagCompound().getCompoundTag("ExtraAttributes");
-        extraAttributes.setTag("enchantments", enchantments);
+        val extraAttributes = stack.tagCompound.getCompoundTag("ExtraAttributes")
+        extraAttributes.setTag("enchantments", enchantments)
 
-        return stack;
+        return stack
     }
 
-    public static ItemStack createSkullItemStack(String name, String skyblockID, String skullID, String textureURL) {
-        ItemStack stack = new ItemStack(Items.skull, 1, 3);
+    fun createSkullItemStack(name: String?, skyblockID: String?, skullID: String?, textureURL: String): ItemStack {
+        val stack = ItemStack(Items.skull, 1, 3)
 
-        NBTTagCompound texture = new NBTTagCompound();
-        texture.setString("Value", TextUtils.Companion.encodeSkinTextureURL(textureURL));
+        val texture = NBTTagCompound()
+        texture.setString("Value", encodeSkinTextureURL(textureURL))
 
-        NBTTagList textures = new NBTTagList();
-        textures.appendTag(texture);
+        val textures = NBTTagList()
+        textures.appendTag(texture)
 
-        NBTTagCompound properties = new NBTTagCompound();
-        properties.setTag("textures", textures);
+        val properties = NBTTagCompound()
+        properties.setTag("textures", textures)
 
-        NBTTagCompound skullOwner = new NBTTagCompound();
-        skullOwner.setTag("Properties", properties);
+        val skullOwner = NBTTagCompound()
+        skullOwner.setTag("Properties", properties)
 
-        skullOwner.setString("Id", skullID);
+        skullOwner.setString("Id", skullID)
 
-        stack.setTagInfo("SkullOwner", skullOwner);
+        stack.setTagInfo("SkullOwner", skullOwner)
 
         if (name != null) {
-            stack.setStackDisplayName(name);
+            stack.setStackDisplayName(name)
         }
 
         if (skyblockID != null) {
-            setItemStackSkyblockID(stack, skyblockID);
+            setItemStackSkyblockID(stack, skyblockID)
         }
 
-        return stack;
+        return stack
     }
 
-    public static ItemStack createSkullItemStack(String name, List<String> lore, String skyblockID, String skullID, String textureURL) {
-        ItemStack stack = new ItemStack(Items.skull, 1, 3);
+    fun createSkullItemStack(
+        name: String?,
+        lore: List<String>,
+        skyblockID: String?,
+        skullID: String?,
+        textureURL: String
+    ): ItemStack {
+        val stack = ItemStack(Items.skull, 1, 3)
 
-        NBTTagCompound texture = new NBTTagCompound();
-        texture.setString("Value", TextUtils.Companion.encodeSkinTextureURL(textureURL));
+        val texture = NBTTagCompound()
+        texture.setString("Value", encodeSkinTextureURL(textureURL))
 
-        NBTTagList textures = new NBTTagList();
-        textures.appendTag(texture);
+        val textures = NBTTagList()
+        textures.appendTag(texture)
 
-        NBTTagCompound properties = new NBTTagCompound();
-        properties.setTag("textures", textures);
+        val properties = NBTTagCompound()
+        properties.setTag("textures", textures)
 
-        NBTTagCompound skullOwner = new NBTTagCompound();
-        skullOwner.setTag("Properties", properties);
+        val skullOwner = NBTTagCompound()
+        skullOwner.setTag("Properties", properties)
 
-        skullOwner.setString("Id", skullID);
+        skullOwner.setString("Id", skullID)
 
-        stack.setTagInfo("SkullOwner", skullOwner);
+        stack.setTagInfo("SkullOwner", skullOwner)
 
         if (name != null) {
-            stack.setStackDisplayName(name);
-            ItemUtils.setItemLore(stack, lore);
+            stack.setStackDisplayName(name)
+            setItemLore(stack, lore)
         }
 
         if (skyblockID != null) {
-            setItemStackSkyblockID(stack, skyblockID);
+            setItemStackSkyblockID(stack, skyblockID)
         }
 
-        return stack;
+        return stack
     }
 
-    public static void setItemStackSkyblockID(ItemStack itemStack, String skyblockID) {
-        NBTTagCompound extraAttributes = new NBTTagCompound();
-        extraAttributes.setString("id", skyblockID);
-        itemStack.setTagInfo("ExtraAttributes", extraAttributes);
+    fun setItemStackSkyblockID(itemStack: ItemStack, skyblockID: String?) {
+        val extraAttributes = NBTTagCompound()
+        extraAttributes.setString("id", skyblockID)
+        itemStack.setTagInfo("ExtraAttributes", extraAttributes)
     }
 
     /**
      * Given a skull ItemStack, returns the skull owner ID, or null if it doesn't exist.
      */
-    public static String getSkullOwnerID(ItemStack skull) {
+    fun getSkullOwnerID(skull: ItemStack?): String? {
         if (skull == null || !skull.hasTagCompound()) {
-            return null;
+            return null
         }
 
-        NBTTagCompound nbt = skull.getTagCompound();
+        var nbt = skull.tagCompound
         if (nbt.hasKey("SkullOwner", 10)) {
-            nbt = nbt.getCompoundTag("SkullOwner");
+            nbt = nbt.getCompoundTag("SkullOwner")
             if (nbt.hasKey("Id", 8)) {
-                return nbt.getString("Id");
+                return nbt.getString("Id")
             }
         }
-        return null;
+        return null
     }
 
-    public static NBTTagByteArray getCompressedNBT(ItemStack[] items) {
+    fun getCompressedNBT(items: Array<ItemStack?>?): NBTTagByteArray? {
         if (items == null) {
-            return null;
+            return null
         }
         // Add each item's nbt to a tag list
-        NBTTagList list = new NBTTagList();
-        for (ItemStack item : items) {
+        val list = NBTTagList()
+        for (item in items) {
             if (item == null) {
-                list.appendTag((new ItemStack((Item) null)).serializeNBT());
+                list.appendTag((ItemStack(null as Item?)).serializeNBT())
             } else {
-                list.appendTag(item.serializeNBT());
+                list.appendTag(item.serializeNBT())
             }
         }
         // Append standard "i" tag for compression
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setTag("i", list);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        val nbt = NBTTagCompound()
+        nbt.setTag("i", list)
+        val stream = ByteArrayOutputStream()
         try {
-            CompressedStreamTools.writeCompressed(nbt, stream);
-        } catch (IOException e) {
-            return null;
+            CompressedStreamTools.writeCompressed(nbt, stream)
+        } catch (e: IOException) {
+            return null
         }
-        return new NBTTagByteArray(stream.toByteArray());
+        return NBTTagByteArray(stream.toByteArray())
     }
 
     /**
      * Returns the rarity of a Skyblock item given its lore. This method takes the item's lore as a string list as input.
-     * This method is split up from the method that takes the {@code ItemStack} instance for easier unit testing.
+     * This method is split up from the method that takes the `ItemStack` instance for easier unit testing.
      *
-     * @param lore the {@code List<String>} containing the item's lore
-     * @return the rarity of the item if a valid rarity is found, or {@code null} if item is {@code null} or no valid rarity is found
+     * @param lore the `List<String>` containing the item's lore
+     * @return the rarity of the item if a valid rarity is found, or `null` if item is `null` or no valid rarity is found
      */
-    private static ItemRarity getRarity(List<String> lore) {
+    private fun getRarity(lore: List<String>): ItemRarity? {
         // Start from the end since the rarity is usually the last line or one of the last.
-        for (int i = lore.size() - 1; i >= 0 ; i--) {
-            String currentLine = lore.get(i);
+        for (i in lore.indices.reversed()) {
+            val currentLine = lore[i]
 
-            Matcher rarityMatcher = ITEM_TYPE_AND_RARITY_PATTERN.matcher(currentLine);
+            val rarityMatcher = ITEM_TYPE_AND_RARITY_PATTERN.matcher(currentLine)
             if (rarityMatcher.find()) {
-                String rarity = rarityMatcher.group("rarity");
+                val rarity = rarityMatcher.group("rarity")
 
-                for (ItemRarity itemRarity : ItemRarity.values()) {
+                for (itemRarity in ItemRarity.entries) {
                     // Use a "startsWith" check here because "VERY SPECIAL" has two words and only "VERY" is matched.
                     if (itemRarity.getLoreName().startsWith(rarity)) {
-                        return itemRarity;
+                        return itemRarity
                     }
                 }
             }
         }
 
-        return null;
+        return null
     }
 
     /**
      * Returns the item type of a Skyblock item given its lore. This method takes the item's lore as a string list as input.
-     * This method is split up from the method that takes the {@code ItemStack} instance for easier unit testing.
+     * This method is split up from the method that takes the `ItemStack` instance for easier unit testing.
      *
-     * @param lore the {@code List<String>} containing the item's lore
-     * @return the rarity of the item if a valid rarity is found, or {@code null} if item is {@code null} or no valid rarity is found
+     * @param lore the `List<String>` containing the item's lore
+     * @return the rarity of the item if a valid rarity is found, or `null` if item is `null` or no valid rarity is found
      */
-    private static ItemType getType(List<String> lore) {
+    private fun getType(lore: List<String>): ItemType? {
         // Start from the end since the rarity is usually the last line or one of the last.
-        for (int i = lore.size() - 1; i >= 0; i--) {
-            String currentLine = lore.get(i);
+        for (i in lore.indices.reversed()) {
+            val currentLine = lore[i]
 
-            Matcher itemTypeMatcher = ITEM_TYPE_AND_RARITY_PATTERN.matcher(currentLine);
+            val itemTypeMatcher = ITEM_TYPE_AND_RARITY_PATTERN.matcher(currentLine)
             if (itemTypeMatcher.find()) {
-                String type = itemTypeMatcher.group("type");
+                val type = itemTypeMatcher.group("type")
 
                 if (type != null) {
-                    for (ItemType itemType : ItemType.values()) {
+                    for (itemType in ItemType.entries) {
                         if (itemType.getLoreName().startsWith(type)) {
-                            return itemType;
+                            return itemType
                         }
                     }
                 }
             }
         }
 
-        return null;
+        return null
     }
 }

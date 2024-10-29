@@ -760,6 +760,7 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
      */
     fun isRemoteDisabled(feature: Feature?): Boolean {
         if (feature == null) return false
+        if(Minecraft.getMinecraft().isSingleplayer) return false;
 
         val disabledFeatures: HashMap<String, List<Int>>? = SkyblockAddonsPlus.onlineData!!.getDisabledFeatures()//main.onlineData.getDisabledFeatures()
 
@@ -806,7 +807,7 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
      * @return Whether the feature is enabled.
      */
     fun isEnabled(feature: Feature): Boolean {
-        return !isDisabled(feature)
+        return false//!isDisabled(feature)
     }
 
     // TODO Don't force alpha in the future...

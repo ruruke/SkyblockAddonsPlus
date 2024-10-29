@@ -37,7 +37,6 @@ class EnumUtils {
         }
 
         companion object {
-
             @Suppress("unused") // Accessed by reflection...
             fun fromId(id: Int): AnchorPoint? {
                 for (feature in entries) {

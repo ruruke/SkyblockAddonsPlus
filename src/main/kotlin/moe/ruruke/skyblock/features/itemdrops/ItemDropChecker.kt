@@ -120,7 +120,7 @@ class ItemDropChecker {
                     }
                 }
             }
-        } else if (SkyblockAddonsPlus.config!!.isEnabled(Feature.DROP_CONFIRMATION) && SkyblockAddonsPlus.configValues!!.isEnabled(Feature.DOUBLE_DROP_IN_OTHER_GAMES)
+        } else if (SkyblockAddonsPlus.configValues!!.isEnabled(Feature.DROP_CONFIRMATION) && SkyblockAddonsPlus.configValues!!.isEnabled(Feature.DOUBLE_DROP_IN_OTHER_GAMES)
         ) {
             return dropConfirmed(item, 2, playAlert)
         } else {

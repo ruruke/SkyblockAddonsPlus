@@ -4,6 +4,7 @@ import moe.ruruke.skyblock.SkyblockAddonsPlus
 import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.configValues
 import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.getLogger
 import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.utils
+import moe.ruruke.skyblock.config.NewConfig
 import moe.ruruke.skyblock.core.Feature
 import moe.ruruke.skyblock.features.enchants.EnchantManager.parseEnchants
 import moe.ruruke.skyblock.utils.ItemUtils
@@ -18,6 +19,7 @@ class PlayerListener {
     /**
      * Modifies item enchantments on tooltips as well as roman numerals
      */
+    val logger = getLogger()
     @SubscribeEvent(priority = EventPriority.LOWEST)
     fun onItemTooltipLast(e: ItemTooltipEvent) {
         val hoveredItem = e.itemStack
@@ -26,7 +28,7 @@ class PlayerListener {
             if (configValues!!.isEnabled(Feature.ENCHANTMENT_LORE_PARSING)) {
                 parseEnchants(e.toolTip, hoveredItem)
             }
-            if (SkyblockAddonsPlus.getNewConfigValue().isEnabled(Feature.REPLACE_ROMAN_NUMERALS_WITH_NUMBERS)) {
+            if (NewConfig.isEnabled(Feature.REPLACE_ROMAN_NUMERALS_WITH_NUMBERS)) {
                 val startIndex =
                     if (configValues!!.isEnabled(Feature.DONT_REPLACE_ROMAN_NUMERALS_IN_ITEM_NAME)) 1 else 0
 

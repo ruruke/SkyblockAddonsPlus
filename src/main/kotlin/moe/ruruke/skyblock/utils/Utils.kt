@@ -234,6 +234,10 @@ class Utils {
         }
 
     fun isOnSkyblock(): Boolean {
+        //TODO: DEBUG
+        if(Minecraft.getMinecraft().isSingleplayer) {
+            return true
+        }
         return onSkyblock
     }
     fun parseSidebar() {

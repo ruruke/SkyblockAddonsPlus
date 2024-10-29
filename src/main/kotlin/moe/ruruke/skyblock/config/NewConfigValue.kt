@@ -19,7 +19,7 @@ import java.util.*
  * The main Config entrypoint that extends the Config type and inits the config options.
  * See [this link](https://docs.polyfrost.cc/oneconfig/config/adding-options) for more config Options
  */
-class NewConfigValue : Config(Mod(SkyblockAddonsPlus.NAME, ModType.UTIL_QOL), SkyblockAddonsPlus.MODID + ".json") {
+class NewConfigValue : Config(Mod(SkyblockAddonsPlus.NAME, ModType.SKYBLOCK), SkyblockAddonsPlus.MODID + "_v2.json") {
     init {
         initialize()
     }
@@ -56,7 +56,7 @@ class NewConfigValue : Config(Mod(SkyblockAddonsPlus.NAME, ModType.UTIL_QOL), Sk
         if (feature == null) return false
         if(Minecraft.getMinecraft().isSingleplayer) return false;
 
-        val disabledFeatures: HashMap<String, List<Int>>? = SkyblockAddonsPlus.onlineData!!.getDisabledFeatures()//main.onlineData.getDisabledFeatures()
+        val disabledFeatures: HashMap<String, List<Int>>? = SkyblockAddonsPlus.getOnlineData()!!.getDisabledFeatures()//main.onlineData.getDisabledFeatures()
 
         if (disabledFeatures!!.containsKey("all")) {
             if (disabledFeatures["all"] != null) {

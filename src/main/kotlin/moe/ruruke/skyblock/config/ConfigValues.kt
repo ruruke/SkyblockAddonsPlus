@@ -53,7 +53,7 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
     private var loadedConfig = JsonObject()
 
 
-    private val languageConfig = JsonObject()
+    private var languageConfig = JsonObject()
 
 
     private val disabledFeatures: MutableSet<Feature> = EnumSet.noneOf(
@@ -568,24 +568,24 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
         keyClass: Class<E>,
         valueClass: Class<F>
     ) {
-        try {
-            if (jsonObject.has(path)) {
-                for ((key1, value1) in jsonObject.getAsJsonObject(path).entrySet()) {
-                    var fromId = keyClass.getDeclaredMethod("fromId", Int::class.javaPrimitiveType)
-                    val key: E? = fromId.invoke(null, key1.toInt()) as E
-
-                    fromId = valueClass.getDeclaredMethod("fromId", Int::class.javaPrimitiveType)
-                    val value: F? = fromId.invoke(null, value1.asInt) as F
-
-                    if (key != null && value != null) {
-                        map[key] = value
-                    }
-                }
-            }
-        } catch (ex: Exception) {
-            logger.error("Failed to deserialize path: $path")
-            logger.catching(ex)
-        }
+//        try {
+//            if (jsonObject.has(path)) {
+//                for ((key1, value1) in jsonObject.getAsJsonObject(path).entrySet()) {
+//                    var fromId = keyClass.getDeclaredMethod("fromId", Int::class.javaPrimitiveType)
+//                    val key: E? = fromId.invoke(null, key1.toInt()) as E
+//
+//                    fromId = valueClass.getDeclaredMethod("fromId", Int::class.javaPrimitiveType)
+//                    val value: F? = fromId.invoke(null, value1.asInt) as F
+//
+//                    if (key != null && value != null) {
+//                        map[key] = value
+//                    }
+//                }
+//            }
+//        } catch (ex: Exception) {
+//            logger.error("Failed to deserialize path: $path")
+//            logger.catching(ex)
+//        }
     }
 
     private fun <E : Enum<*>, N : Number> deserializeEnumNumberMapFromID(
@@ -762,7 +762,7 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
         if (feature == null) return false
         if(Minecraft.getMinecraft().isSingleplayer) return false;
 
-        val disabledFeatures: HashMap<String, List<Int>>? = SkyblockAddonsPlus.onlineData!!.getDisabledFeatures()//main.onlineData.getDisabledFeatures()
+        val disabledFeatures: HashMap<String, List<Int>>? = SkyblockAddonsPlus.getOnlineData()!!.getDisabledFeatures()//main.onlineData.getDisabledFeatures()
 
         if (disabledFeatures!!.containsKey("all")) {
             if (disabledFeatures["all"] != null) {
@@ -1040,6 +1040,9 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
     }
     fun getLanguageConfig(): JsonObject {
         return languageConfig;
+    }
+    fun setLanguageConfig(langConfig: JsonObject){
+        languageConfig = langConfig;
     }
 
     fun setLanguage(language: Language) {

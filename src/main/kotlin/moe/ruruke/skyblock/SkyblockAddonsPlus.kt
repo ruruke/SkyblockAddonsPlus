@@ -63,9 +63,13 @@ class SkyblockAddonsPlus() {
         var utils: Utils? = null;
 //        private val inventoryUtils: InventoryUtils? = null
         var instance: Companion = this
-        var onlineData: OnlineData? = null
+        private var onlineData: OnlineData? = null
 
         var config: NewConfigValue? = null
+
+        @Mod.Instance(MODID)
+        var INSTANCE: SkyblockAddonsPlus? = null // Adds the instance of the mod, so we can access other variables.
+
 
         var scheduler: Scheduler? = null
         var newScheduler: NewScheduler? = null
@@ -75,6 +79,12 @@ class SkyblockAddonsPlus() {
         )
         fun getNewConfigValue(): NewConfigValue {
             return config!!;
+        }
+        fun getOnlineData(): OnlineData? {
+            return onlineData;
+        }
+        fun setOnlineData(_onlineData: OnlineData) {
+            onlineData =  _onlineData
         }
         fun getLogger(): Logger {
             val fullClassName = Throwable().stackTrace[1].className
@@ -94,8 +104,8 @@ class SkyblockAddonsPlus() {
     // Register the config and commands.
     @Mod.EventHandler
     fun onInit(event: FMLInitializationEvent?) {
-        config = NewConfigValue()
 
+        config = NewConfigValue()
         ClientCommandHandler.instance.registerCommand(SkyblockAddonsPlusCommand())
         if (DataUtils.USE_ONLINE_DATA) {
             DataUtils.loadOnlineData();
@@ -115,7 +125,7 @@ class SkyblockAddonsPlus() {
         EventManager.INSTANCE.register(this);
         configValues = ConfigValues(e.suggestedConfigurationFile)
 //        persistentValuesManager = PersistentValuesManager(e.modConfigurationDirectory)
-        configValues!!.loadValues()
+//        configValues!!.loadValues()
 //        DataUtils.readLocalAndFetchOnline()
 //        persistentValuesManager.loadValues()
     }

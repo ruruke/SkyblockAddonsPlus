@@ -62,7 +62,7 @@
 //     */
 //    public void checkForUpdate() {
 //        logger.info("Checking to see if an update is available...");
-//        UpdateInfo updateInfo = main.getOnlineData().getUpdateInfo();
+//        UpdateInfo updateInfo = main.getOnlineData()!!.getUpdateInfo();
 //
 //        // Variables reset for testing update checker notifications
 //        sentUpdateMessage = false;

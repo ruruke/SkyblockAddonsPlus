@@ -82,12 +82,12 @@ class ItemDropChecker {
                 return true
             }
 
-            val blacklist: List<String> = SkyblockAddonsPlus.onlineData!!.getDropSettings()!!.getDontDropTheseItems()!!
-            val whitelist: List<String> = SkyblockAddonsPlus.onlineData!!.getDropSettings()!!.getAllowDroppingTheseItems()!!
+            val blacklist: List<String> = SkyblockAddonsPlus.getOnlineData()!!.getDropSettings()!!.getDontDropTheseItems()!!
+            val whitelist: List<String> = SkyblockAddonsPlus.getOnlineData()!!.getDropSettings()!!.getAllowDroppingTheseItems()!!
 
             if (itemIsInHotbar) {
                 if (itemRarity.compareTo(
-                        SkyblockAddonsPlus.onlineData!!.getDropSettings()!!.getMinimumHotbarRarity()!!
+                        SkyblockAddonsPlus.getOnlineData()!!.getDropSettings()!!.getMinimumHotbarRarity()!!
                     ) < 0 && !blacklist.contains(itemID)
                 ) {
                     return true
@@ -104,7 +104,7 @@ class ItemDropChecker {
                 }
             } else {
                 return if (itemRarity.compareTo(
-                        SkyblockAddonsPlus.onlineData!!.getDropSettings()!!.getMinimumInventoryRarity()!!
+                        SkyblockAddonsPlus.getOnlineData()!!.getDropSettings()!!.getMinimumInventoryRarity()!!
                     ) < 0 && !blacklist.contains(itemID)
                 ) {
                     true

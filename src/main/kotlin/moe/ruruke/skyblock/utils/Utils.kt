@@ -89,10 +89,10 @@ class Utils {
      * The player's current location in Skyblock
      */
     private var location: Location = Location.UNKNOWN
-        get() = field
-        set(value) {
-            field = value
-        }
+
+    fun getLocation(): Location {
+        return location;
+    }
 
     /**
      * The skyblock profile that the player is currently on. Ex. "Grapefruit"
@@ -224,7 +224,7 @@ class Utils {
             val player = Minecraft.getMinecraft().thePlayer ?: return false
             val brand = player.clientBrand
             if (brand != null) {
-                for (p in main.onlineData!!.getHypixelBrands()!!) {
+                for (p in main.getOnlineData()!!.getHypixelBrands()!!) {
                     if (p.matcher(brand).matches()) {
                         return true
                     }

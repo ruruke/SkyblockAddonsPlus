@@ -31,8 +31,10 @@ object EnchantManager {
         Pattern.compile("^(Respiration|Aqua Affinity|Depth Strider|Efficiency).*")
     private const val COMMA = ", "
 
-    private val enchants = Enchants()
-
+    private var enchants = Enchants()
+    fun setEnchants(_enchants: Enchants){
+        enchants = _enchants
+    }
     private val loreCache = Cache()
 
     /**

@@ -419,9 +419,11 @@ class InventoryUtils {
      */
     fun updateInventoryType(guiChest: GuiChest): InventoryType? {
         // Get the open chest and test if it's the same one that we've seen before
-        val inventory = (Minecraft.getMinecraft().thePlayer.openContainer as ContainerChest).lowerChestInventory
+        val inventory = guiChest.lowerChestInventory as IInventory
         if (inventory.displayName == null) {
             return null.also { inventoryType = it }
+        }else{
+            main.utils!!.sendMessage("Name > "+ inventory.name)
         }
         val chestName = TextUtils.stripColor(inventory.displayName.unformattedText)
 

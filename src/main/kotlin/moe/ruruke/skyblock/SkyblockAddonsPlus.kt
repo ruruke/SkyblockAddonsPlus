@@ -10,7 +10,8 @@ import moe.ruruke.skyblock.command.SkyblockAddonsPlusCommand
 import moe.ruruke.skyblock.config.ConfigValues
 import moe.ruruke.skyblock.config.NewConfigValue
 import moe.ruruke.skyblock.core.OnlineData
-import moe.ruruke.skyblock.gui.listeners.PlayerListener
+import moe.ruruke.skyblock.listeners.GuiScreenListener
+import moe.ruruke.skyblock.listeners.PlayerListener
 import moe.ruruke.skyblock.misc.scheduler.NewScheduler
 import moe.ruruke.skyblock.misc.scheduler.Scheduler
 import moe.ruruke.skyblock.utils.InventoryUtils
@@ -53,6 +54,7 @@ class SkyblockAddonsPlus() {
             return elapsedPartialTicks;
         }
         private var playerListener: PlayerListener? = null
+        private var guiScreenListener: GuiScreenListener? = null
         @kotlin.jvm.JvmField
         var registeredFeatureIDs: MutableSet<Int> = HashSet()
         var configValues: ConfigValues? = null
@@ -62,7 +64,6 @@ class SkyblockAddonsPlus() {
             .registerTypeAdapter(Pattern::class.java, PatternAdapter())
             .create()
         var utils: Utils? = null;
-//        private val inventoryUtils: InventoryUtils? = null
         var instance: Companion = this
         private var onlineData: OnlineData? = null
 
@@ -74,7 +75,7 @@ class SkyblockAddonsPlus() {
 
         var scheduler: Scheduler? = null
         var newScheduler: NewScheduler? = null
-        private var inventoryUtils: InventoryUtils? = null
+        var inventoryUtils: InventoryUtils? = null
         val THREAD_EXECUTOR: ThreadPoolExecutor = ThreadPoolExecutor(
             0, 1, 60L, TimeUnit.SECONDS,
             LinkedBlockingDeque(), ThreadFactoryBuilder().setNameFormat(NAME + " - #%d").build()
@@ -118,6 +119,7 @@ class SkyblockAddonsPlus() {
             DataUtils.loadOnlineData();
         }
         MinecraftForge.EVENT_BUS.register(playerListener);
+        MinecraftForge.EVENT_BUS.register(guiScreenListener);
 
 //        CommandManager.INSTANCE.registerCommand(ExampleCommand())
 //        CommandManager.INSTANCE.registerCommand(ExampleCommand())
@@ -139,6 +141,7 @@ class SkyblockAddonsPlus() {
 
     init {
         playerListener = PlayerListener()
+        guiScreenListener = GuiScreenListener()
         scheduler = Scheduler()
         newScheduler = NewScheduler()
         inventoryUtils = InventoryUtils()

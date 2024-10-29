@@ -1,67 +1,26 @@
-package moe.ruruke.skyblock.gui.listeners
+package moe.ruruke.skyblock.listeners
 
-import com.google.common.collect.Sets
-import com.google.common.math.DoubleMath
 import moe.ruruke.skyblock.SkyblockAddonsPlus
 import moe.ruruke.skyblock.config.NewConfig
 import moe.ruruke.skyblock.core.Feature
-import moe.ruruke.skyblock.core.InventoryType
-import moe.ruruke.skyblock.core.ItemRarity
-import moe.ruruke.skyblock.core.SkillType
 import moe.ruruke.skyblock.features.enchants.EnchantManager
 import moe.ruruke.skyblock.utils.ActionBarParser
-import moe.ruruke.skyblock.utils.ColorCode
 import moe.ruruke.skyblock.utils.ItemUtils
 import moe.ruruke.skyblock.utils.RomanNumeralParser.replaceNumeralsWithIntegers
-import moe.ruruke.skyblock.utils.ScoreboardManager.tick
-import moe.ruruke.skyblock.utils.TextUtils
-import net.minecraft.block.Block
-import net.minecraft.block.BlockPrismarine
-import net.minecraft.block.BlockStone
 import net.minecraft.client.Minecraft
-import net.minecraft.client.audio.PositionedSoundRecord
-import net.minecraft.client.audio.SoundCategory
-import net.minecraft.client.entity.EntityOtherPlayerMP
-import net.minecraft.client.gui.inventory.GuiChest
-import net.minecraft.client.network.NetworkPlayerInfo
-import net.minecraft.client.settings.KeyBinding
 import net.minecraft.entity.Entity
 import net.minecraft.entity.item.EntityArmorStand
 import net.minecraft.entity.monster.EntityEnderman
-import net.minecraft.entity.monster.EntityMagmaCube
-import net.minecraft.entity.monster.EntitySlime
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.entity.projectile.EntityArrow
-import net.minecraft.init.Blocks
-import net.minecraft.init.Items
-import net.minecraft.inventory.ContainerChest
-import net.minecraft.item.EnumDyeColor
 import net.minecraft.util.*
 import net.minecraftforge.client.event.ClientChatReceivedEvent
-import net.minecraftforge.client.event.sound.PlaySoundEvent
-import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.event.entity.EntityEvent.EnteringChunk
 import net.minecraftforge.event.entity.EntityJoinWorldEvent
-import net.minecraftforge.event.entity.living.EnderTeleportEvent
-import net.minecraftforge.event.entity.living.LivingDeathEvent
-import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent
 import net.minecraftforge.event.entity.player.AttackEntityEvent
 import net.minecraftforge.event.entity.player.ItemTooltipEvent
-import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.fml.common.eventhandler.EventPriority
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import net.minecraftforge.fml.common.gameevent.InputEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent
-import org.apache.logging.log4j.Logger
-import org.lwjgl.input.Keyboard
-import java.math.RoundingMode
 import java.util.*
-import java.util.regex.Matcher
-import java.util.regex.Pattern
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
 
 //TODO Fix for Hypixel localization
 class PlayerListener {
@@ -592,11 +551,11 @@ class PlayerListener {
      */
     @SubscribeEvent
     fun onTick(e: ClientTickEvent) {
-//        if (e.phase == TickEvent.Phase.START) {
-//            val mc = Minecraft.getMinecraft()
-//            timerTick++
-//
-//            if (mc != null) { // Predict health every tick if needed.
+        if (e.phase == TickEvent.Phase.START) {
+            val mc = Minecraft.getMinecraft()
+            timerTick++
+
+            if (mc != null) { // Predict health every tick if needed.
 //                tick()
 //
 //                if (actionBarParser.getHealthUpdate() != null && System.currentTimeMillis() - actionBarParser.getLastHealthUpdate() > 3000) {
@@ -612,9 +571,9 @@ class PlayerListener {
 //                        ).toFloat()
 //                    setAttribute(Attribute.HEALTH, newHealth)
 //                }
-//
-//                if (timerTick == 20) {
-//                    // Add natural mana every second (increase is based on your max mana).
+
+                if (timerTick == 20) {
+//                     Add natural mana every second (increase is based on your max mana).
 //                    if (main.getRenderListener().isPredictMana()) {
 //                        // If regen-ing, cap at the max mana
 //                        if (getAttribute(Attribute.MANA) < getAttribute(Attribute.MAX_MANA)) {
@@ -637,9 +596,9 @@ class PlayerListener {
 //                    ) {
 //                        main.getDungeonManager().updateDeathsFromPlayerListInfo()
 //                    }
-//                } else if (timerTick % 5 == 0) { // Check inventory, location, updates, and skeleton helmet every 1/4 second.
-//                    val player = mc.thePlayer
-//
+                } else if (timerTick % 5 == 0) { // Check inventory, location, updates, and skeleton helmet every 1/4 second.
+                    val player = mc.thePlayer
+
 //                    if (player != null) {
 //                        EndstoneProtectorManager.checkGolemStatus()
 //                        TabListParser.parse()
@@ -712,11 +671,11 @@ class PlayerListener {
 //                        }
 //                    }
 //                    main.getInventoryUtils().cleanUpPickupLog()
-//                } else if (timerTick > 20) { // To keep the timer going from 1 to 21 only.
-//                    timerTick = 1
-//                }
-//            }
-//        }
+                } else if (timerTick > 20) { // To keep the timer going from 1 to 21 only.
+                    timerTick = 1
+                }
+            }
+        }
     }
 
     // TODO Feature Rewrite

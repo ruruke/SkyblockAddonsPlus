@@ -53,9 +53,9 @@ class InjectionHelper {
     fun setInstructionConsumer(consumer: Consumer<AbstractInsnNode>) {
         instructionConsumer = consumer
     }
-    fun setInjectionPosition(_injectionPosition: InjectionPosition?) {
-        injectionPosition = _injectionPosition
-    }
+//    fun setInjectionPosition(_injectionPosition: InjectionPosition?) {
+//        injectionPosition = _injectionPosition
+//    }
     fun setInstructions(inst: InsnList?): InjectionHelper {
         instructions = inst
         return this

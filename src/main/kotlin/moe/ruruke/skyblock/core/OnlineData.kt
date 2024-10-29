@@ -28,16 +28,39 @@ class OnlineData {
     private val dropSettings: DropSettings? = null
 
     private val hypixelBrands: HashSet<Pattern>? = null
+    fun getHypixelBrands(): HashSet<Pattern>? {
+        return hypixelBrands
+    }
+
+    fun getDropSettings(): DropSettings? {
+        return dropSettings
+    }
 
     fun getDisabledFeatures(): HashMap<String, List<Int>>? {
         return disabledFeatures
     }
 
     class DropSettings {
-        //        private ItemRarity minimumInventoryRarity;
-        //        private ItemRarity minimumHotbarRarity;
+        private val minimumInventoryRarity: ItemRarity? = null;
+        private val minimumHotbarRarity: ItemRarity? = null;
+
         private val dontDropTheseItems: List<String>? = null
 
         private val allowDroppingTheseItems: List<String>? = null
+
+        fun getDontDropTheseItems(): List<String>? {
+            return dontDropTheseItems
+        }
+        fun getAllowDroppingTheseItems(): List<String>? {
+            return allowDroppingTheseItems
+        }
+
+        fun getMinimumInventoryRarity(): ItemRarity? {
+            return minimumInventoryRarity
+        }
+
+        fun getMinimumHotbarRarity(): ItemRarity? {
+            return minimumHotbarRarity
+        }
     }
 }

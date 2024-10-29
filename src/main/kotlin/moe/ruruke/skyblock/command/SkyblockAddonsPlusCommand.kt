@@ -1,6 +1,7 @@
 package moe.ruruke.skyblock.command
 
 import moe.ruruke.skyblock.SkyblockAddonsPlus
+import moe.ruruke.skyblock.utils.Utils
 import net.minecraft.command.CommandBase
 import net.minecraft.command.ICommandSender
 
@@ -30,6 +31,7 @@ public class SkyblockAddonsPlusCommand : CommandBase() {
     }
 
     override fun processCommand(sender: ICommandSender?, args: Array<out String>?) {
-        main.utils!!.sendMessage("skyblockaddonsplus")
+        var s = Utils.getPlayerViewPosition()
+        main.utils!!.sendMessage("skyblockaddonsplus ${s.x} ${s.y} ${s.z}")
     }
 }

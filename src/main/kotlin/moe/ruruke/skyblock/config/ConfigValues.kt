@@ -992,7 +992,7 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
     val lockedSlots: Set<Int>
         get() {
             val profile: String =
-                SkyblockAddonsPlus.utils!!.getProfileName()
+                main.utils!!.getProfileName()
             if (!profileLockedSlots.containsKey(profile)) {
                 profileLockedSlots[profile] = HashSet()
             }

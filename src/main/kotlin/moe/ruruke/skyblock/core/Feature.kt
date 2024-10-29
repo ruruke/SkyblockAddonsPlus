@@ -622,7 +622,7 @@ enum class Feature(
      */
     fun onToggle() {
         if (this.id == id) {
-            val main: SkyblockAddonsPlus = SkyblockAddonsPlus.instance!!
+            val main: SkyblockAddonsPlus.Companion = SkyblockAddonsPlus.instance!!
             //TODO:
 //            val devModeKeyBinding: SkyblockKeyBinding = main.getDeveloperCopyNBTKey()
 

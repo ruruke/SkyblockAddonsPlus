@@ -10,7 +10,7 @@ object Translations {
     fun getMessage(path: String, vararg variables: Any?): String? {
         var text: String = ""
         try {
-            val main: SkyblockAddonsPlus = SkyblockAddonsPlus.instance!!
+            val main: SkyblockAddonsPlus.Companion = SkyblockAddonsPlus.instance!!
 
             // Get the string.
             val pathSplit: Array<String> =

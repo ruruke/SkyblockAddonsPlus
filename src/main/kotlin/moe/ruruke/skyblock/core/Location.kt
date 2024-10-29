@@ -189,11 +189,19 @@ enum class Location {
      */
     private val scoreboardName: String
 
-    private val discordIconKey: String
+    fun getScoreboardName(): String {
+        return scoreboardName
+    }
+
+    //TODO:
+//    private val discordIconKey: String
+//    fun getDiscordIc(): String {
+//        return scoreboardName
+//    }
 
     constructor(scoreboardName: String, discordIconKey: String) {
         this.scoreboardName = scoreboardName
-        this.discordIconKey = discordIconKey
+//        this.discordIconKey = discordIconKey
     }
 
     constructor(scoreboardName: String) {
@@ -284,10 +292,10 @@ enum class Location {
             "THE_WASTELAND"
         )
 
-        if (NO_DISCORD_RPC.contains(name)) {
-            discordIconKey = "skyblock"
-        } else {
-            discordIconKey = name.lowercase(Locale.getDefault()).replace("_", "-")
-        }
+//        if (NO_DISCORD_RPC.contains(name)) {
+//            discordIconKey = "skyblock"
+//        } else {
+//            discordIconKey = name.lowercase(Locale.getDefault()).replace("_", "-")
+//        }
     }
 }

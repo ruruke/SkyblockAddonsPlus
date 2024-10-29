@@ -8,5 +8,9 @@ enum class Attribute(private val defaultValue: Float) {
     MAX_MANA(100.toFloat()),
     FUEL(3000.toFloat()),
     MAX_FUEL(3000.toFloat()),
-    OVERFLOW_MANA(20.toFloat())
+    OVERFLOW_MANA(20.toFloat());
+
+    fun getDefaultValue(): Float {
+        return defaultValue
+    }
 }

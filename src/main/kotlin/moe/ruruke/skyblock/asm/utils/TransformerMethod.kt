@@ -386,6 +386,9 @@ enum class TransformerMethod @JvmOverloads constructor(
         if (ioException) exceptions = arrayOf("java/io/IOException")
     }
 
+    fun getName(): String{
+        return name
+    }
     fun createMethodNode(): MethodNode {
         return MethodNode(Opcodes.ACC_PUBLIC, _name, description, null, exceptions)
     }

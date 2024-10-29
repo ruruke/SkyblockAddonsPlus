@@ -1,9 +1,9 @@
 //package moe.ruruke.skyblock.misc;
 //
-//import codes.biscuit.skyblockaddons.SkyblockAddons;
-//import codes.biscuit.skyblockaddons.core.Translations;
-//import codes.biscuit.skyblockaddons.core.UpdateInfo;
-//import codes.biscuit.skyblockaddons.tweaker.SkyblockAddonsTransformer;
+//import moe.ruruke.skyblock.SkyblockAddons;
+//import moe.ruruke.skyblock.core.Translations;
+//import moe.ruruke.skyblock.core.UpdateInfo;
+//import moe.ruruke.skyblock.tweaker.SkyblockAddonsTransformer;
 //import lombok.Getter;
 //import net.minecraft.event.ClickEvent;
 //import net.minecraft.event.HoverEvent;

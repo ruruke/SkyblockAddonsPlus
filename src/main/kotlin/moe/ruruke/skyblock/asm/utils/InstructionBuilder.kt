@@ -1,6 +1,6 @@
 package moe.ruruke.skyblock.asm.utils
 
-import codes.biscuit.skyblockaddons.asm.utils.InjectionHelper
+import moe.ruruke.skyblock.asm.utils.InjectionHelper
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.*

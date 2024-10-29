@@ -144,7 +144,7 @@ class GuiChestTransformer : ITransformer {
 
                             methodNode.instructions.insertBefore(
                                 abstractNode, MethodInsnNode(
-                                    Opcodes.INVOKESTATIC, "codes/biscuit/skyblockaddons/asm/hooks/GuiChestHook",
+                                    Opcodes.INVOKESTATIC, "moe/ruruke/skyblock/asm/hooks/GuiChestHook",
                                     "color", "(FFFF" + TransformerClass.IInventory.getName() + ")V", false
                                 )
                             )
@@ -176,7 +176,7 @@ class GuiChestTransformer : ITransformer {
                             methodNode.instructions.insertBefore(
                                 abstractNode, MethodInsnNode(
                                     Opcodes.INVOKESTATIC,
-                                    "codes/biscuit/skyblockaddons/asm/hooks/GuiChestHook",
+                                    "moe/ruruke/skyblock/asm/hooks/GuiChestHook",
                                     "drawString",
                                     "(" + TransformerClass.FontRenderer.getName() + "Ljava/lang/String;III)I",
                                     false
@@ -199,7 +199,7 @@ class GuiChestTransformer : ITransformer {
         list.add(
             MethodInsnNode(
                 Opcodes.INVOKESTATIC,
-                "codes/biscuit/skyblockaddons/asm/hooks/GuiChestHook",
+                "moe/ruruke/skyblock/asm/hooks/GuiChestHook",
                 "onRenderChestForegroundLayer",
                 "(" + TransformerClass.GuiChest.getName() + ")V",
                 false
@@ -214,7 +214,7 @@ class GuiChestTransformer : ITransformer {
 
         list.add(
             MethodInsnNode(
-                Opcodes.INVOKESTATIC, "codes/biscuit/skyblockaddons/asm/hooks/GuiChestHook", "updateScreen",
+                Opcodes.INVOKESTATIC, "moe/ruruke/skyblock/asm/hooks/GuiChestHook", "updateScreen",
                 "()V", false
             )
         ) // GuiChestHook.updateScreen();
@@ -234,12 +234,12 @@ class GuiChestTransformer : ITransformer {
     private fun drawScreen(): InsnList {
         val list = InsnList()
 
-        list.add(TypeInsnNode(Opcodes.NEW, "codes/biscuit/skyblockaddons/asm/utils/ReturnValue"))
+        list.add(TypeInsnNode(Opcodes.NEW, "moe/ruruke/skyblock/asm/utils/ReturnValue"))
         list.add(InsnNode(Opcodes.DUP)) // ReturnValue returnValue = new ReturnValue();
         list.add(
             MethodInsnNode(
                 Opcodes.INVOKESPECIAL,
-                "codes/biscuit/skyblockaddons/asm/utils/ReturnValue",
+                "moe/ruruke/skyblock/asm/utils/ReturnValue",
                 "<init>",
                 "()V",
                 false
@@ -252,8 +252,8 @@ class GuiChestTransformer : ITransformer {
         list.add(VarInsnNode(Opcodes.ALOAD, 4)) // returnValue
         list.add(
             MethodInsnNode(
-                Opcodes.INVOKESTATIC, "codes/biscuit/skyblockaddons/asm/hooks/GuiChestHook", "drawScreenIslands",
-                "(IILcodes/biscuit/skyblockaddons/asm/utils/ReturnValue;)V", false
+                Opcodes.INVOKESTATIC, "moe/ruruke/skyblock/asm/hooks/GuiChestHook", "drawScreenIslands",
+                "(IILmoe/ruruke/skyblock/asm/utils/ReturnValue;)V", false
             )
         ) // GuiChestHook.drawScreenIslands(returnValue);
 
@@ -261,7 +261,7 @@ class GuiChestTransformer : ITransformer {
         list.add(
             MethodInsnNode(
                 Opcodes.INVOKEVIRTUAL,
-                "codes/biscuit/skyblockaddons/asm/utils/ReturnValue",
+                "moe/ruruke/skyblock/asm/utils/ReturnValue",
                 "isCancelled",
                 "()Z",
                 false
@@ -276,7 +276,7 @@ class GuiChestTransformer : ITransformer {
             FrameNode(
                 Opcodes.F_APPEND,
                 1,
-                arrayOf<Any>("codes/biscuit/skyblockaddons/asm/utils/ReturnValue"),
+                arrayOf<Any>("moe/ruruke/skyblock/asm/utils/ReturnValue"),
                 0,
                 null
             )
@@ -304,7 +304,7 @@ class GuiChestTransformer : ITransformer {
 
         list.add(
             MethodInsnNode(
-                Opcodes.INVOKESTATIC, "codes/biscuit/skyblockaddons/asm/hooks/GuiChestHook", "drawScreen",
+                Opcodes.INVOKESTATIC, "moe/ruruke/skyblock/asm/hooks/GuiChestHook", "drawScreen",
                 "(II)V", false
             )
         ) // GuiChestHook.drawScreen(this.guiLeft, this.guiTop);
@@ -342,7 +342,7 @@ class GuiChestTransformer : ITransformer {
         list.add(
             MethodInsnNode(
                 Opcodes.INVOKESTATIC,
-                "codes/biscuit/skyblockaddons/asm/hooks/GuiChestHook",
+                "moe/ruruke/skyblock/asm/hooks/GuiChestHook",
                 "initGui",
                 "(" + TransformerClass.IInventory.getName() + "II" + TransformerClass.FontRenderer.getName() + ")V",
                 false
@@ -362,7 +362,7 @@ class GuiChestTransformer : ITransformer {
 
         list.add(
             MethodInsnNode(
-                Opcodes.INVOKESTATIC, "codes/biscuit/skyblockaddons/asm/hooks/GuiChestHook", "keyTyped",
+                Opcodes.INVOKESTATIC, "moe/ruruke/skyblock/asm/hooks/GuiChestHook", "keyTyped",
                 "(CI)Z", false
             )
         ) // GuiChestHook.keyTyped(typedChar, keyCode)
@@ -391,12 +391,12 @@ class GuiChestTransformer : ITransformer {
     private fun handleMouseClick(): InsnList {
         val list = InsnList()
 
-        list.add(TypeInsnNode(Opcodes.NEW, "codes/biscuit/skyblockaddons/asm/utils/ReturnValue"))
+        list.add(TypeInsnNode(Opcodes.NEW, "moe/ruruke/skyblock/asm/utils/ReturnValue"))
         list.add(InsnNode(Opcodes.DUP)) // ReturnValue returnValue = new ReturnValue();
         list.add(
             MethodInsnNode(
                 Opcodes.INVOKESPECIAL,
-                "codes/biscuit/skyblockaddons/asm/utils/ReturnValue",
+                "moe/ruruke/skyblock/asm/utils/ReturnValue",
                 "<init>",
                 "()V",
                 false
@@ -421,9 +421,9 @@ class GuiChestTransformer : ITransformer {
         list.add(
             MethodInsnNode(
                 Opcodes.INVOKESTATIC,
-                "codes/biscuit/skyblockaddons/asm/hooks/GuiChestHook",
+                "moe/ruruke/skyblock/asm/hooks/GuiChestHook",
                 "handleMouseClick",
-                "(" + TransformerClass.Slot.getName() + TransformerClass.Container.getName() + TransformerClass.IInventory.getName() + "Lcodes/biscuit/skyblockaddons/asm/utils/ReturnValue;)V",
+                "(" + TransformerClass.Slot.getName() + TransformerClass.Container.getName() + TransformerClass.IInventory.getName() + "Lmoe/ruruke/skyblock/asm/utils/ReturnValue;)V",
                 false
             )
         )
@@ -431,7 +431,7 @@ class GuiChestTransformer : ITransformer {
         list.add(VarInsnNode(Opcodes.ALOAD, 5))
         list.add(
             MethodInsnNode(
-                Opcodes.INVOKEVIRTUAL, "codes/biscuit/skyblockaddons/asm/utils/ReturnValue", "isCancelled",
+                Opcodes.INVOKEVIRTUAL, "moe/ruruke/skyblock/asm/utils/ReturnValue", "isCancelled",
                 "()Z", false
             )
         )
@@ -445,7 +445,7 @@ class GuiChestTransformer : ITransformer {
             FrameNode(
                 Opcodes.F_APPEND,
                 1,
-                arrayOf<Any>("codes/biscuit/skyblockaddons/asm/utils/ReturnValue"),
+                arrayOf<Any>("moe/ruruke/skyblock/asm/utils/ReturnValue"),
                 0,
                 null
             )
@@ -478,12 +478,12 @@ class GuiChestTransformer : ITransformer {
     private fun mouseClicked(): InsnList {
         val list = InsnList()
 
-        list.add(TypeInsnNode(Opcodes.NEW, "codes/biscuit/skyblockaddons/asm/utils/ReturnValue"))
+        list.add(TypeInsnNode(Opcodes.NEW, "moe/ruruke/skyblock/asm/utils/ReturnValue"))
         list.add(InsnNode(Opcodes.DUP)) // ReturnValue returnValue = new ReturnValue();
         list.add(
             MethodInsnNode(
                 Opcodes.INVOKESPECIAL,
-                "codes/biscuit/skyblockaddons/asm/utils/ReturnValue",
+                "moe/ruruke/skyblock/asm/utils/ReturnValue",
                 "<init>",
                 "()V",
                 false
@@ -497,15 +497,15 @@ class GuiChestTransformer : ITransformer {
         list.add(VarInsnNode(Opcodes.ALOAD, 4)) // returnValue
         list.add(
             MethodInsnNode(
-                Opcodes.INVOKESTATIC, "codes/biscuit/skyblockaddons/asm/hooks/GuiChestHook", "mouseClicked",
-                "(IIILcodes/biscuit/skyblockaddons/asm/utils/ReturnValue;)V", false
+                Opcodes.INVOKESTATIC, "moe/ruruke/skyblock/asm/hooks/GuiChestHook", "mouseClicked",
+                "(IIILmoe/ruruke/skyblock/asm/utils/ReturnValue;)V", false
             )
         ) // GuiChestHook.mouseClicked(mouseX, mouseY, mouseButton);
 
         list.add(VarInsnNode(Opcodes.ALOAD, 4))
         list.add(
             MethodInsnNode(
-                Opcodes.INVOKEVIRTUAL, "codes/biscuit/skyblockaddons/asm/utils/ReturnValue", "isCancelled",
+                Opcodes.INVOKEVIRTUAL, "moe/ruruke/skyblock/asm/utils/ReturnValue", "isCancelled",
                 "()Z", false
             )
         )
@@ -519,7 +519,7 @@ class GuiChestTransformer : ITransformer {
             FrameNode(
                 Opcodes.F_APPEND,
                 1,
-                arrayOf<Any>("codes/biscuit/skyblockaddons/asm/utils/ReturnValue"),
+                arrayOf<Any>("moe/ruruke/skyblock/asm/utils/ReturnValue"),
                 0,
                 null
             )
@@ -551,12 +551,12 @@ class GuiChestTransformer : ITransformer {
     private fun mouseReleased(): InsnList {
         val list = InsnList()
 
-        list.add(TypeInsnNode(Opcodes.NEW, "codes/biscuit/skyblockaddons/asm/utils/ReturnValue"))
+        list.add(TypeInsnNode(Opcodes.NEW, "moe/ruruke/skyblock/asm/utils/ReturnValue"))
         list.add(InsnNode(Opcodes.DUP)) // ReturnValue returnValue = new ReturnValue();
         list.add(
             MethodInsnNode(
                 Opcodes.INVOKESPECIAL,
-                "codes/biscuit/skyblockaddons/asm/utils/ReturnValue",
+                "moe/ruruke/skyblock/asm/utils/ReturnValue",
                 "<init>",
                 "()V",
                 false
@@ -567,15 +567,15 @@ class GuiChestTransformer : ITransformer {
         list.add(VarInsnNode(Opcodes.ALOAD, 4)) // returnValue
         list.add(
             MethodInsnNode(
-                Opcodes.INVOKESTATIC, "codes/biscuit/skyblockaddons/asm/hooks/GuiChestHook", "mouseReleased",
-                "(Lcodes/biscuit/skyblockaddons/asm/utils/ReturnValue;)V", false
+                Opcodes.INVOKESTATIC, "moe/ruruke/skyblock/asm/hooks/GuiChestHook", "mouseReleased",
+                "(Lmoe/ruruke/skyblock/asm/utils/ReturnValue;)V", false
             )
         ) // GuiChestHook.mouseReleased(returnValue);
 
         list.add(VarInsnNode(Opcodes.ALOAD, 4))
         list.add(
             MethodInsnNode(
-                Opcodes.INVOKEVIRTUAL, "codes/biscuit/skyblockaddons/asm/utils/ReturnValue", "isCancelled",
+                Opcodes.INVOKEVIRTUAL, "moe/ruruke/skyblock/asm/utils/ReturnValue", "isCancelled",
                 "()Z", false
             )
         )
@@ -589,7 +589,7 @@ class GuiChestTransformer : ITransformer {
             FrameNode(
                 Opcodes.F_APPEND,
                 1,
-                arrayOf<Any>("codes/biscuit/skyblockaddons/asm/utils/ReturnValue"),
+                arrayOf<Any>("moe/ruruke/skyblock/asm/utils/ReturnValue"),
                 0,
                 null
             )
@@ -616,12 +616,12 @@ class GuiChestTransformer : ITransformer {
     private fun mouseClickMove(): InsnList {
         val list = InsnList()
 
-        list.add(TypeInsnNode(Opcodes.NEW, "codes/biscuit/skyblockaddons/asm/utils/ReturnValue"))
+        list.add(TypeInsnNode(Opcodes.NEW, "moe/ruruke/skyblock/asm/utils/ReturnValue"))
         list.add(InsnNode(Opcodes.DUP)) // ReturnValue returnValue = new ReturnValue();
         list.add(
             MethodInsnNode(
                 Opcodes.INVOKESPECIAL,
-                "codes/biscuit/skyblockaddons/asm/utils/ReturnValue",
+                "moe/ruruke/skyblock/asm/utils/ReturnValue",
                 "<init>",
                 "()V",
                 false
@@ -632,15 +632,15 @@ class GuiChestTransformer : ITransformer {
         list.add(VarInsnNode(Opcodes.ALOAD, 6)) // returnValue
         list.add(
             MethodInsnNode(
-                Opcodes.INVOKESTATIC, "codes/biscuit/skyblockaddons/asm/hooks/GuiChestHook", "mouseClickMove",
-                "(Lcodes/biscuit/skyblockaddons/asm/utils/ReturnValue;)V", false
+                Opcodes.INVOKESTATIC, "moe/ruruke/skyblock/asm/hooks/GuiChestHook", "mouseClickMove",
+                "(Lmoe/ruruke/skyblock/asm/utils/ReturnValue;)V", false
             )
         ) // GuiChestHook.mouseClickMove(returnValue);
 
         list.add(VarInsnNode(Opcodes.ALOAD, 6))
         list.add(
             MethodInsnNode(
-                Opcodes.INVOKEVIRTUAL, "codes/biscuit/skyblockaddons/asm/utils/ReturnValue", "isCancelled",
+                Opcodes.INVOKEVIRTUAL, "moe/ruruke/skyblock/asm/utils/ReturnValue", "isCancelled",
                 "()Z", false
             )
         )

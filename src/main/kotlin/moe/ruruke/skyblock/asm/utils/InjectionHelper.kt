@@ -1,6 +1,5 @@
-package codes.biscuit.skyblockaddons.asm.utils
+package moe.ruruke.skyblock.asm.utils
 
-import codes.biscuit.skyblockaddons.asm.utils.InjectionHelper.InstructionMatcher.InstructionMatcherFunction
 import com.google.common.collect.Sets
 import lombok.AccessLevel
 import lombok.Getter
@@ -25,9 +24,12 @@ class InjectionHelper {
         TreeMap() // Instruction Offset -> Condition Injection Point
     private var injectionPosition: InjectionPosition? = null
 
-
     @Setter
     private var injectionOffset = 0
+    fun setInjectionOffset(offset: Int): InjectionHelper {
+        injectionOffset = offset
+        return this
+    }
 
     @Setter(value = AccessLevel.PUBLIC)
     private var instructions: InsnList? = null
@@ -223,7 +225,7 @@ class InjectionHelper {
         private val localVarMatcher =
             InstructionMatcher { instruction: AbstractInsnNode?, matchAgainst: Int -> instruction is VarInsnNode && matchAgainst === instruction.`var` }
         private val ownerMatcher = InstructionMatcher(
-            InstructionMatcherFunction { instruction: AbstractInsnNode?, matchAgainst: TransformerClass ->
+            InstructionMatcher.InstructionMatcherFunction() { instruction: AbstractInsnNode?, matchAgainst: TransformerClass ->
                 if (instruction is FieldInsnNode) {
                     return@InstructionMatcherFunction matchAgainst.nameRaw == instruction.owner
                 } else if (instruction is MethodInsnNode) {
@@ -288,6 +290,11 @@ class InjectionHelper {
 
         fun endCondition(): InjectionHelper {
             return INSTANCE
+        }
+
+        fun addAnchorCondition(value: Int): InjectionPoint {
+            endCondition().addAnchorCondition(value)
+            return this
         }
     }
 

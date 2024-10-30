@@ -1019,6 +1019,22 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
         return value
     }
 
+    fun getChromaFeatures(): MutableSet<Feature> {
+        return chromaFeatures
+    }
+    fun getChromaSize(): MutableFloat {
+        return chromaSize
+    }
+    fun getChromaSpeed(): MutableFloat {
+        return chromaSpeed
+    }
+    fun getChromaSaturation(): MutableFloat {
+        return chromaSaturation
+    }
+    fun getChromaBrightness(): MutableFloat {
+        return chromaBrightness;
+    }
+
     fun setChroma(feature: Feature, enabled: Boolean) {
         if (enabled) {
             chromaFeatures.add(feature)

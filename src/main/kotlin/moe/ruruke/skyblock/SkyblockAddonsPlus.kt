@@ -58,6 +58,7 @@ class SkyblockAddonsPlus() {
         @kotlin.jvm.JvmField
         var registeredFeatureIDs: MutableSet<Int> = HashSet()
         var configValues: ConfigValues? = null
+
         private val GSON: Gson = GsonBuilder()
             .setPrettyPrinting()
             .registerTypeAdapterFactory(GsonInitializableTypeAdapter())

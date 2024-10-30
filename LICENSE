@@ -40,3 +40,5 @@ dependencyLicenses/slf4j-api/MIT.txt.
 
 This product bundles SkyblockAddons, which is available under the MIT license. The full license is available at
 dependencyLicenses/skyblockaddons/MIT.txt.
+This product bundles HypixelLocalizationLib
+https://github.com/BiscuitDevelopment/HypixelLocalizationLib/tree/master

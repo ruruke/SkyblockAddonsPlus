@@ -137,7 +137,7 @@ object ContainerPreviewManager {
      * Saves `containerInventory` to the container inventory cache if it's not `null` when a
      * [net.minecraft.client.gui.inventory.GuiChest] is closed.
      *
-     * @see codes.biscuit.skyblockaddons.listeners.GuiScreenListener.onGuiOpen
+     * @see moe.ruruke.skyblock.listeners.GuiScreenListener.onGuiOpen
      */
     fun onContainerClose() {
         if (containerInventory != null) {
@@ -411,7 +411,7 @@ object ContainerPreviewManager {
      * Called when a key is typed in a [GuiContainer]. Used to control backpack preview freezing.
      *
      * @param keyCode the key code of the key that was typed
-     * @see codes.biscuit.skyblockaddons.asm.hooks.GuiContainerHook.keyTyped
+     * @see moe.ruruke.skyblock.asm.hooks.GuiContainerHook.keyTyped
      */
     fun onContainerKeyTyped(keyCode: Int) {
         val main: SkyblockAddonsPlus.Companion = SkyblockAddonsPlus.instance

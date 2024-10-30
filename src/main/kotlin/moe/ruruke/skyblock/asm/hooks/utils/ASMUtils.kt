@@ -1,4 +1,4 @@
-package moe.ruruke.skyblock.asm.utils
+package moe.ruruke.skyblock.asm.hooks.utils
 
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.FieldInsnNode

@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.eventhandler.Event
  * `EntityPlayer` instances for both of them are included as well if the players are within the client's render
  * distance. Otherwise, they will be `null`.
  *
- * @see codes.biscuit.skyblockaddons.listeners.PlayerListener.onChatReceive
+ * @see moe.ruruke.skyblock.listeners.PlayerListener.onChatReceive
  */
 class DungeonPlayerReviveEvent
 /**

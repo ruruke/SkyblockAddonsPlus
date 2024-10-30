@@ -1,4 +1,4 @@
-package codes.biscuit.skyblockaddons.gui.buttons
+package moe.ruruke.skyblock.gui.buttons
 
 import moe.ruruke.skyblock.SkyblockAddonsPlus
 import moe.ruruke.skyblock.core.Feature

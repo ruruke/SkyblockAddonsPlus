@@ -1,6 +1,6 @@
 //package moe.ruruke.skyblock.gui
 //
-//import codes.biscuit.skyblockaddons.SkyblockAddons
+//import moe.ruruke.skyblock.SkyblockAddons
 //import moe.ruruke.skyblock.core.Feature
 //import org.apache.logging.log4j.Logger
 //import org.lwjgl.input.Keyboard

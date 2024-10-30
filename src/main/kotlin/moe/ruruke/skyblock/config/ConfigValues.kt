@@ -100,6 +100,9 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
     private val mapZoom = MutableFloat(0.18478261f) // 1.3
 
     private val healingCircleOpacity = MutableFloat(0.4)
+    fun getHealingCircleOpacity(): MutableFloat{
+        return healingCircleOpacity
+    }
 
 
     private val chromaSize = MutableFloat(30f)

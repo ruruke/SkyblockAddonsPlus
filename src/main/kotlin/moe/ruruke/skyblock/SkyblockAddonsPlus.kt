@@ -168,9 +168,12 @@ class SkyblockAddonsPlus() {
         playerListener = PlayerListener()
         guiScreenListener = GuiScreenListener()
         skillXpManager = SkillXpManager()
-        scheduler = Scheduler()
-        newScheduler = NewScheduler()
         inventoryUtils = InventoryUtils()
         utils = Utils()
+        scheduler = Scheduler()
+        newScheduler = NewScheduler()
+//        dungeonManager = DungeonManager() TODO:
+//        guiManager = GuiManager() 別のライブラリを使う
+        skillXpManager = SkillXpManager()
     }
 }

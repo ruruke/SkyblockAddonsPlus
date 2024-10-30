@@ -1,9 +1,9 @@
 package moe.ruruke.skyblock.asm
 
-import moe.ruruke.skyblock.asm.utils.InjectionHelper
-import moe.ruruke.skyblock.asm.utils.TransformerClass
-import moe.ruruke.skyblock.asm.utils.TransformerField
-import moe.ruruke.skyblock.asm.utils.TransformerMethod
+import moe.ruruke.skyblock.asm.hooks.utils.InjectionHelper
+import moe.ruruke.skyblock.asm.hooks.utils.TransformerClass
+import moe.ruruke.skyblock.asm.hooks.utils.TransformerField
+import moe.ruruke.skyblock.asm.hooks.utils.TransformerMethod
 import moe.ruruke.skyblock.tweaker.transformer.ITransformer
 import org.objectweb.asm.tree.ClassNode
 

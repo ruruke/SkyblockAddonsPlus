@@ -5,7 +5,7 @@ import moe.ruruke.skyblock.SkyblockAddonsPlus
 import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.configValues
 import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.instance
 import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.utils
-import moe.ruruke.skyblock.asm.utils.ReturnValue
+import moe.ruruke.skyblock.asm.hooks.utils.ReturnValue
 import moe.ruruke.skyblock.core.Feature
 import moe.ruruke.skyblock.core.Location
 import moe.ruruke.skyblock.core.Translations.getMessage

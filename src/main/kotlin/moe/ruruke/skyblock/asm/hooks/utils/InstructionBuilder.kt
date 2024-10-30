@@ -1,6 +1,5 @@
-package moe.ruruke.skyblock.asm.utils
+package moe.ruruke.skyblock.asm.hooks.utils
 
-import moe.ruruke.skyblock.asm.utils.InjectionHelper
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.*

@@ -1,7 +1,7 @@
 package moe.ruruke.skyblock.asm.hooks
 
 import moe.ruruke.skyblock.SkyblockAddonsPlus
-import moe.ruruke.skyblock.asm.utils.ReturnValue
+import moe.ruruke.skyblock.asm.hooks.utils.ReturnValue
 import moe.ruruke.skyblock.core.Feature
 import moe.ruruke.skyblock.core.InventoryType
 import moe.ruruke.skyblock.features.backpacks.ContainerPreviewManager

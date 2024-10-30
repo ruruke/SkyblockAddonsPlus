@@ -1,4 +1,4 @@
-package moe.ruruke.skyblock.asm.utils
+package moe.ruruke.skyblock.asm.hooks.utils
 
 import moe.ruruke.skyblock.tweaker.SkyblockAddonsTransformer
 import org.objectweb.asm.Opcodes

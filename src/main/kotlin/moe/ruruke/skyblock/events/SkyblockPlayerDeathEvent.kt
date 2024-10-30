@@ -8,7 +8,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent
  * It includes the `EntityPlayer` of the player who died, their username and the cause of death.
  * The [PlayerEvent.entityPlayer] may be `null` if a player dies outside of the client's render distance.
  *
- * @see codes.biscuit.skyblockaddons.listeners.PlayerListener.onChatReceive
+ * @see moe.ruruke.skyblock.listeners.PlayerListener.onChatReceive
  */
 class SkyblockPlayerDeathEvent
 /**

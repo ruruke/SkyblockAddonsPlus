@@ -14,7 +14,7 @@ import java.util.regex.Pattern
 class TabEffectManager {
     /**
      * The following two fields are accessed by
-     * [codes.biscuit.skyblockaddons.listeners.RenderListener.drawPotionEffectTimers] to retrieve lists for drawing.
+     * [moe.ruruke.skyblock.listeners.RenderListener.drawPotionEffectTimers] to retrieve lists for drawing.
      *
      *
      * Both return a list of current Potion or Powerup timers. They can be empty, but are never null.
@@ -69,7 +69,7 @@ class TabEffectManager {
     }
 
     /**
-     * Called by [codes.biscuit.skyblockaddons.listeners.PlayerListener.onTick] every second
+     * Called by [moe.ruruke.skyblock.listeners.PlayerListener.onTick] every second
      * to update the list of current effect timers.
      */
     fun update(tabFooterString: String?, strippedTabFooterString: String) {
@@ -122,7 +122,7 @@ class TabEffectManager {
 
         /**
          * The following two fields are accessed by
-         * [codes.biscuit.skyblockaddons.listeners.RenderListener.drawPotionEffectTimers]
+         * [moe.ruruke.skyblock.listeners.RenderListener.drawPotionEffectTimers]
          * to retrieve dummy lists for drawing when editing GUI locations while no Effects are active.
          *
          *

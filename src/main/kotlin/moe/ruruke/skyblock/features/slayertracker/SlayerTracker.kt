@@ -124,7 +124,7 @@ class SlayerTracker {
      * Sets the value of a specific slayer stat
      *
      *
-     * This method is called from [codes.biscuit.skyblockaddons.commands.SkyblockAddonsCommand.processCommand]
+     * This method is called from [moe.ruruke.skyblock.commands.SkyblockAddonsCommand.processCommand]
      * when the player runs the command to change the slayer tracker stats.
      *
      * @param args the arguments provided when the player executed the command

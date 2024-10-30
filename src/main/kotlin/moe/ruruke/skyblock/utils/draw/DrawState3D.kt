@@ -34,7 +34,7 @@ class DrawState3D : DrawState {
         return this
     }
 
-    override fun setColor(color: SkyblockColor): DrawState3D {
+    public override fun setColor(color: SkyblockColor): DrawState3D {
         super.reColor(color)
         return this
     }

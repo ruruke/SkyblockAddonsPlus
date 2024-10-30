@@ -1,6 +1,6 @@
 //package moe.ruruke.skyblock.gui
 //
-//import codes.biscuit.skyblockaddons.SkyblockAddons
+//import moe.ruruke.skyblock.SkyblockAddons
 //import com.google.common.collect.Sets
 //
 //import org.lwjgl.input.Keyboard

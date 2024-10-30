@@ -1,6 +1,6 @@
 package moe.ruruke.skyblock.gui
 
-import codes.biscuit.skyblockaddons.gui.buttons.ButtonModify
+import moe.ruruke.skyblock.gui.buttons.ButtonModify
 import moe.ruruke.skyblock.SkyblockAddonsPlus
 import moe.ruruke.skyblock.core.Feature
 import moe.ruruke.skyblock.core.Translations

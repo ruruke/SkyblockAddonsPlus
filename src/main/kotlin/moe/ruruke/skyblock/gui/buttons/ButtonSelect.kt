@@ -28,7 +28,7 @@ class ButtonSelect(
 
         var description: String
 //        fun getName(): String
-//        fun getDescription(): String?
+//        fun getDesc(): String?
     }
 
     fun interface OnItemSelectedCallback {

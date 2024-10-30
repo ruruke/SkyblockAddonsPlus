@@ -1,5 +1,6 @@
 package moe.ruruke.skyblock.features.enchants
 
+import moe.ruruke.skyblock.core.Translations
 import moe.ruruke.skyblock.gui.buttons.ButtonSelect.SelectItem
 
 /**
@@ -20,21 +21,12 @@ enum class EnchantListLayout() : SelectItem {
         this.title = title
         this.description = description!!
     }
-//    override fun getName(): String {
-//        return Translations.getMessage(title)!!
+
+//    fun getName(): String {
+//        return Translations.getMessage(title!!)!!
 //    }
 //
-//
-//    override fun getDescription(): String? {
-//        return getMessage(description)
-//    }
-//
-//    override var name: String
-//        get() = getMessage(title)!!
-//        set(s) {
-//        }
-//
-//    override fun getDescription(): String {
-//        return getMessage(description)!!
+//    override fun getDesc(): String {
+//        return Translations.getMessage(description)!!
 //    }
 }

@@ -1,6 +1,6 @@
 package moe.ruruke.skyblock.asm
 
-import moe.ruruke.skyblock.asm.utils.TransformerClass
+import moe.ruruke.skyblock.asm.hooks.utils.TransformerClass
 import moe.ruruke.skyblock.tweaker.transformer.ITransformer
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.*

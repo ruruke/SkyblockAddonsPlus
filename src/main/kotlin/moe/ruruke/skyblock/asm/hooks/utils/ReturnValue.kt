@@ -1,4 +1,4 @@
-package moe.ruruke.skyblock.asm.utils
+package moe.ruruke.skyblock.asm.hooks.utils
 
 class ReturnValue<R> {
     var isCancelled: Boolean = false

@@ -1,9 +1,9 @@
 package moe.ruruke.skyblock.asm
 
-import moe.ruruke.skyblock.asm.utils.ASMUtils.getField
-import moe.ruruke.skyblock.asm.utils.TransformerClass
-import moe.ruruke.skyblock.asm.utils.TransformerField
-import moe.ruruke.skyblock.asm.utils.TransformerMethod
+import moe.ruruke.skyblock.asm.hooks.utils.ASMUtils.getField
+import moe.ruruke.skyblock.asm.hooks.utils.TransformerClass
+import moe.ruruke.skyblock.asm.hooks.utils.TransformerField
+import moe.ruruke.skyblock.asm.hooks.utils.TransformerMethod
 import moe.ruruke.skyblock.tweaker.transformer.ITransformer
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.ClassNode

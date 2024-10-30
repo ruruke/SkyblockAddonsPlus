@@ -9,6 +9,7 @@ import net.minecraft.entity.item.EntityArmorStand
 import net.minecraft.util.AxisAlignedBB
 import java.util.*
 import java.util.regex.Pattern
+import kotlin.collections.HashMap
 
 class JerryPresent(
     present: UUID?,
@@ -73,8 +74,8 @@ class JerryPresent(
     companion object {
         private val FROM_TO_PATTERN: Pattern = Pattern.compile("(?:From:|To:) (?:\\[.*?] )?(?<name>\\w{1,16})")
 
-        private val jerryPresents: Map<UUID, JerryPresent> = HashMap()
-        fun getJerryPresents(): Map<UUID, JerryPresent> {
+        private val jerryPresents: HashMap<UUID, JerryPresent> = HashMap()
+        fun getJerryPresents(): HashMap<UUID, JerryPresent> {
             return jerryPresents
         }
 

@@ -19,9 +19,9 @@ import net.minecraft.item.EnumDyeColor
 import net.minecraft.util.ResourceLocation
 
 object GuiContainerHook {
-    private val LOCK = ResourceLocation("skyblockaddons", "lock.png")
-    private val OVERLAY_RED = ColorCode.RED.getColor(127)
-    private val OVERLAY_GREEN = ColorCode.GREEN.getColor(127)
+    val LOCK = ResourceLocation("skyblockaddons", "lock.png")
+    val OVERLAY_RED = ColorCode.RED.getColor(127)
+    val OVERLAY_GREEN = ColorCode.GREEN.getColor(127)
 
     fun keyTyped(keyCode: Int) {
         onContainerKeyTyped(keyCode)

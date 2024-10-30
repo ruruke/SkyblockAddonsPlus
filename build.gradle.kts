@@ -78,6 +78,7 @@ val modShade: Configuration by configurations.creating {
 sourceSets {
     main {
         output.setResourcesDir(java.classesDirectory)
+        java.srcDir("./../../src/main/kotlin")
     }
 }
 

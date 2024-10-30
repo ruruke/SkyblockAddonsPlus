@@ -2,15 +2,25 @@ package moe.ruruke.skyblock.listeners
 
 import moe.ruruke.skyblock.SkyblockAddonsPlus
 import moe.ruruke.skyblock.config.NewConfig
+import moe.ruruke.skyblock.core.Attribute
 import moe.ruruke.skyblock.core.Feature
+import moe.ruruke.skyblock.core.InventoryType
+import moe.ruruke.skyblock.core.SkillType
+import moe.ruruke.skyblock.core.npc.NPCUtils
+import moe.ruruke.skyblock.features.EndstoneProtectorManager
+import moe.ruruke.skyblock.features.JerryPresent
 import moe.ruruke.skyblock.features.enchants.EnchantManager
+import moe.ruruke.skyblock.features.fishParticles.FishParticleManager
+import moe.ruruke.skyblock.features.tablist.TabListParser
 import moe.ruruke.skyblock.utils.ActionBarParser
 import moe.ruruke.skyblock.utils.ItemUtils
 import moe.ruruke.skyblock.utils.RomanNumeralParser.replaceNumeralsWithIntegers
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.inventory.GuiChest
 import net.minecraft.entity.Entity
 import net.minecraft.entity.item.EntityArmorStand
 import net.minecraft.entity.monster.EntityEnderman
+import net.minecraft.inventory.ContainerChest
 import net.minecraft.util.*
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.event.entity.EntityJoinWorldEvent
@@ -96,7 +106,7 @@ class PlayerListener {
             main.instance.getInventoryUtil().resetPreviousInventory()
             countedEndermen.clear()
             //TODO:
-//            EndstoneProtectorManager.reset()
+            EndstoneProtectorManager.reset()
 
             //TODO:
 //            val doubleWarpMarker: IslandWarpGui.Marker = IslandWarpGui.getDoubleWarpMarker()
@@ -105,9 +115,9 @@ class PlayerListener {
 //                Minecraft.getMinecraft().thePlayer.sendChatMessage("/warp " + doubleWarpMarker.getWarpName())
 //            }
 //
-//            NPCUtils.getNpcLocations().clear()
-//            JerryPresent.getJerryPresents().clear()
-//            FishParticleManager.clearParticleCache()
+            NPCUtils.getNpcLocations().clear()
+            JerryPresent.getJerryPresents().clear()
+            FishParticleManager.clearParticleCache()
         }
     }
 
@@ -344,7 +354,7 @@ class PlayerListener {
 //                    }
 //                }
 //
-//                if (main.getInventoryUtils().getInventoryType() === InventoryType.SALVAGING && main.configValues!!
+//                if (main.inventoryUtils!!.getInventoryType() === InventoryType.SALVAGING && main.configValues!!
 //                        .isEnabled(Feature.SHOW_SALVAGE_ESSENCES_COUNTER)
 //                ) {
 //                    main.getDungeonManager().addSalvagedEssences(unformattedText)
@@ -599,26 +609,29 @@ class PlayerListener {
                 } else if (timerTick % 5 == 0) { // Check inventory, location, updates, and skeleton helmet every 1/4 second.
                     val player = mc.thePlayer
 
-//                    if (player != null) {
-//                        EndstoneProtectorManager.checkGolemStatus()
-//                        TabListParser.parse()
-//                        main.utils!!.parseSidebar()
-//                        main.getInventoryUtils().checkIfInventoryIsFull(mc, player)
-//
-//                        if (main.utils!!.isOnSkyblock()) {
-//                            main.getInventoryUtils().checkIfWearingSkeletonHelmet(player)
-//                            main.getInventoryUtils().checkIfUsingToxicArrowPoison(player)
-//                            main.getInventoryUtils().checkIfWearingSlayerArmor(player)
+                    if (player != null) {
+                        EndstoneProtectorManager.checkGolemStatus()
+                        TabListParser.parse()
+                        main.utils!!.parseSidebar()
+                        main.inventoryUtils!!.checkIfInventoryIsFull(mc, player)
+
+                        if (main.utils!!.isOnSkyblock()) {
+                            main.inventoryUtils!!.checkIfWearingSkeletonHelmet(player)
+                            main.inventoryUtils!!.checkIfUsingToxicArrowPoison(player)
+                            main.inventoryUtils!!.checkIfWearingSlayerArmor(player)
+
+                            //TODO:
 //                            if (shouldTriggerFishingIndicator()) { // The logic fits better in its own function
 //                                main.utils!!.playLoudSound("random.successful_hit", 0.8)
 //                            }
 //                            if (main.configValues!!.isEnabled(Feature.FETCHUR_TODAY)) {
 //                                FetchurManager.getInstance().recalculateFetchurItem()
 //                            }
-//
-//                            // Update mining/fishing pet tracker numbers when the player opens the skill menu
-//                            if (main.getInventoryUtils().getInventoryType() === InventoryType.SKILL_TYPE_MENU) {
-//                                val skill = SkillType.getFromString(main.getInventoryUtils().getInventorySubtype())
+
+                            // Update mining/fishing pet tracker numbers when the player opens the skill menu
+                            //TODO:
+//                            if (main.inventoryUtils!!.getInventoryType() === InventoryType.SKILL_TYPE_MENU) {
+//                                val skill = SkillType.getFromString(main.inventoryUtils!!.getInventorySubtype()!!)
 //                                if (skill == SkillType.MINING || skill == SkillType.FISHING) {
 //                                    try {
 //                                        val cc =
@@ -655,22 +668,22 @@ class PlayerListener {
 //                                    }
 //                                }
 //                            }
-//                        }
-//
-//                        if (mc.currentScreen == null && main.getPlayerListener().didntRecentlyJoinWorld() &&
-//                            (!main.utils!!.isInDungeon() || Minecraft.getSystemTime() - lastDeath > 1000 &&
-//                                    Minecraft.getSystemTime() - lastRevive > 1000)
-//                        ) {
-//                            main.getInventoryUtils().getInventoryDifference(player.inventory.mainInventory)
-//                        }
-//
+                        }
+
+                        if (mc.currentScreen == null && main.getPlayerListener().didntRecentlyJoinWorld() &&
+                            (!main.utils!!.isInDungeon() || Minecraft.getSystemTime() - lastDeath > 1000 &&
+                                    Minecraft.getSystemTime() - lastRevive > 1000)
+                        ) {
+                            main.inventoryUtils!!.getInventoryDifference(player.inventory.mainInventory)
+                        }
+//TODO:
 //                        if (main.configValues!!.isEnabled(Feature.BAIT_LIST) && BaitManager.getInstance()
 //                                .isHoldingRod()
 //                        ) {
 //                            BaitManager.getInstance().refreshBaits()
 //                        }
-//                    }
-//                    main.getInventoryUtils().cleanUpPickupLog()
+                    }
+                    main.inventoryUtils!!.cleanUpPickupLog()
                 } else if (timerTick > 20) { // To keep the timer going from 1 to 21 only.
                     timerTick = 1
                 }
@@ -1224,7 +1237,7 @@ class PlayerListener {
 //                .isEnabled(Feature.ITEM_PICKUP_LOG) && e.entityPlayer === thisPlayer && main.utils!!.isInDungeon()
 //        ) {
 //            lastDeath = Minecraft.getSystemTime()
-//            main.getInventoryUtils().resetPreviousInventory()
+//            main.inventoryUtils!!.resetPreviousInventory()
 //        }
 //
 //        if (main.configValues!!.isEnabled(Feature.DUNGEON_DEATH_COUNTER) && main.utils!!.isInDungeon()) {
@@ -1262,7 +1275,7 @@ class PlayerListener {
 //
 //        // Reset the previous inventory so the screen doesn't get spammed with a large pickup log
 //        if (main.configValues!!.isEnabled(Feature.ITEM_PICKUP_LOG)) {
-//            main.getInventoryUtils().resetPreviousInventory()
+//            main.inventoryUtils!!.resetPreviousInventory()
 //        }
 //    }
 //
@@ -1329,24 +1342,28 @@ class PlayerListener {
 //        actionBarParser.setLastSecondHealth(health)
 //    }
 //
-//    fun shouldResetMouse(): Boolean {
+    fun shouldResetMouse(): Boolean {
+        //TODO:
+        return false
 //        return System.currentTimeMillis() - main.getGuiScreenListener().getLastContainerCloseMs() > 100
-//    }
+    }
 //
-//    val healthUpdate: Float
-//        get() = actionBarParser.getHealthUpdate()
+
+    fun getHealthUpdate(): Float? {
+        return actionBarParser.getHealthUpdate()
+    }
 //
 //    private fun changeMana(change: Float) {
 //        setAttribute(Attribute.MANA, getAttribute(Attribute.MANA) + change)
 //    }
 //
-//    private fun getAttribute(attribute: Attribute): Float {
-//        return main.utils!!.getAttributes().get(attribute).getValue()
-//    }
-//
-//    private fun setAttribute(attribute: Attribute, value: Float) {
-//        main.utils!!.getAttributes().get(attribute).setValue(value)
-//    }
+    private fun getAttribute(attribute: Attribute): Float {
+        return main.utils!!.getAttributes().get(attribute)?.getValue()!!
+    }
+
+    private fun setAttribute(attribute: Attribute, value: Float) {
+        main.utils!!.getAttributes().get(attribute)?.setValue(value)
+    }
 //
 //    /**
 //     * Checks if the fishing indicator sound should be played. To play the sound, these conditions have to be met:

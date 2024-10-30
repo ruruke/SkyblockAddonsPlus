@@ -12,7 +12,7 @@ object SpookyEventManager {
         Pattern.compile("Your Candy: (?<greenCandy>\\d+) Green, (?<purpleCandy>\\d+) Purple \\((?<points>\\d+) pts\\.\\)")
 
     private val dummyCandyCounts: MutableMap<CandyType, Int> = HashMap()
-    fun getCandyDummyCounts(): MutableMap<CandyType, Int> {
+    fun getDummyCandyCounts(): MutableMap<CandyType, Int> {
         return dummyCandyCounts
     }
 

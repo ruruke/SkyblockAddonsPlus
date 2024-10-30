@@ -2,6 +2,8 @@
 //
 //import moe.ruruke.skyblock.SkyblockAddons
 //import moe.ruruke.skyblock.core.Feature
+//import moe.ruruke.skyblock.core.Language
+//import moe.ruruke.skyblock.gui.buttons.ButtonArrow
 //import org.apache.logging.log4j.Logger
 //import org.lwjgl.input.Keyboard
 //import moe.ruruke.skyblock.utils.EnumUtils.*
@@ -44,9 +46,9 @@
 //            var skip = (page - 1) * displayCount
 //
 //            var max = page == 1
-//            buttonList.add(ButtonArrow(width / 2 - 15 - 50, height - 70, main, ButtonArrow.ArrowType.LEFT, max))
+//            buttonList.add(ButtonArrow(width / 2.0 - 15.0 - 50.0, height - 70.0, main, ButtonArrow.ArrowType.LEFT, max))
 //            max = Language.values().length - skip - displayCount <= 0
-//            buttonList.add(ButtonArrow(width / 2 - 15 + 50, height - 70, main, ButtonArrow.ArrowType.RIGHT, max))
+//            buttonList.add(ButtonArrow(width / 2.0 - 15.0 + 50.0, height - 70.0, main, ButtonArrow.ArrowType.RIGHT, max))
 //
 //            for (language in Language.values()) {
 //                if (skip == 0) {
@@ -688,7 +690,7 @@
 //    }
 //
 //    companion object {
-//        val main: SkyblockAddons = SkyblockAddons.getInstance()
+//        val main: SkyblockAddonsPlus.Companion = SkyblockAddonsPlus.instance
 //        val logger: Logger = SkyblockAddons.getLogger()
 //    }
 //}

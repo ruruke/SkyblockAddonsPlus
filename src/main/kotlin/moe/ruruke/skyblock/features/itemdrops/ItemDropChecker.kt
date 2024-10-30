@@ -1,6 +1,7 @@
 package moe.ruruke.skyblock.features.itemdrops
 
 import moe.ruruke.skyblock.SkyblockAddonsPlus
+import moe.ruruke.skyblock.config.NewConfig
 import moe.ruruke.skyblock.core.Feature
 import moe.ruruke.skyblock.core.ItemRarity
 import moe.ruruke.skyblock.core.Translations
@@ -120,7 +121,7 @@ class ItemDropChecker {
                     }
                 }
             }
-        } else if (SkyblockAddonsPlus.configValues!!.isEnabled(Feature.DROP_CONFIRMATION) && SkyblockAddonsPlus.configValues!!.isEnabled(Feature.DOUBLE_DROP_IN_OTHER_GAMES)
+        } else if (NewConfig.isEnabled(Feature.DROP_CONFIRMATION) && NewConfig.isEnabled(Feature.DOUBLE_DROP_IN_OTHER_GAMES)
         ) {
             return dropConfirmed(item, 2, playAlert)
         } else {

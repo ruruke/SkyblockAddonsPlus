@@ -1,6 +1,7 @@
 package moe.ruruke.skyblock.misc.scheduler
 
 import moe.ruruke.skyblock.SkyblockAddonsPlus
+import moe.ruruke.skyblock.core.Feature
 import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
@@ -121,27 +122,33 @@ class Scheduler {
 
         fun execute() {
             val main: SkyblockAddonsPlus.Companion = SkyblockAddonsPlus.instance
-            //TODO:
-//            if (this == SHOW_FULL_INVENTORY_WARNING) {
-//                val mc: Minecraft = Minecraft.getMinecraft()
-//                if (mc.theWorld == null || mc.thePlayer == null || !main.utils!!.isOnSkyblock()) {
-//                    return
-//                }
-//
-//                main.getInventoryUtils().showFullInventoryWarning()
-//
-//                // Schedule a repeat if needed.
-//                if (main.configValues!!.isEnabled(Feature.REPEAT_FULL_INVENTORY_WARNING)) {
-//                    main.getScheduler().schedule(SHOW_FULL_INVENTORY_WARNING, 10)
-//                    main.getScheduler().schedule(RESET_TITLE_FEATURE, 10 + main.configValues!!.getWarningSeconds())
-//                }
-//            } else if (this == RESET_TITLE_FEATURE) {
-//                main.getRenderListener().setTitleFeature(null)
-//            } else if (this == RESET_SUBTITLE_FEATURE) {
-//                main.getRenderListener().setSubtitleFeature(null)
-//            } else if (this == ERASE_UPDATE_MESSAGE) {
-//                main.getRenderListener().setUpdateMessageDisplayed(true)
-//            } else if (this == CHECK_FOR_UPDATE) {
+            when {
+                this == SHOW_FULL_INVENTORY_WARNING -> {
+                    val mc: Minecraft = Minecraft.getMinecraft()
+                    if (mc.theWorld == null || mc.thePlayer == null || !main.utils!!.isOnSkyblock()) {
+                        return
+                    }
+
+                    main.inventoryUtils!!.showFullInventoryWarning()
+
+                    // Schedule a repeat if needed.
+                    if (main.configValues!!.isEnabled(Feature.REPEAT_FULL_INVENTORY_WARNING)) {
+                        main.scheduler!!.schedule(SHOW_FULL_INVENTORY_WARNING, 10)
+                        main.scheduler!!.schedule(RESET_TITLE_FEATURE, 10 + main.configValues!!.getWarningSeconds())
+                    }
+                }
+                this == RESET_TITLE_FEATURE -> {
+                    main.renderListener!!.setTitleFeature(null)
+                }
+                this == RESET_SUBTITLE_FEATURE -> {
+                    main.renderListener!!.setSubtitleFeature(null)
+                }
+                this == ERASE_UPDATE_MESSAGE -> {
+                    main.renderListener!!.setUpdateMessageDisplayed(true)
+                }
+            }
+            //TODO
+//            else if (this == CHECK_FOR_UPDATE) {
 //                main.getUpdater().checkForUpdate()
 //            }
         }

@@ -33,7 +33,7 @@ object CooldownManager {
     }
 
     fun getItemCooldown(item: ItemStack?): Int {
-        return itemCooldowns.getOrDefault(getSkyblockItemID(item), 0)
+        return itemCooldowns.getOrDefault(getSkyblockItemID(item!!), 0)
     }
 
     fun getItemCooldown(itemId: String?): Int {
@@ -46,7 +46,7 @@ object CooldownManager {
      * @param item ItemStack to put on cooldown
      */
     fun put(item: ItemStack?) {
-        val itemId = getSkyblockItemID(item) ?: return
+        val itemId = getSkyblockItemID(item!!) ?: return
         val cooldown = itemCooldowns.getOrDefault(itemId, 0)
         if (cooldown > 0) {
             put(itemId, cooldown.toLong())
@@ -77,7 +77,7 @@ object CooldownManager {
      * @param cooldown Cooldown in milliseconds
      */
     fun put(item: ItemStack?, cooldown: Long) {
-        val itemId = getSkyblockItemID(item)
+        val itemId = getSkyblockItemID(item!!)
         if (itemId != null && cooldown > 0) {
             put(itemId, cooldown)
         }

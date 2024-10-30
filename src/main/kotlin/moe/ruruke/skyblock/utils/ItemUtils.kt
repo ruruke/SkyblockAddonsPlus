@@ -118,7 +118,7 @@ class ItemUtils {
          * @param item the Skyblock item to check
          * @return the Skyblock Item ID of this item or `null` if this isn't a valid Skyblock item
          */
-        fun getSkyblockItemID(item: ItemStack?): String? {
+        fun getSkyblockItemID(item: ItemStack): String? {
             if (item == null) {
                 return null
             }

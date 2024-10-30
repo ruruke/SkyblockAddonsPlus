@@ -12,11 +12,15 @@ import moe.ruruke.skyblock.config.NewConfigValue
 import moe.ruruke.skyblock.config.PersistentValuesManager
 import moe.ruruke.skyblock.core.OnlineData
 import moe.ruruke.skyblock.core.SkillXpManager
+import moe.ruruke.skyblock.features.EntityOutlines.EntityOutlineRenderer
+import moe.ruruke.skyblock.features.EntityOutlines.FeatureItemOutlines
 import moe.ruruke.skyblock.listeners.GuiScreenListener
 import moe.ruruke.skyblock.listeners.PlayerListener
+import moe.ruruke.skyblock.listeners.RenderListener
 import moe.ruruke.skyblock.misc.SkyblockKeyBinding
 import moe.ruruke.skyblock.misc.scheduler.NewScheduler
 import moe.ruruke.skyblock.misc.scheduler.Scheduler
+import moe.ruruke.skyblock.newgui.GuiManager
 import moe.ruruke.skyblock.utils.InventoryUtils
 import moe.ruruke.skyblock.utils.SkyblockAddonsMessageFactory
 import moe.ruruke.skyblock.utils.Utils
@@ -31,6 +35,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import org.lwjgl.input.Keyboard
 import java.util.*
 import java.util.concurrent.LinkedBlockingDeque
 import java.util.concurrent.ThreadPoolExecutor
@@ -53,7 +58,7 @@ class SkyblockAddonsPlus() {
         const val MODID: String = "skyblockaddonsplus"
         const val NAME: String = "SkyblockAddonsPlus"
         const val VERSION: String = "1.0.0"
-        private val keyBindings: List<SkyblockKeyBinding> = LinkedList()
+        private val keyBindings: MutableList<SkyblockKeyBinding> = LinkedList()
         private var elapsedPartialTicks: Float = 0f
         fun getTimer(): Float {
             return elapsedPartialTicks;
@@ -77,12 +82,26 @@ class SkyblockAddonsPlus() {
 
         @Mod.Instance(MODID)
         var INSTANCE: SkyblockAddonsPlus? = null // Adds the instance of the mod, so we can access other variables.
+        private var usingLabymod = false
+        private var usingOofModv1 = false
+        private var usingPatcher = false
+        fun isUsingLabyMod(): Boolean {
+            return usingLabymod
+        }
+        fun isUsingOofModv1(): Boolean {
+            return usingOofModv1
+        }
 
+        fun isUsingPatcher(): Boolean {
+            return usingPatcher
+        }
 
         var scheduler: Scheduler? = null
         var newScheduler: NewScheduler? = null
         var inventoryUtils: InventoryUtils? = null
         var skillXpManager: SkillXpManager? = null
+        var guiManager: GuiManager? = null
+        var renderListener: RenderListener? = null
         val THREAD_EXECUTOR: ThreadPoolExecutor = ThreadPoolExecutor(
             0, 1, 60L, TimeUnit.SECONDS,
             LinkedBlockingDeque(), ThreadFactoryBuilder().setNameFormat(NAME + " - #%d").build()
@@ -143,11 +162,38 @@ class SkyblockAddonsPlus() {
         if (DataUtils.USE_ONLINE_DATA) {
             DataUtils.loadOnlineData();
         }
-        MinecraftForge.EVENT_BUS.register(playerListener);
-        MinecraftForge.EVENT_BUS.register(guiScreenListener);
 
-//        CommandManager.INSTANCE.registerCommand(ExampleCommand())
-//        CommandManager.INSTANCE.registerCommand(ExampleCommand())
+//        MinecraftForge.EVENT_BUS.register(NetworkListener())
+        MinecraftForge.EVENT_BUS.register(playerListener)
+        MinecraftForge.EVENT_BUS.register(guiScreenListener)
+        MinecraftForge.EVENT_BUS.register(renderListener)
+        MinecraftForge.EVENT_BUS.register(scheduler)
+        MinecraftForge.EVENT_BUS.register(newScheduler)
+        MinecraftForge.EVENT_BUS.register(FeatureItemOutlines())
+//        MinecraftForge.EVENT_BUS.register(FeatureDungeonTeammateOutlines())
+        MinecraftForge.EVENT_BUS.register(EntityOutlineRenderer())
+//        MinecraftForge.EVENT_BUS.register(FeatureTrackerQuest())
+//        (Minecraft.getMinecraft().resourceManager as SimpleReloadableResourceManager).registerReloadListener(
+//            resourceManagerReloadListener
+//        )
+
+        //TODO: バグってる。 
+//        Collections.addAll(
+//            keyBindings, SkyblockKeyBinding("open_settings", Keyboard.KEY_NONE, "settings.settings"),
+//            SkyblockKeyBinding("edit_gui", Keyboard.KEY_NONE, "settings.editLocations"),
+//            SkyblockKeyBinding("lock_slot", Keyboard.KEY_L, "settings.lockSlot"),
+//            SkyblockKeyBinding("freeze_backpack", Keyboard.KEY_F, "settings.freezeBackpackPreview"),
+//            SkyblockKeyBinding("increase_dungeon_map_zoom", Keyboard.KEY_EQUALS, "keyBindings.increaseDungeonMapZoom"),
+//            SkyblockKeyBinding(
+//                "decrease_dungeon_map_zoom",
+//                Keyboard.KEY_SUBTRACT,
+//                "keyBindings.decreaseDungeonMapZoom"
+//            ),
+////            SkyblockKeyBinding("copy_NBT", developerModeKey, "keyBindings.developerCopyNBT")
+//        )
+        usingLabymod = utils!!.isModLoaded("labymod");
+        usingOofModv1 = utils!!.isModLoaded("refractionoof", "1.0");
+        usingPatcher = utils!!.isModLoaded("patcher");
     }
 
     @Subscribe
@@ -166,6 +212,7 @@ class SkyblockAddonsPlus() {
 
     init {
         playerListener = PlayerListener()
+        renderListener = RenderListener()
         guiScreenListener = GuiScreenListener()
         skillXpManager = SkillXpManager()
         inventoryUtils = InventoryUtils()
@@ -173,7 +220,7 @@ class SkyblockAddonsPlus() {
         scheduler = Scheduler()
         newScheduler = NewScheduler()
 //        dungeonManager = DungeonManager() TODO:
-//        guiManager = GuiManager() 別のライブラリを使う
+        guiManager = GuiManager()
         skillXpManager = SkillXpManager()
     }
 }

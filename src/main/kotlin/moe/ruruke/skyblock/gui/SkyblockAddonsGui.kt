@@ -2,6 +2,7 @@ package moe.ruruke.skyblock.gui
 
 import moe.ruruke.skyblock.gui.buttons.ButtonModify
 import moe.ruruke.skyblock.SkyblockAddonsPlus
+import moe.ruruke.skyblock.config.NewConfig
 import moe.ruruke.skyblock.core.Feature
 import moe.ruruke.skyblock.core.Translations
 import moe.ruruke.skyblock.gui.buttons.*
@@ -230,8 +231,8 @@ class SkyblockAddonsGui(page: Int, tab: GuiTab) : GuiScreen() {
                     Minecraft.getMinecraft().displayGuiScreen(SkyblockAddonsGui(1, EnumUtils.GuiTab.GENERAL_SETTINGS))
                 }
             } else if (abstractButton is ButtonToggle) {
-                if (SkyblockAddonsPlus.configValues!!isRemoteDisabled(feature)) return
-                if (SkyblockAddonsPlus.configValues!!.isDisabled(feature))
+                if (NewConfig.isRemoteDisabled(feature)) return
+                if (NewConfig.isDisabled(feature))
                 run {
                     feature.setEnabled(true)
                     if (feature === Feature.DISCORD_RPC && SkyblockAddonsPlus.utils!!.isOnSkyblock())

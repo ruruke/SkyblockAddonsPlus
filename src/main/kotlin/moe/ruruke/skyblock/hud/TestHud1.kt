@@ -7,8 +7,8 @@ import cc.polyfrost.oneconfig.hud.SingleTextHud
  *
  * @see TestConfig.hud
  */
-class TestHud : SingleTextHud("Test", true) {
+class TestHud : SingleTextHud("Development Ver.", true) {
     public override fun getText(example: Boolean): String {
-        return "I'm an example HUD"
+        return "Development Ver."
     }
 }

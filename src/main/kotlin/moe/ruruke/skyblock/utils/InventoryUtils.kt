@@ -8,6 +8,7 @@ import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.configValues
 import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.instance
 import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.scheduler
 import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.utils
+import moe.ruruke.skyblock.config.NewConfig
 import moe.ruruke.skyblock.core.Feature
 import moe.ruruke.skyblock.core.InventoryType
 import moe.ruruke.skyblock.features.ItemDiff
@@ -50,9 +51,15 @@ class InventoryUtils {
      */
     
     private var wearingSkeletonHelmet = false
+    fun isWearingSkeletonHelmet(): Boolean {
+        return wearingSkeletonHelmet
+    }
 
     
     private var usingToxicArrowPoison = false
+    fun isUsingToxicArrowPoison(): Boolean {
+        return usingToxicArrowPoison
+    }
 
     
     private val slayerArmorProgresses = arrayOfNulls<SlayerArmorProgress>(4)
@@ -68,6 +75,9 @@ class InventoryUtils {
 
     
     private var inventorySubtype: String? = null
+    fun getInventorySubtype(): String? {
+        return inventorySubtype
+    }
     private val main = instance
 
 
@@ -256,7 +266,7 @@ class InventoryUtils {
      * @param p Player to check
      */
     fun checkIfInventoryIsFull(mc: Minecraft, p: EntityPlayerSP) {
-        if (utils!!.isOnSkyblock() && configValues!!.isEnabled(Feature.FULL_INVENTORY_WARNING)) {
+        if (utils!!.isOnSkyblock() && NewConfig.isEnabled(Feature.FULL_INVENTORY_WARNING)) {
             /*
             If the inventory is full, show the full inventory warning.
             Slot 8 is the Skyblock menu/quiver arrow slot. It's ignored so shooting with a full inventory
@@ -300,7 +310,7 @@ class InventoryUtils {
     fun showFullInventoryWarning() {
         //TODO:
         utils!!.playLoudSound("random.orb", 0.5)
-//        main.getRenderListener().setTitleFeature(Feature.FULL_INVENTORY_WARNING)
+        main.renderListener!!.setTitleFeature(Feature.FULL_INVENTORY_WARNING)
     }
 
     /**

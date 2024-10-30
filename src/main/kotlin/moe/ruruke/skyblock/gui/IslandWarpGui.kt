@@ -37,7 +37,7 @@
 //    }
 //
 //    override fun initGui() {
-//        val main: SkyblockAddons = SkyblockAddons.getInstance()
+//        val main: SkyblockAddonsPlus.Companion = SkyblockAddonsPlus.instance
 //
 //        val islands: MutableMap<Island, UnlockedStatus> = EnumMap(
 //            Island::class.java

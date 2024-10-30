@@ -68,6 +68,9 @@ class ActionBarParser {
 
     
     private val healthUpdate: Float? = null
+    fun getHealthUpdate(): Float? {
+        return healthUpdate
+    }
 
     
     private val lastHealthUpdate: Long = 0
@@ -274,10 +277,10 @@ class ActionBarParser {
                 returnString = ""
             }
             healthLock = false
-            val postSetLock = utils!!.attributes[Attribute.MAX_HEALTH]!!
+            val postSetLock = utils!!.getAttributes()[Attribute.MAX_HEALTH]!!
                 .value != maxHealth ||
                     (abs(
-                        (utils!!.attributes[Attribute.HEALTH]!!
+                        (utils!!.getAttributes()[Attribute.HEALTH]!!
                             .value - newHealth).toDouble()
                     ) / maxHealth) > .05
             setAttribute(Attribute.HEALTH, newHealth)
@@ -552,7 +555,7 @@ class ActionBarParser {
      */
     private fun setAttribute(attribute: Attribute, value: Float) {
         if (attribute == Attribute.HEALTH && healthLock) return
-        utils!!.attributes[attribute]!!.setValue(value)
+        utils!!.getAttributes()[attribute]!!.setValue(value)
     }
 
     companion object {

@@ -62,9 +62,9 @@ class EntityOutlineRenderer {
                     RenderEntityOutlineEvent(RenderEntityOutlineEvent.Type.NO_XRAY, xrayOutlineEvent.getEntitiesToChooseFrom())
                 MinecraftForge.EVENT_BUS.post(noxrayOutlineEvent)
                 // Cache the entities for future use
-                entityRenderCache.setXrayCache(xrayOutlineEvent.getEntitiesToOutline()!!)
-                entityRenderCache.setNoXrayCache(noxrayOutlineEvent.getEntitiesToOutline()!!)
-                entityRenderCache.setNoOutlineCache(noxrayOutlineEvent.getEntitiesToChooseFrom()!!)
+                entityRenderCache.setXrayCache(xrayOutlineEvent.getEntitiesToOutline())
+                entityRenderCache.setNoXrayCache(noxrayOutlineEvent.getEntitiesToOutline())
+                entityRenderCache.setNoOutlineCache(noxrayOutlineEvent.getEntitiesToChooseFrom())
 
                 if (isCacheEmpty) {
                     if (!emptyLastTick) {

@@ -10,9 +10,6 @@ import moe.ruruke.skyblock.events.SkyblockJoinedEvent
 import moe.ruruke.skyblock.events.SkyblockLeftEvent
 import moe.ruruke.skyblock.features.itemdrops.ItemDropChecker
 import moe.ruruke.skyblock.misc.scheduler.Scheduler
-import moe.ruruke.skyblock.utils.MathUtils.interpolateX
-import moe.ruruke.skyblock.utils.MathUtils.interpolateY
-import moe.ruruke.skyblock.utils.MathUtils.interpolateZ
 import moe.ruruke.skyblock.utils.RomanNumeralParser.parseNumeral
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
@@ -55,11 +52,13 @@ class Utils {
     /**
      * Get a player's attributes. This includes health, mana, and defence.
      */
-    var attributes: MutableMap<Attribute, MutableFloat> = mutableMapOf()
-        get() = field
-        set(value) {
-            field = value
-        }
+    private var attributes: MutableMap<Attribute, MutableFloat> = mutableMapOf()
+    fun getAttributes(): MutableMap<Attribute, MutableFloat> {
+        return attributes
+    }
+    fun setAttributes(attributes: MutableMap<Attribute, MutableFloat>){
+        this.attributes = attributes
+    }
 
     /**
      * This is the item checker that makes sure items being dropped or sold are allowed to be dropped or sold.
@@ -109,10 +108,12 @@ class Utils {
      * Whether a loud sound is being played by the mod.
      */
     private var playingSound = false
-        get() = field
-        set(value) {
-            field = value
-        }
+    fun isPlayingSound(): Boolean {
+        return playingSound
+    }
+    fun setPlayingSound(playingSound: Boolean) {
+        this.playingSound = playingSound
+    }
 
     /**
      * The current serverID that the player is on.
@@ -168,7 +169,7 @@ class Utils {
     private var inDungeon = false
     fun isInDungeon(): Boolean
     {
-        return isInDungeon()
+        return inDungeon
     }
 
     private var fadingIn = false
@@ -251,12 +252,12 @@ class Utils {
 
     fun isOnSkyblock(): Boolean {
         //TODO: DEBUG
-        if(Minecraft.getMinecraft().isSingleplayer) {
+//        return true
+        if(main.config!!.forceOnSkyblock){
             return true
         }
-        return true
         //TODO:
-        //return onSkyblock
+        return onSkyblock
     }
     fun parseSidebar() {
         var foundScoreboard = false
@@ -876,9 +877,9 @@ class Utils {
 
             if (currentTick != lastTick || currentPartialTicks != lastPartialTicks) {
                 val renderViewEntity = Minecraft.getMinecraft().renderViewEntity
-                interpolatedPlayerPosition.x = interpolateX(renderViewEntity, currentPartialTicks)
-                interpolatedPlayerPosition.y = interpolateY(renderViewEntity, currentPartialTicks)
-                interpolatedPlayerPosition.z = interpolateZ(renderViewEntity, currentPartialTicks)
+                interpolatedPlayerPosition.x = MathUtils.interpolateX(renderViewEntity, currentPartialTicks)
+                interpolatedPlayerPosition.y = MathUtils.interpolateY(renderViewEntity, currentPartialTicks)
+                interpolatedPlayerPosition.z = MathUtils.interpolateZ(renderViewEntity, currentPartialTicks)
 
                 lastTick = currentTick
                 lastPartialTicks = currentPartialTicks

@@ -19,14 +19,12 @@ class NewConfig {
          * @return `true` if the feature should be disabled, `false` otherwise
          */
         fun isRemoteDisabled(feature: Feature?): Boolean {
-            if (feature == null) return false
-            if(Minecraft.getMinecraft().isSingleplayer) return false;
 
             val disabledFeatures: HashMap<String, List<Int>>? = SkyblockAddonsPlus.getOnlineData()!!.getDisabledFeatures()//main.onlineData.getDisabledFeatures()
 
             if (disabledFeatures!!.containsKey("all")) {
                 if (disabledFeatures["all"] != null) {
-                    if (disabledFeatures["all"]!!.contains(feature.getId())) {
+                    if (disabledFeatures["all"]!!.contains(feature!!.getId())) {
                         return true
                     }
                 } else {
@@ -45,7 +43,7 @@ class NewConfig {
             }
             if (disabledFeatures.containsKey(version)) {
                 if (disabledFeatures[version] != null) {
-                    return disabledFeatures[version]!!.contains(feature.getId())
+                    return disabledFeatures[version]!!.contains(feature!!.getId())
                 } else {
                     logger.error("\"$version\" key in disabled features map has value of null. Please fix online data.")
                 }
@@ -62,10 +60,13 @@ class NewConfig {
                 SkyblockAddonsPlus.utils!!.sendErrorMessage("RemoteDisabled")
                 return true
             }
+            val config = SkyblockAddonsPlus.config!!
             when(feature.getId()) {
-                45 -> return SkyblockAddonsPlus.config!!.replaceRomanNumeralsWithNumbers
+                1 -> return config.dropConfirm
+                7 -> return config.fullInventoryWarning
+                45 -> return config.replaceRomanNumeralsWithNumbers
+
             }
-            SkyblockAddonsPlus.utils!!.sendErrorMessage("Other!")
             return false
         }
 

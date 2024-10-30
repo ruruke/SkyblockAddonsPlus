@@ -23,6 +23,9 @@ import java.util.*
 object MinecraftHook {
     
     private var lastLockedSlotItemChange: Long = -1
+    fun getLastLockedSlotItemChange(): Long {
+        return lastLockedSlotItemChange
+    }
 
     private val DEEP_CAVERNS_LOCATIONS: Set<Location> = EnumSet.of(
         Location.DEEP_CAVERNS,

@@ -18,7 +18,7 @@
 //    private var enableSnapping = true
 //    private var showFeatureNameOnHover = false
 //
-//    private val main: SkyblockAddons = SkyblockAddons.getInstance()
+//    private val main: SkyblockAddonsPlus.Companion = SkyblockAddonsPlus.instance
 //
 //    // The feature that is currently being dragged, or null for nothing.
 //    private var draggedFeature: Feature? = null

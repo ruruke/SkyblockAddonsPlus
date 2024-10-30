@@ -28,13 +28,10 @@ class SkyblockKeyBinding(
     private var previousKeyCode = 999
 
     // TODO localize errors?
-    val keyCode: Int
-        /**
-         * Returns the current key code for this key binding.
-         *
-         * @return the current key code for this key binding
-         */
-        get() = keyBinding.keyCode
+    private val keyCode: Int = 0
+    fun getKeyCode(): Int {
+        return keyCode
+    }
 
     val isKeyDown: Boolean
         /**

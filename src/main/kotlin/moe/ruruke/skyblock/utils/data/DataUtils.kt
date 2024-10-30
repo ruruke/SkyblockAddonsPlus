@@ -531,8 +531,8 @@ object DataUtils {
 
         //TODO:
 //        remoteRequests.add(OnlineDataRequest())
-//        /*        if (SkyblockAddons.getInstance().getConfigValues().getLanguage() != Language.ENGLISH) {
-//            remoteRequests.add(new LocalizedStringsRequest(SkyblockAddons.getInstance().getConfigValues().getLanguage()));
+//        /*        if (SkyblockAddons.getInstance().configValues!!.getLanguage() != Language.ENGLISH) {
+//            remoteRequests.add(new LocalizedStringsRequest(SkyblockAddons.getInstance().configValues!!.getLanguage()));
 //        }*/
 //        remoteRequests.add(EnchantedItemListsRequest())
 //        remoteRequests.add(ContainersRequest())

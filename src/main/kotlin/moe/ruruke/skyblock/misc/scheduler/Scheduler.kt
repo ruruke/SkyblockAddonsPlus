@@ -124,16 +124,16 @@ class Scheduler {
             //TODO:
 //            if (this == SHOW_FULL_INVENTORY_WARNING) {
 //                val mc: Minecraft = Minecraft.getMinecraft()
-//                if (mc.theWorld == null || mc.thePlayer == null || !main.getUtils().isOnSkyblock()) {
+//                if (mc.theWorld == null || mc.thePlayer == null || !main.utils!!.isOnSkyblock()) {
 //                    return
 //                }
 //
 //                main.getInventoryUtils().showFullInventoryWarning()
 //
 //                // Schedule a repeat if needed.
-//                if (main.getConfigValues().isEnabled(Feature.REPEAT_FULL_INVENTORY_WARNING)) {
+//                if (main.configValues!!.isEnabled(Feature.REPEAT_FULL_INVENTORY_WARNING)) {
 //                    main.getScheduler().schedule(SHOW_FULL_INVENTORY_WARNING, 10)
-//                    main.getScheduler().schedule(RESET_TITLE_FEATURE, 10 + main.getConfigValues().getWarningSeconds())
+//                    main.getScheduler().schedule(RESET_TITLE_FEATURE, 10 + main.configValues!!.getWarningSeconds())
 //                }
 //            } else if (this == RESET_TITLE_FEATURE) {
 //                main.getRenderListener().setTitleFeature(null)

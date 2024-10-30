@@ -23,12 +23,12 @@ class DragonTracker {
         //TODO:
         return 0
 //        val dragonTrackerData: DragonTrackerData =
-//            SkyblockAddonsPlus.instance.getPersistentValuesManager().getPersistentValues().getDragonTracker()
+//            SkyblockAddonsPlus.instance.persistentValuesManager!!.getPersistentValues().getDragonTracker()
 //        return dragonTrackerData.dragonsSince.getOrDefault(dragonsSince, 0)
     }
 
 //    val recentDragons: List<DragonType>
-//        get() = SkyblockAddons.getInstance().getPersistentValuesManager().getPersistentValues().getDragonTracker()
+//        get() = SkyblockAddons.getInstance().persistentValuesManager!!.getPersistentValues().getDragonTracker()
 //            .getRecentDragons()
 
     fun dragonSpawned(dragonTypeText: String) {
@@ -38,7 +38,7 @@ class DragonTracker {
             //TODO:
 //
 //            val dragonTrackerData: DragonTrackerData =
-//                SkyblockAddonsPlus.instance.getPersistentValuesManager().getPersistentValues().getDragonTracker()
+//                SkyblockAddonsPlus.instance.persistentValuesManager!!.getPersistentValues().getDragonTracker()
 //            val dragonType: DragonType = DragonType.Companion.fromName(dragonTypeText)
 //            if (dragonType != null) {
 //                if (dragonTrackerData.recentDragons.size == 3) {
@@ -57,7 +57,7 @@ class DragonTracker {
 //            dragonTrackerData.eyesPlaced = dragonTrackerData.eyesPlaced + eyesToPlace
 //            eyesToPlace = 0
 //
-//            SkyblockAddons.getInstance().getPersistentValuesManager().saveValues()
+//            SkyblockAddons.getInstance().persistentValuesManager!!.saveValues()
         }
     }
 
@@ -89,19 +89,19 @@ class DragonTracker {
 //                }
 //
 //                val dragonTrackerData: DragonTrackerData =
-//                    SkyblockAddons.getInstance().getPersistentValuesManager().getPersistentValues().getDragonTracker()
+//                    SkyblockAddons.getInstance().persistentValuesManager!!.getPersistentValues().getDragonTracker()
 //                val skyBlockItemID: String = ItemUtils.getSkyblockItemID(itemDifference.getExtraAttributes())
 //                when (skyBlockItemID) {
 //                    "ASPECT_OF_THE_DRAGON" -> {
 //                        dragonTrackerData.dragonsSince[DragonsSince.ASPECT_OF_THE_DRAGONS] = 0
-//                        SkyblockAddons.getInstance().getPersistentValuesManager().saveValues()
+//                        SkyblockAddons.getInstance().persistentValuesManager!!.saveValues()
 //                    }
 //
 //                    "PET" -> {
 //                        val petInfo: PetInfo = ItemUtils.getPetInfo(itemDifference.getExtraAttributes())
 //                        if (petInfo != null && "ENDER_DRAGON" == petInfo.getType()) {
 //                            dragonTrackerData.dragonsSince[DragonsSince.ENDER_DRAGON_PET] = 0
-//                            SkyblockAddons.getInstance().getPersistentValuesManager().saveValues()
+//                            SkyblockAddons.getInstance().persistentValuesManager!!.saveValues()
 //                        }
 //                    }
 //

@@ -33,6 +33,6 @@ class Chroma3DShader : ChromaShader("chroma_3d") {
 //            arrayOf<Float>(viewPosition.x.toFloat(), viewPosition.y.toFloat(), viewPosition.z.toFloat())
 //        }
         registerUniform(UniformType.FLOAT, "alpha") { alpha }
-//        registerUniform(UniformType.FLOAT, "brightness") { main.getConfigValues().getChromaBrightness().floatValue() }
+//        registerUniform(UniformType.FLOAT, "brightness") { main.configValues!!.getChromaBrightness().floatValue() }
     }
 }

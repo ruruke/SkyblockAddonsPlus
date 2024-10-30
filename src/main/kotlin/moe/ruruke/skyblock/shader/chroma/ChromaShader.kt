@@ -13,9 +13,9 @@ abstract class ChromaShader(shaderName: String?) : Shader(shaderName!!, shaderNa
 //        }
 //        registerUniform(UniformType.FLOAT, "timeOffset") {
 //            val ticks: Float = main.getNewScheduler().getTotalTicks() as Float + Utils.getPartialTicks()
-//            val chromaSpeed: Float = main.getConfigValues().getChromaSpeed().floatValue() / 360f
+//            val chromaSpeed: Float = main.configValues!!.getChromaSpeed().floatValue() / 360f
 //            ticks * chromaSpeed
 //        }
-//        registerUniform(UniformType.FLOAT, "saturation") { main.getConfigValues().getChromaSaturation().floatValue() }
+//        registerUniform(UniformType.FLOAT, "saturation") { main.configValues!!.getChromaSaturation().floatValue() }
     }
 }

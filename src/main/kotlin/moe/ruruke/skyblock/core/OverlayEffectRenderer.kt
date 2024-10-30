@@ -55,7 +55,7 @@
 //     * Whether we should render the overlay on this frame. Return `true` to render
 //     */
 //    fun shouldRenderOverlay(): Boolean {
-//        return SkyblockAddons.getInstance().getUtils().isOnSkyblock()
+//        return SkyblockAddons.getInstance().utils!!.isOnSkyblock()
 //    }
 //
 //
@@ -65,7 +65,7 @@
 //     */
 //    fun setupRenderEnvironment() {
 //        if (feature != null) {
-//            DRAW_PARTICLE.setColor(SkyblockAddons.getInstance().getConfigValues().getSkyblockColor(feature))
+//            DRAW_PARTICLE.setColor(SkyblockAddons.getInstance().configValues!!.getSkyblockColor(feature))
 //                .newColorEnv()
 //        }
 //    }

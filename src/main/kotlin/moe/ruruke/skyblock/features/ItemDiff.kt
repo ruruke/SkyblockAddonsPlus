@@ -31,6 +31,9 @@ class ItemDiff @JvmOverloads constructor(
         this.timestamp = System.currentTimeMillis()
     }
 
+    fun getExtraAttributes(): NBTTagCompound? {
+        return extraAttributes
+    }
     fun getDisplayName(): String {
         return displayName
     }

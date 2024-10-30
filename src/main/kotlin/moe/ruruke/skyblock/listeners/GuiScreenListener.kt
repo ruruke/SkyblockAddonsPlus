@@ -84,7 +84,7 @@ class GuiScreenListener {
 //
 //    @SubscribeEvent
 //    fun onGuiOpen(e: GuiOpenEvent) {
-//        if (!main.getUtils().isOnSkyblock()) {
+//        if (!main.utils!!.isOnSkyblock()) {
 //            return
 //        }
 //
@@ -116,7 +116,7 @@ class GuiScreenListener {
 //    fun onKeyInput(event: KeyboardInputEvent.Pre) {
 //        val eventKey = Keyboard.getEventKey()
 //
-//        if (main.getConfigValues().isEnabled(Feature.DEVELOPER_MODE) && eventKey == main.getDeveloperCopyNBTKey()
+//        if (main.configValues!!.isEnabled(Feature.DEVELOPER_MODE) && eventKey == main.getDeveloperCopyNBTKey()
 //                .getKeyCode() && Keyboard.getEventKeyState()
 //        ) {
 //            // Copy Item NBT
@@ -135,8 +135,8 @@ class GuiScreenListener {
 //            }
 //        }
 //
-//        if (main.getConfigValues().isEnabled(Feature.DUNGEONS_MAP_DISPLAY) &&
-//            main.getConfigValues().isEnabled(Feature.CHANGE_DUNGEON_MAP_ZOOM_WITH_KEYBOARD) &&
+//        if (main.configValues!!.isEnabled(Feature.DUNGEONS_MAP_DISPLAY) &&
+//            main.configValues!!.isEnabled(Feature.CHANGE_DUNGEON_MAP_ZOOM_WITH_KEYBOARD) &&
 //            Minecraft.getMinecraft().currentScreen is LocationEditGui
 //        ) {
 //            if (Keyboard.isKeyDown(main.getKeyBindings().get(5).getKeyCode()) && Keyboard.getEventKeyState()) {
@@ -155,7 +155,7 @@ class GuiScreenListener {
 //
 //    @SubscribeEvent
 //    fun onMouseClick(event: GuiScreenEvent.MouseInputEvent.Pre) {
-//        if (!main.getUtils().isOnSkyblock()) {
+//        if (!main.utils!!.isOnSkyblock()) {
 //            return
 //        }
 //
@@ -166,7 +166,7 @@ class GuiScreenListener {
 //            return
 //        }
 //
-//        if (main.getConfigValues().isEnabled(Feature.LOCK_SLOTS) && event.gui is GuiContainer) {
+//        if (main.configValues!!.isEnabled(Feature.LOCK_SLOTS) && event.gui is GuiContainer) {
 //            val guiContainer = event.gui as GuiContainer
 //
 //            if (eventButton >= 0) {
@@ -184,13 +184,13 @@ class GuiScreenListener {
 //                            return
 //                        }
 //
-//                        if (main.getConfigValues().getLockedSlots().contains(i + 36)) {
+//                        if (main.configValues!!.getLockedSlots().contains(i + 36)) {
 //                            if (!slot.hasStack && !hotbarSlot.hasStack) {
 //                                return
 //                            } else {
-//                                main.getUtils().playLoudSound("note.bass", 0.5)
-//                                main.getUtils().sendMessage(
-//                                    main.getConfigValues()
+//                                main.utils!!.playLoudSound("note.bass", 0.5)
+//                                main.utils!!.sendMessage(
+//                                    main.configValues!!
 //                                        .getRestrictedColor(Feature.DROP_CONFIRMATION) + Translations.getMessage("messages.slotLocked")
 //                                )
 //                                event.isCanceled = true
@@ -264,7 +264,7 @@ class GuiScreenListener {
 //            try {
 //                inventory.removeInventoryChangeListener(inventoryChangeListener)
 //            } catch (e: NullPointerException) {
-//                SkyblockAddons.getInstance().getUtils().sendErrorMessage(
+//                SkyblockAddons.getInstance().utils!!.sendErrorMessage(
 //                    "Tried to remove an inventory listener from a container that has no listeners."
 //                )
 //            }

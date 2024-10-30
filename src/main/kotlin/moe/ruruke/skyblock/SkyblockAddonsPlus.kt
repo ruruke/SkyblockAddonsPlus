@@ -9,9 +9,11 @@ import com.google.gson.GsonBuilder
 import moe.ruruke.skyblock.command.SkyblockAddonsPlusCommand
 import moe.ruruke.skyblock.config.ConfigValues
 import moe.ruruke.skyblock.config.NewConfigValue
+import moe.ruruke.skyblock.config.PersistentValuesManager
 import moe.ruruke.skyblock.core.OnlineData
 import moe.ruruke.skyblock.listeners.GuiScreenListener
 import moe.ruruke.skyblock.listeners.PlayerListener
+import moe.ruruke.skyblock.misc.SkyblockKeyBinding
 import moe.ruruke.skyblock.misc.scheduler.NewScheduler
 import moe.ruruke.skyblock.misc.scheduler.Scheduler
 import moe.ruruke.skyblock.utils.InventoryUtils
@@ -49,6 +51,7 @@ class SkyblockAddonsPlus() {
         const val MODID: String = "skyblockaddonsplus"
         const val NAME: String = "SkyblockAddonsPlus"
         const val VERSION: String = "1.0.0"
+        private val keyBindings: List<SkyblockKeyBinding> = LinkedList()
         private var elapsedPartialTicks: Float = 0f
         fun getTimer(): Float {
             return elapsedPartialTicks;
@@ -105,11 +108,13 @@ class SkyblockAddonsPlus() {
             return GSON
         }
 
-
+        var persistentValuesManager: PersistentValuesManager? = null
         fun runAsync(runnable: Runnable?) {
             THREAD_EXECUTOR.execute(runnable)
         }
-
+        fun getDeveloperCopyNBTKey(): SkyblockKeyBinding {
+            return keyBindings.get(6)
+        }
     }
     // Register the config and commands.
     @Mod.EventHandler
@@ -134,7 +139,7 @@ class SkyblockAddonsPlus() {
     fun preInit(e: FMLPreInitializationEvent) {
         EventManager.INSTANCE.register(this);
         configValues = ConfigValues(e.suggestedConfigurationFile)
-//        persistentValuesManager = PersistentValuesManager(e.modConfigurationDirectory)
+        persistentValuesManager = PersistentValuesManager(e.modConfigurationDirectory)
 //        configValues!!.loadValues()
         DataUtils.readLocalAndFetchOnline()
 //        persistentValuesManager.loadValues()

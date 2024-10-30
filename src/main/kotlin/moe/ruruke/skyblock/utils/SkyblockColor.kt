@@ -83,7 +83,7 @@ class SkyblockColor {
 
     val isPositionalMulticolor: Boolean
         get() = colorAnimation != ColorAnimation.NONE && false
-    //        return colorAnimation != ColorAnimation.NONE && SkyblockAddons.getInstance().getConfigValues().getChromaMode() != EnumUtils.ChromaMode.ALL_SAME_COLOR;
+    //        return colorAnimation != ColorAnimation.NONE && SkyblockAddons.getInstance().configValues!!.getChromaMode() != EnumUtils.ChromaMode.ALL_SAME_COLOR;
 
     val color: Int
         get() = getColorSafe(0)
@@ -117,7 +117,7 @@ class SkyblockColor {
 
         fun shouldUseChromaShaders(): Boolean {
             //TODO:
-//        ConfigValues config = SkyblockAddons.getInstance().getConfigValues();
+//        ConfigValues config = SkyblockAddons.getInstance().configValues!!;
 //        return config.getChromaMode() != EnumUtils.ChromaMode.ALL_SAME_COLOR && ShaderManager.getInstance().areShadersSupported() && config.isEnabled(Feature.USE_NEW_CHROMA_EFFECT);
             return false
         }

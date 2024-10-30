@@ -625,7 +625,7 @@ enum class Feature(
             //TODO:
 //            val devModeKeyBinding: SkyblockKeyBinding = main.getDeveloperCopyNBTKey()
 
-//            if (main.getConfigValues().isEnabled(DEVELOPER_MODE)) {
+//            if (main.configValues!!.isEnabled(DEVELOPER_MODE)) {
 //                devModeKeyBinding.register()
 //            } else if (devModeKeyBinding.isRegistered()) {
 //                devModeKeyBinding.deRegister()

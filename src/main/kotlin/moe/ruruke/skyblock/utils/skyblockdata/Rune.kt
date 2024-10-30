@@ -5,7 +5,12 @@ import net.minecraft.nbt.NBTTagCompound
 class Rune(runeData: NBTTagCompound) {
     private var type: String? = null
     private var level = 0
-
+    fun getType(): String? {
+        return type
+    }
+    fun getLevel(): Int {
+        return level
+    }
     init {
         // There should only be 1 rune type
 

@@ -1132,8 +1132,8 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
 //    }
 //
 //    fun setCustomStatus(statusEntry: DiscordStatusEntry, text: String): String {
-//        while (main.getConfigValues().getDiscordCustomStatuses().size() < 2) {
-//            main.getConfigValues().getDiscordCustomStatuses().add("")
+//        while (main.configValues!!.getDiscordCustomStatuses().size() < 2) {
+//            main.configValues!!.getDiscordCustomStatuses().add("")
 //        }
 //
 //        return discordCustomStatuses.set(statusEntry.getId(), text)

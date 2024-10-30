@@ -215,7 +215,7 @@
 //
 //        String targetVersion = target.toString();
 //
-//        main.getUtils().sendMessage("§7§m----------------§7[ §b§lSkyblockAddons §7]§7§m----------------", false);
+//        main.utils!!.sendMessage("§7§m----------------§7[ §b§lSkyblockAddons §7]§7§m----------------", false);
 //
 //        ChatComponentText newUpdate = new ChatComponentText("§b" + Translations.getMessage(
 //                "messages.updateChecker.newUpdateAvailable", targetVersion) + "\n");
@@ -224,7 +224,7 @@
 //        ChatComponentText joinDiscord = new ChatComponentText("§b" + Translations.getMessage(
 //                "messages.updateChecker.joinDiscord") + "\n");
 //        newUpdate.appendSibling(viewChangelog).appendSibling(joinDiscord);
-//        main.getUtils().sendMessage(newUpdate, false);
+//        main.utils!!.sendMessage(newUpdate, false);
 //
 //        ChatComponentText showcaseButton = null;
 //        ChatComponentText downloadButton;
@@ -279,12 +279,12 @@
 //        }
 //
 //        if (showcaseButton != null) {
-//            main.getUtils().sendMessage(showcaseButton, false);
+//            main.utils!!.sendMessage(showcaseButton, false);
 //        } else {
-//            main.getUtils().sendMessage(downloadButton, false);
+//            main.utils!!.sendMessage(downloadButton, false);
 //        }
 //
-//        main.getUtils().sendMessage("§7§m--------------------------------------------------", false);
+//        main.utils!!.sendMessage("§7§m--------------------------------------------------", false);
 //
 //        sentUpdateMessage = true;
 //    }

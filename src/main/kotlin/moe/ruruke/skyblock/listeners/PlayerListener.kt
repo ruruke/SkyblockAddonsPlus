@@ -117,7 +117,7 @@ class PlayerListener {
 //     */
 //    @SubscribeEvent(priority = EventPriority.HIGH)
 //    fun onChatReceive(e: ClientChatReceivedEvent) {
-//        if (!main.getUtils().isOnHypixel()) {
+//        if (!main.utils!!.isOnHypixel()) {
 //            return
 //        }
 //
@@ -131,19 +131,19 @@ class PlayerListener {
 //            return
 //        }
 //
-//        if (main.getConfigValues()
+//        if (main.configValues!!
 //                .isEnabled(Feature.OUTBID_ALERT_SOUND) && formattedText.matches("§6\\[Auction] §..*§eoutbid you .*".toRegex())
-//            && (main.getConfigValues().isEnabled(Feature.OUTBID_ALERT_SOUND_IN_OTHER_GAMES) || main.getUtils()
+//            && (main.configValues!!.isEnabled(Feature.OUTBID_ALERT_SOUND_IN_OTHER_GAMES) || main.utils!!
 //                .isOnSkyblock())
 //        ) {
-//            main.getUtils().playLoudSound("random.orb", 0.5)
+//            main.utils!!.playLoudSound("random.orb", 0.5)
 //        }
 //
-//        if (main.getUtils().isOnSkyblock()) {
+//        if (main.utils!!.isOnSkyblock()) {
 //            // Type 2 means it's an action bar message.
 //            if (e.type.toInt() == 2) {
 //                // Log the message to the game log if action bar message logging is enabled.
-//                if (main.getConfigValues().isEnabled(Feature.DEVELOPER_MODE) && DevUtils.isLoggingActionBarMessages()) {
+//                if (main.configValues!!.isEnabled(Feature.DEVELOPER_MODE) && DevUtils.isLoggingActionBarMessages()) {
 //                    logger.info("[ACTION BAR] $unformattedText")
 //                }
 //
@@ -154,12 +154,12 @@ class PlayerListener {
 //                    return
 //                }
 //
-//                if (main.getUtils().isInDungeon()) {
-//                    if (main.getConfigValues().isEnabled(Feature.DUNGEONS_COLLECTED_ESSENCES_DISPLAY)) {
+//                if (main.utils!!.isInDungeon()) {
+//                    if (main.configValues!!.isEnabled(Feature.DUNGEONS_COLLECTED_ESSENCES_DISPLAY)) {
 //                        main.getDungeonManager().addEssence(restMessage)
 //                    }
 //
-//                    if (main.getConfigValues().isEnabled(Feature.DUNGEONS_SECRETS_DISPLAY)) {
+//                    if (main.configValues!!.isEnabled(Feature.DUNGEONS_SECRETS_DISPLAY)) {
 //                        main.getDungeonManager().addSecrets(restMessage)
 //                    }
 //                }
@@ -188,68 +188,68 @@ class PlayerListener {
 //
 //                        MinecraftForge.EVENT_BUS.post(SkyblockPlayerDeathEvent(deadPlayer, username, causeOfDeath))
 //                    }
-//                } else if (main.getConfigValues()
+//                } else if (main.configValues!!
 //                        .isEnabled(Feature.SUMMONING_EYE_ALERT) && formattedText == "§r§6§lRARE DROP! §r§5Summoning Eye§r"
 //                ) {
-//                    main.getUtils().playLoudSound("random.orb", 0.5) // credits to tomotomo, thanks lol
+//                    main.utils!!.playLoudSound("random.orb", 0.5) // credits to tomotomo, thanks lol
 //                    main.getRenderListener().setTitleFeature(Feature.SUMMONING_EYE_ALERT)
 //                    main.getScheduler()
-//                        .schedule(Scheduler.CommandType.RESET_TITLE_FEATURE, main.getConfigValues().getWarningSeconds())
+//                        .schedule(Scheduler.CommandType.RESET_TITLE_FEATURE, main.configValues!!.getWarningSeconds())
 //                } else if (formattedText == "§r§aA special §r§5Zealot §r§ahas spawned nearby!§r") {
-//                    if (main.getConfigValues().isEnabled(Feature.SPECIAL_ZEALOT_ALERT)) {
-//                        main.getUtils().playLoudSound("random.orb", 0.5)
+//                    if (main.configValues!!.isEnabled(Feature.SPECIAL_ZEALOT_ALERT)) {
+//                        main.utils!!.playLoudSound("random.orb", 0.5)
 //                        main.getRenderListener().setTitleFeature(Feature.SUMMONING_EYE_ALERT)
 //                        main.getRenderListener().setTitleFeature(Feature.SPECIAL_ZEALOT_ALERT)
 //                        main.getScheduler().schedule(
 //                            Scheduler.CommandType.RESET_TITLE_FEATURE,
-//                            main.getConfigValues().getWarningSeconds()
+//                            main.configValues!!.getWarningSeconds()
 //                        )
 //                    }
-//                    if (main.getConfigValues().isEnabled(Feature.ZEALOT_COUNTER)) {
+//                    if (main.configValues!!.isEnabled(Feature.ZEALOT_COUNTER)) {
 //                        // Edit the message to include counter.
 //                        e.message = ChatComponentText(
-//                            (formattedText + ColorCode.GRAY + " (" + main.getPersistentValuesManager()
+//                            (formattedText + ColorCode.GRAY + " (" + main.persistentValuesManager!!
 //                                .getPersistentValues().getKills()).toString() + ")"
 //                        )
 //                    }
-//                    main.getPersistentValuesManager().addEyeResetKills()
+//                    main.persistentValuesManager!!.addEyeResetKills()
 //                    // TODO: Seems like leg warning and num sc killed should be separate features
-//                } else if (main.getConfigValues()
+//                } else if (main.configValues!!
 //                        .isEnabled(Feature.LEGENDARY_SEA_CREATURE_WARNING) && SeaCreatureManager.getInstance()
 //                        .getAllSeaCreatureSpawnMessages().contains(unformattedText)
 //                ) {
-//                    main.getPersistentValuesManager().getPersistentValues().setSeaCreaturesKilled(
-//                        main.getPersistentValuesManager().getPersistentValues().getSeaCreaturesKilled() + 1
+//                    main.persistentValuesManager!!.getPersistentValues().setSeaCreaturesKilled(
+//                        main.persistentValuesManager!!.getPersistentValues().getSeaCreaturesKilled() + 1
 //                    )
 //                    if (SeaCreatureManager.getInstance().getLegendarySeaCreatureSpawnMessages()
 //                            .contains(unformattedText)
 //                    ) {
-//                        main.getUtils().playLoudSound("random.orb", 0.5)
+//                        main.utils!!.playLoudSound("random.orb", 0.5)
 //                        main.getRenderListener().setTitleFeature(Feature.LEGENDARY_SEA_CREATURE_WARNING)
 //                        main.getScheduler().schedule(
 //                            Scheduler.CommandType.RESET_TITLE_FEATURE,
-//                            main.getConfigValues().getWarningSeconds()
+//                            main.configValues!!.getWarningSeconds()
 //                        )
 //                    }
-//                } else if (main.getConfigValues()
+//                } else if (main.configValues!!
 //                        .isEnabled(Feature.DISABLE_MAGICAL_SOUP_MESSAGES) && SOUP_RANDOM_MESSAGES.contains(
 //                        unformattedText
 //                    )
 //                ) {
 //                    e.isCanceled = true
-//                } else if (main.getConfigValues()
+//                } else if (main.configValues!!
 //                        .isEnabled(Feature.DISABLE_TELEPORT_PAD_MESSAGES) && (formattedText.startsWith("§r§aWarped from ") || formattedText == "§r§cThis Teleport Pad does not have a destination set!§r")
 //                ) {
 //                    e.isCanceled = true
-//                } else if (main.getConfigValues()
+//                } else if (main.configValues!!
 //                        .isEnabled(Feature.DISABLE_MORT_MESSAGES) && strippedText.startsWith("[NPC] Mort:")
 //                ) {
 //                    e.isCanceled = true
-//                } else if (main.getConfigValues()
+//                } else if (main.configValues!!
 //                        .isEnabled(Feature.DISABLE_BOSS_MESSAGES) && strippedText.startsWith("[BOSS] ")
 //                ) {
 //                    e.isCanceled = true
-//                } else if (main.getConfigValues()
+//                } else if (main.configValues!!
 //                        .isEnabled(Feature.SPIRIT_SCEPTRE_DISPLAY) && strippedText.startsWith("Your Implosion hit") || strippedText.startsWith(
 //                        "Your Spirit Sceptre hit"
 //                    )
@@ -260,7 +260,7 @@ class PlayerListener {
 //                        this.spiritSceptreHitEnemies = matcher.group("hitEnemies").toInt()
 //                        this.spiritSceptreDealtDamage = matcher.group("dealtDamage").replace(",", "").toFloat()
 //
-//                        if (main.getConfigValues().isEnabled(Feature.DISABLE_SPIRIT_SCEPTRE_MESSAGES)) {
+//                        if (main.configValues!!.isEnabled(Feature.DISABLE_SPIRIT_SCEPTRE_MESSAGES)) {
 //                            e.isCanceled = true
 //                        }
 //                    }
@@ -277,27 +277,27 @@ class PlayerListener {
 //                        .matches() && System.currentTimeMillis() - lastMaddoxLevelTime < 100
 //                ) {
 //                    SlayerTracker.getInstance().completedSlayer(lastMaddoxSlayerType)
-//                } else if (main.getConfigValues().isEnabled(Feature.DRAGON_STATS_TRACKER) &&
+//                } else if (main.configValues!!.isEnabled(Feature.DRAGON_STATS_TRACKER) &&
 //                    strippedText.startsWith("☬ You placed a Summoning Eye!")
 //                ) { // §r§5☬ §r§dYou placed a Summoning Eye! §r§7(§r§e5§r§7/§r§a8§r§7)§r
 //                    DragonTracker.getInstance().addEye()
-//                } else if (main.getConfigValues().isEnabled(Feature.DRAGON_STATS_TRACKER) &&
+//                } else if (main.configValues!!.isEnabled(Feature.DRAGON_STATS_TRACKER) &&
 //                    strippedText == "You recovered a Summoning Eye!"
 //                ) {
 //                    DragonTracker.getInstance().removeEye()
-//                } else if (main.getConfigValues().isEnabled(Feature.DRAGON_STATS_TRACKER) &&
+//                } else if (main.configValues!!.isEnabled(Feature.DRAGON_STATS_TRACKER) &&
 //                    (DRAGON_SPAWNED_PATTERN.matcher(strippedText).also { matcher = it }).matches()
 //                ) {
 //                    DragonTracker.getInstance().dragonSpawned(matcher.group("dragonType"))
-//                } else if (main.getConfigValues().isEnabled(Feature.DRAGON_STATS_TRACKER) &&
+//                } else if (main.configValues!!.isEnabled(Feature.DRAGON_STATS_TRACKER) &&
 //                    DRAGON_KILLED_PATTERN.matcher(strippedText).matches()
 //                ) {
 //                    DragonTracker.getInstance().dragonKilled()
-//                } else if (main.getConfigValues().isEnabled(Feature.SHOW_ITEM_COOLDOWNS) &&
+//                } else if (main.configValues!!.isEnabled(Feature.SHOW_ITEM_COOLDOWNS) &&
 //                    unformattedText == "You laid an egg!"
 //                ) { // Put the Chicken Head on cooldown for 20 seconds when the player lays an egg.
 //                    CooldownManager.put(InventoryUtils.CHICKEN_HEAD_ID)
-//                } else if (main.getConfigValues().isEnabled(Feature.BIRCH_PARK_RAINMAKER_TIMER) &&
+//                } else if (main.configValues!!.isEnabled(Feature.BIRCH_PARK_RAINMAKER_TIMER) &&
 //                    formattedText.startsWith("§r§eYou added a minute of rain!")
 //                ) {
 //                    if (this.rainmakerTimeEnd == -1L || this.rainmakerTimeEnd < System.currentTimeMillis()) {
@@ -306,7 +306,7 @@ class PlayerListener {
 //                    } else {
 //                        this.rainmakerTimeEnd += (1000 * 60).toLong() // Extend the timer one minute.
 //                    }
-//                } else if (main.getConfigValues().isEnabled(Feature.FETCHUR_TODAY) &&
+//                } else if (main.configValues!!.isEnabled(Feature.FETCHUR_TODAY) &&
 //                    formattedText.startsWith("§e[NPC] Fetchur§f:")
 //                ) {
 //                    val fetchur: FetchurManager = FetchurManager.getInstance()
@@ -317,40 +317,40 @@ class PlayerListener {
 //                        FetchurManager.getInstance().saveLastTimeFetched()
 //                    }
 //                    // Tries to check if a message is from a player to add the player profile icon
-//                } else if (main.getConfigValues().isEnabled(Feature.PLAYER_SYMBOLS_IN_CHAT) &&
+//                } else if (main.configValues!!.isEnabled(Feature.PLAYER_SYMBOLS_IN_CHAT) &&
 //                    unformattedText.contains(":")
 //                ) {
 //                    playerSymbolsDisplay(e, unformattedText)
 //                }
 //
-//                if (main.getConfigValues().isEnabled(Feature.NO_ARROWS_LEFT_ALERT)) {
+//                if (main.configValues!!.isEnabled(Feature.NO_ARROWS_LEFT_ALERT)) {
 //                    if (NO_ARROWS_LEFT_PATTERN.matcher(formattedText).matches()) {
-//                        main.getUtils().playLoudSound("random.orb", 0.5)
+//                        main.utils!!.playLoudSound("random.orb", 0.5)
 //                        main.getRenderListener().setSubtitleFeature(Feature.NO_ARROWS_LEFT_ALERT)
 //                        main.getRenderListener().setArrowsLeft(-1)
 //                        main.getScheduler().schedule(
 //                            Scheduler.CommandType.RESET_SUBTITLE_FEATURE,
-//                            main.getConfigValues().getWarningSeconds()
+//                            main.configValues!!.getWarningSeconds()
 //                        )
 //                    } else if ((ONLY_HAVE_ARROWS_LEFT_PATTERN.matcher(formattedText).also { matcher = it }).matches()) {
 //                        val arrowsLeft = matcher.group("arrows").toInt()
-//                        main.getUtils().playLoudSound("random.orb", 0.5)
+//                        main.utils!!.playLoudSound("random.orb", 0.5)
 //                        main.getRenderListener().setSubtitleFeature(Feature.NO_ARROWS_LEFT_ALERT)
 //                        main.getRenderListener().setArrowsLeft(arrowsLeft)
 //                        main.getScheduler().schedule(
 //                            Scheduler.CommandType.RESET_SUBTITLE_FEATURE,
-//                            main.getConfigValues().getWarningSeconds()
+//                            main.configValues!!.getWarningSeconds()
 //                        )
 //                    }
 //                }
 //
-//                if (main.getInventoryUtils().getInventoryType() === InventoryType.SALVAGING && main.getConfigValues()
+//                if (main.getInventoryUtils().getInventoryType() === InventoryType.SALVAGING && main.configValues!!
 //                        .isEnabled(Feature.SHOW_SALVAGE_ESSENCES_COUNTER)
 //                ) {
 //                    main.getDungeonManager().addSalvagedEssences(unformattedText)
 //                }
 //
-//                if (main.getUtils().isInDungeon()) {
+//                if (main.utils!!.isInDungeon()) {
 //                    val reviveMessageMatcher = REVIVE_MESSAGE_PATTERN.matcher(unformattedText)
 //
 //                    if (reviveMessageMatcher.matches()) {
@@ -379,14 +379,14 @@ class PlayerListener {
 //                        MinecraftForge.EVENT_BUS.post(DungeonPlayerReviveEvent(revivedPlayer, revivingPlayer))
 //                    }
 //
-//                    if (main.getConfigValues().isEnabled(Feature.SHOW_DUNGEON_MILESTONE)) {
+//                    if (main.configValues!!.isEnabled(Feature.SHOW_DUNGEON_MILESTONE)) {
 //                        val dungeonMilestone: DungeonMilestone = main.getDungeonManager().parseMilestone(formattedText)
 //                        if (dungeonMilestone != null) {
 //                            main.getDungeonManager().setDungeonMilestone(dungeonMilestone)
 //                        }
 //                    }
 //
-//                    if (main.getConfigValues().isEnabled(Feature.DUNGEONS_COLLECTED_ESSENCES_DISPLAY)) {
+//                    if (main.configValues!!.isEnabled(Feature.DUNGEONS_COLLECTED_ESSENCES_DISPLAY)) {
 //                        main.getDungeonManager().addBonusEssence(formattedText)
 //                    }
 //                }
@@ -398,17 +398,17 @@ class PlayerListener {
 //                    val profile = matcher.group(1)
 //
 //                    // TODO: Slothpixel can no longer handle our queries
-//                    /*                    if (!profile.equals(main.getUtils().getProfileName())) {
+//                    /*                    if (!profile.equals(main.utils!!.getProfileName())) {
 //                        APIManager.getInstance().onProfileSwitch(profile);
 //                    }*/
-//                    main.getUtils().setProfileName(profile)
+//                    main.utils!!.setProfileName(profile)
 //                } else if ((SWITCH_PROFILE_CHAT_PATTERN.matcher(strippedText).also { matcher = it }).matches()) {
 //                    val profile = matcher.group(1)
 //
-//                    /*                    if (!profile.equals(main.getUtils().getProfileName())) {
+//                    /*                    if (!profile.equals(main.utils!!.getProfileName())) {
 //                        APIManager.getInstance().onProfileSwitch(profile);
 //                    }*/
-//                    main.getUtils().setProfileName(profile)
+//                    main.utils!!.setProfileName(profile)
 //                }
 //            }
 //        }
@@ -447,13 +447,13 @@ class PlayerListener {
 //                val oldMessage = e.message
 //                val usernameWithSymbols = namesWithSymbols[username]
 //                var suffix = " "
-//                if (main.getConfigValues().isEnabled(Feature.SHOW_PROFILE_TYPE)) {
+//                if (main.configValues!!.isEnabled(Feature.SHOW_PROFILE_TYPE)) {
 //                    val m = PROFILE_TYPE_SYMBOL.matcher(usernameWithSymbols)
 //                    if (m.find()) {
 //                        suffix += m.group(0)
 //                    }
 //                }
-//                if (main.getConfigValues().isEnabled(Feature.SHOW_NETHER_FACTION)) {
+//                if (main.configValues!!.isEnabled(Feature.SHOW_NETHER_FACTION)) {
 //                    val m = NETHER_FACTION_SYMBOL.matcher(usernameWithSymbols)
 //                    if (m.find()) {
 //                        suffix += m.group(0)
@@ -514,7 +514,7 @@ class PlayerListener {
 //        val mc = Minecraft.getMinecraft()
 //        val heldItem = e.entityPlayer.heldItem
 //
-//        if (main.getUtils().isOnSkyblock() && heldItem != null) {
+//        if (main.utils!!.isOnSkyblock() && heldItem != null) {
 //            // Change the GUI background color when a backpack is opened to match the backpack's color.
 //            if (heldItem.item === Items.skull) {
 //                val color: BackpackColor? = ItemUtils.getBackpackColor(heldItem)
@@ -525,14 +525,14 @@ class PlayerListener {
 //                && (e.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK || e.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR)
 //            ) {
 //                // Update fishing status if the player is fishing and reels in their rod.
-//                if (main.getConfigValues().isEnabled(Feature.FISHING_SOUND_INDICATOR) && BaitManager.getInstance()
+//                if (main.configValues!!.isEnabled(Feature.FISHING_SOUND_INDICATOR) && BaitManager.getInstance()
 //                        .isHoldingRod()
 //                ) {
 //                    oldBobberIsInWater = false
 //                    lastBobberEnteredWater = Long.MAX_VALUE
 //                    oldBobberPosY = 0.0
 //                }
-//                if (main.getConfigValues().isEnabled(Feature.SHOW_ITEM_COOLDOWNS)) {
+//                if (main.configValues!!.isEnabled(Feature.SHOW_ITEM_COOLDOWNS)) {
 //                    val itemId = ItemUtils.getSkyblockItemID(heldItem)
 //                    // Grappling hook cool-down
 //                    if (itemId != null && itemId == InventoryUtils.GRAPPLING_HOOK_ID && mc.thePlayer.fishEntity != null) {
@@ -562,7 +562,7 @@ class PlayerListener {
 //                    actionBarParser.setHealthUpdate(null)
 //                }
 //                val p = mc.thePlayer
-//                if (p != null && main.getConfigValues()
+//                if (p != null && main.configValues!!
 //                        .isEnabled(Feature.HEALTH_PREDICTION)
 //                ) { //Reverse calculate the player's health by using the player's vanilla hearts. Also calculate the health change for the gui item.
 //                    val newHealth =
@@ -591,7 +591,7 @@ class PlayerListener {
 //
 //                    this.parseTabList()
 //
-//                    if (main.getConfigValues().isEnabled(Feature.DUNGEON_DEATH_COUNTER) && main.getUtils().isInDungeon()
+//                    if (main.configValues!!.isEnabled(Feature.DUNGEON_DEATH_COUNTER) && main.utils!!.isInDungeon()
 //                        && main.getDungeonManager().isPlayerListInfoEnabled()
 //                    ) {
 //                        main.getDungeonManager().updateDeathsFromPlayerListInfo()
@@ -602,17 +602,17 @@ class PlayerListener {
 //                    if (player != null) {
 //                        EndstoneProtectorManager.checkGolemStatus()
 //                        TabListParser.parse()
-//                        main.getUtils().parseSidebar()
+//                        main.utils!!.parseSidebar()
 //                        main.getInventoryUtils().checkIfInventoryIsFull(mc, player)
 //
-//                        if (main.getUtils().isOnSkyblock()) {
+//                        if (main.utils!!.isOnSkyblock()) {
 //                            main.getInventoryUtils().checkIfWearingSkeletonHelmet(player)
 //                            main.getInventoryUtils().checkIfUsingToxicArrowPoison(player)
 //                            main.getInventoryUtils().checkIfWearingSlayerArmor(player)
 //                            if (shouldTriggerFishingIndicator()) { // The logic fits better in its own function
-//                                main.getUtils().playLoudSound("random.successful_hit", 0.8)
+//                                main.utils!!.playLoudSound("random.successful_hit", 0.8)
 //                            }
-//                            if (main.getConfigValues().isEnabled(Feature.FETCHUR_TODAY)) {
+//                            if (main.configValues!!.isEnabled(Feature.FETCHUR_TODAY)) {
 //                                FetchurManager.getInstance().recalculateFetchurItem()
 //                            }
 //
@@ -636,19 +636,19 @@ class PlayerListener {
 //                                        }
 //                                        if (total > 0) {
 //                                            val persistentValues: PersistentValuesManager.PersistentValues =
-//                                                main.getPersistentValuesManager().getPersistentValues()
+//                                                main.persistentValuesManager!!.getPersistentValues()
 //                                            val original: Int
 //                                            if (skill == SkillType.FISHING) {
 //                                                original = persistentValues.getSeaCreaturesKilled()
-//                                                main.getPersistentValuesManager().getPersistentValues()
+//                                                main.persistentValuesManager!!.getPersistentValues()
 //                                                    .setSeaCreaturesKilled(total)
 //                                            } else {
 //                                                original = persistentValues.getOresMined()
-//                                                main.getPersistentValuesManager().getPersistentValues()
+//                                                main.persistentValuesManager!!.getPersistentValues()
 //                                                    .setOresMined(total)
 //                                            }
 //                                            if (original != total) {
-//                                                main.getPersistentValuesManager().saveValues()
+//                                                main.persistentValuesManager!!.saveValues()
 //                                            }
 //                                        }
 //                                    } catch (ignored: Exception) {
@@ -658,13 +658,13 @@ class PlayerListener {
 //                        }
 //
 //                        if (mc.currentScreen == null && main.getPlayerListener().didntRecentlyJoinWorld() &&
-//                            (!main.getUtils().isInDungeon() || Minecraft.getSystemTime() - lastDeath > 1000 &&
+//                            (!main.utils!!.isInDungeon() || Minecraft.getSystemTime() - lastDeath > 1000 &&
 //                                    Minecraft.getSystemTime() - lastRevive > 1000)
 //                        ) {
 //                            main.getInventoryUtils().getInventoryDifference(player.inventory.mainInventory)
 //                        }
 //
-//                        if (main.getConfigValues().isEnabled(Feature.BAIT_LIST) && BaitManager.getInstance()
+//                        if (main.configValues!!.isEnabled(Feature.BAIT_LIST) && BaitManager.getInstance()
 //                                .isHoldingRod()
 //                        ) {
 //                            BaitManager.getInstance().refreshBaits()
@@ -689,8 +689,8 @@ class PlayerListener {
 //            strippedTabFooterString = TextUtils.stripColor(tabFooterString)
 //        }
 //        //TODO:
-////        if (main.getUtils().isOnSkyblock()) {
-////            if (main.getConfigValues().isEnabled(Feature.TAB_EFFECT_TIMERS)) {
+////        if (main.utils!!.isOnSkyblock()) {
+////            if (main.configValues!!.isEnabled(Feature.TAB_EFFECT_TIMERS)) {
 ////                TabEffectManager.getInstance().update(tabFooterString, strippedTabFooterString)
 ////            }
 ////        }
@@ -698,14 +698,14 @@ class PlayerListener {
 
 //    @SubscribeEvent
 //    fun onEntityEvent(e: LivingUpdateEvent) {
-//        if (!main.getUtils().isOnSkyblock()) {
+//        if (!main.utils!!.isOnSkyblock()) {
 //            return
 //        }
 //
 //        val entity = e.entity
 //
 //        if (entity.ticksExisted < 5) {
-//            if (main.getConfigValues().isEnabled(Feature.HIDE_OTHER_PLAYERS_PRESENTS)) {
+//            if (main.configValues!!.isEnabled(Feature.HIDE_OTHER_PLAYERS_PRESENTS)) {
 //                if (!JerryPresent.getJerryPresents().containsKey(entity.uniqueID)) {
 //                    val present: JerryPresent = JerryPresent.getJerryPresent(entity)
 //                    if (present != null) {
@@ -715,9 +715,9 @@ class PlayerListener {
 //                }
 //            }
 //
-//            if (entity is EntityOtherPlayerMP && main.getConfigValues()
-//                    .isEnabled(Feature.HIDE_PLAYERS_NEAR_NPCS) && main.getUtils()
-//                    .getLocation() !== Location.GUEST_ISLAND && main.getUtils().getLocation() !== Location.THE_CATACOMBS
+//            if (entity is EntityOtherPlayerMP && main.configValues!!
+//                    .isEnabled(Feature.HIDE_PLAYERS_NEAR_NPCS) && main.utils!!
+//                    .getLocation() !== Location.GUEST_ISLAND && main.utils!!.getLocation() !== Location.THE_CATACOMBS
 //            ) {
 //                val health = entity.health
 //
@@ -736,35 +736,35 @@ class PlayerListener {
 //        if (entity is EntityArmorStand && entity.hasCustomName()) {
 //            PowerOrbManager.getInstance().detectPowerOrb(entity)
 //
-//            if (main.getUtils().getLocation() === Location.ISLAND) {
-//                val cooldown: Int = main.getConfigValues().getWarningSeconds() * 1000 + 5000
-//                if (main.getConfigValues().isEnabled(Feature.MINION_FULL_WARNING) &&
+//            if (main.utils!!.getLocation() === Location.ISLAND) {
+//                val cooldown: Int = main.configValues!!.getWarningSeconds() * 1000 + 5000
+//                if (main.configValues!!.isEnabled(Feature.MINION_FULL_WARNING) &&
 //                    entity.getCustomNameTag() == "§cMy storage is full! :("
 //                ) {
 //                    val now = System.currentTimeMillis()
 //                    if (now - lastMinionSound > cooldown) {
 //                        lastMinionSound = now
-//                        main.getUtils().playLoudSound("random.pop", 1)
+//                        main.utils!!.playLoudSound("random.pop", 1)
 //                        main.getRenderListener().setSubtitleFeature(Feature.MINION_FULL_WARNING)
 //                        main.getScheduler().schedule(
 //                            Scheduler.CommandType.RESET_SUBTITLE_FEATURE,
-//                            main.getConfigValues().getWarningSeconds()
+//                            main.configValues!!.getWarningSeconds()
 //                        )
 //                    }
-//                } else if (main.getConfigValues().isEnabled(Feature.MINION_STOP_WARNING)) {
+//                } else if (main.configValues!!.isEnabled(Feature.MINION_STOP_WARNING)) {
 //                    val matcher = MINION_CANT_REACH_PATTERN.matcher(entity.getCustomNameTag())
 //                    if (matcher.matches()) {
 //                        val now = System.currentTimeMillis()
 //                        if (now - lastMinionSound > cooldown) {
 //                            lastMinionSound = now
-//                            main.getUtils().playLoudSound("random.orb", 1)
+//                            main.utils!!.playLoudSound("random.orb", 1)
 //
 //                            val mobName = matcher.group("mobName")
 //                            main.getRenderListener().setCannotReachMobName(mobName)
 //                            main.getRenderListener().setSubtitleFeature(Feature.MINION_STOP_WARNING)
 //                            main.getScheduler().schedule(
 //                                Scheduler.CommandType.RESET_SUBTITLE_FEATURE,
-//                                main.getConfigValues().getWarningSeconds()
+//                                main.configValues!!.getWarningSeconds()
 //                            )
 //                        }
 //                    }
@@ -786,11 +786,11 @@ class PlayerListener {
 //    fun onDeath(e: LivingDeathEvent) {
 //        if (e.entity is EntityEnderman) {
 //            if (countedEndermen.remove(e.entity.uniqueID)) {
-//                main.getPersistentValuesManager().getPersistentValues()
-//                    .setKills(main.getPersistentValuesManager().getPersistentValues().getKills() + 1)
-//                main.getPersistentValuesManager().saveValues()
+//                main.persistentValuesManager!!.getPersistentValues()
+//                    .setKills(main.persistentValuesManager!!.getPersistentValues().getKills() + 1)
+//                main.persistentValuesManager!!.saveValues()
 //                EndstoneProtectorManager.onKill()
-//            } else if (main.getUtils().isOnSkyblock() && main.getConfigValues()
+//            } else if (main.utils!!.isOnSkyblock() && main.configValues!!
 //                    .isEnabled(Feature.ZEALOT_COUNTER_EXPLOSIVE_BOW_SUPPORT)
 //            ) {
 //                if (isZealot(e.entity)) {
@@ -816,9 +816,9 @@ class PlayerListener {
 //                    if (explosionLocation.distanceTo(deathLocation) < 4.6) {
 ////                        possibleZealotsKilled--;
 //
-//                        main.getPersistentValuesManager().getPersistentValues()
-//                            .setKills(main.getPersistentValuesManager().getPersistentValues().getKills() + 1)
-//                        main.getPersistentValuesManager().saveValues()
+//                        main.persistentValuesManager!!.getPersistentValues()
+//                            .setKills(main.persistentValuesManager!!.getPersistentValues().getKills() + 1)
+//                        main.persistentValuesManager!!.saveValues()
 //                        EndstoneProtectorManager.onKill()
 //                    }
 //
@@ -853,26 +853,26 @@ class PlayerListener {
 //        val entity = e.entity
 //
 //        // Detect Brood Mother spawn
-//        if (main.getUtils().isOnSkyblock() && main.getConfigValues()
-//                .isEnabled(Feature.BROOD_MOTHER_ALERT) && main.getUtils().getLocation() === Location.SPIDERS_DEN
+//        if (main.utils!!.isOnSkyblock() && main.configValues!!
+//                .isEnabled(Feature.BROOD_MOTHER_ALERT) && main.utils!!.getLocation() === Location.SPIDERS_DEN
 //        ) {
 //            if (entity.hasCustomName() && entity.posY > 165) {
 //                if (entity.name.contains("Brood Mother") && (lastBroodmother == -1L || System.currentTimeMillis() - lastBroodmother > 15000)) { //Brood Mother
 //                    lastBroodmother = System.currentTimeMillis()
-//                    //                  main.getUtils().sendMessage("Broodmother spawned."); //testers said to remove message
+//                    //                  main.utils!!.sendMessage("Broodmother spawned."); //testers said to remove message
 //                    main.getRenderListener().setTitleFeature(Feature.BROOD_MOTHER_ALERT)
 //                    main.getScheduler()
-//                        .schedule(Scheduler.CommandType.RESET_TITLE_FEATURE, main.getConfigValues().getWarningSeconds())
-//                    main.getUtils().playLoudSound("random.orb", 0.5)
+//                        .schedule(Scheduler.CommandType.RESET_TITLE_FEATURE, main.configValues!!.getWarningSeconds())
+//                    main.utils!!.playLoudSound("random.orb", 0.5)
 //                }
 //            }
 //        }
-//        if (main.getUtils().isOnSkyblock()) {
+//        if (main.utils!!.isOnSkyblock()) {
 //            val mc = Minecraft.getMinecraft()
 //            for (cubes in mc.theWorld.loadedEntityList) {
-//                if (main.getConfigValues().isEnabled(Feature.BAL_BOSS_ALERT) && main.getUtils()
+//                if (main.configValues!!.isEnabled(Feature.BAL_BOSS_ALERT) && main.utils!!
 //                        .isOnSkyblock() && LocationUtils.isInCrystalHollows(
-//                        main.getUtils().getLocation().getScoreboardName()
+//                        main.utils!!.getLocation().getScoreboardName()
 //                    )
 //                ) {
 //                    if (cubes is EntityMagmaCube) {
@@ -885,13 +885,13 @@ class PlayerListener {
 //                                balTick = 16 // so the sound plays instantly
 //                                main.getScheduler().schedule(
 //                                    Scheduler.CommandType.RESET_TITLE_FEATURE,
-//                                    main.getConfigValues().getWarningSeconds()
+//                                    main.configValues!!.getWarningSeconds()
 //                                )
 //                            }
 //                            if (main.getRenderListener()
 //                                    .getTitleFeature() === Feature.BAL_BOSS_ALERT && balTick % 4 == 0
 //                            ) { // Play sound every 4 ticks or 1/5 second.
-//                                main.getUtils().playLoudSound("random.orb", 0.5)
+//                                main.utils!!.playLoudSound("random.orb", 0.5)
 //                            }
 //                        }
 //                    }
@@ -899,7 +899,7 @@ class PlayerListener {
 //            }
 //        }
 //
-//        if (main.getUtils().isOnSkyblock() && main.getConfigValues()
+//        if (main.utils!!.isOnSkyblock() && main.configValues!!
 //                .isEnabled(Feature.ZEALOT_COUNTER_EXPLOSIVE_BOW_SUPPORT) && entity is EntityArrow
 //        ) {
 //            val arrow = entity
@@ -936,10 +936,10 @@ class PlayerListener {
 //                                    if (distance < 4.6) {
 ////                                        possibleZealotsKilled--;
 //
-//                                        main.getPersistentValuesManager().getPersistentValues().setKills(
-//                                            main.getPersistentValuesManager().getPersistentValues().getKills() + 1
+//                                        main.persistentValuesManager!!.getPersistentValues().setKills(
+//                                            main.persistentValuesManager!!.getPersistentValues().getKills() + 1
 //                                        )
-//                                        main.getPersistentValuesManager().saveValues()
+//                                        main.persistentValuesManager!!.saveValues()
 //                                        EndstoneProtectorManager.onKill()
 //                                    }
 //                                }
@@ -955,7 +955,7 @@ class PlayerListener {
 
 //    @SubscribeEvent
 //    fun onEnderTeleport(e: EnderTeleportEvent) {
-////        if (main.getUtils().isOnSkyblock() && main.getConfigValues()
+////        if (main.utils!!.isOnSkyblock() && main.configValues!!
 ////                .isEnabled(Feature.DISABLE_ENDERMAN_TELEPORTATION_EFFECT)
 ////        ) {
 ////            e.isCanceled = true
@@ -969,7 +969,7 @@ class PlayerListener {
 //    fun onItemTooltipFirst(e: ItemTooltipEvent) {
 //        val hoveredItem = e.itemStack
 //
-//        if (e.toolTip != null && main.getUtils().isOnSkyblock()) {
+//        if (e.toolTip != null && main.utils!!.isOnSkyblock()) {
 //            var insertAt = e.toolTip.size
 //            insertAt-- // 1 line for the rarity
 //            if (e.showAdvancedItemTooltips) {
@@ -982,7 +982,7 @@ class PlayerListener {
 //
 //            val extraAttributes = ItemUtils.getExtraAttributes(hoveredItem)
 //            if (extraAttributes != null) {
-//                if (main.getConfigValues().isEnabled(Feature.SHOW_ITEM_ANVIL_USES) && extraAttributes.hasKey(
+//                if (main.configValues!!.isEnabled(Feature.SHOW_ITEM_ANVIL_USES) && extraAttributes.hasKey(
 //                        "anvil_uses",
 //                        ItemUtils.NBT_INTEGER
 //                    )
@@ -997,7 +997,7 @@ class PlayerListener {
 //                    }
 //                }
 //
-//                if (main.getConfigValues().isEnabled(Feature.SHOW_BROKEN_FRAGMENTS) && hoveredItem.displayName.contains(
+//                if (main.configValues!!.isEnabled(Feature.SHOW_BROKEN_FRAGMENTS) && hoveredItem.displayName.contains(
 //                        "Dragon Fragment"
 //                    ) &&
 //                    extraAttributes.hasKey("bossId") && extraAttributes.hasKey("spawnedFor")
@@ -1005,7 +1005,7 @@ class PlayerListener {
 //                    e.toolTip.add(insertAt++, "§c§lBROKEN FRAGMENT")
 //                }
 //
-//                if (main.getConfigValues().isEnabled(Feature.SHOW_BASE_STAT_BOOST_PERCENTAGE) && extraAttributes.hasKey(
+//                if (main.configValues!!.isEnabled(Feature.SHOW_BASE_STAT_BOOST_PERCENTAGE) && extraAttributes.hasKey(
 //                        "baseStatBoostPercentage",
 //                        ItemUtils.NBT_INTEGER
 //                    )
@@ -1013,8 +1013,8 @@ class PlayerListener {
 //                    val baseStatBoost = extraAttributes.getInteger("baseStatBoostPercentage")
 //
 //                    var colorCode: ColorCode =
-//                        main.getConfigValues().getRestrictedColor(Feature.SHOW_BASE_STAT_BOOST_PERCENTAGE)
-//                    if (main.getConfigValues().isEnabled(Feature.BASE_STAT_BOOST_COLOR_BY_RARITY)) {
+//                        main.configValues!!.getRestrictedColor(Feature.SHOW_BASE_STAT_BOOST_PERCENTAGE)
+//                    if (main.configValues!!.isEnabled(Feature.BASE_STAT_BOOST_COLOR_BY_RARITY)) {
 //                        var rarityIndex = baseStatBoost / 10
 //                        if (rarityIndex < 0) rarityIndex = 0
 //                        if (rarityIndex >= ItemRarity.entries.size) rarityIndex = ItemRarity.entries.size - 1
@@ -1024,41 +1024,41 @@ class PlayerListener {
 //                    e.toolTip.add(insertAt++, "§7Base Stat Boost: $colorCode+$baseStatBoost%")
 //                }
 //
-//                if (main.getConfigValues().isEnabled(Feature.SHOW_STACKING_ENCHANT_PROGRESS)) {
+//                if (main.configValues!!.isEnabled(Feature.SHOW_STACKING_ENCHANT_PROGRESS)) {
 //                    insertAt = EnchantManager.insertStackingEnchantProgress(e.toolTip, extraAttributes, insertAt)
 //                }
 //
-//                if (main.getConfigValues().isEnabled(Feature.SHOW_SWORD_KILLS) && extraAttributes.hasKey(
+//                if (main.configValues!!.isEnabled(Feature.SHOW_SWORD_KILLS) && extraAttributes.hasKey(
 //                        "sword_kills",
 //                        ItemUtils.NBT_INTEGER
 //                    )
 //                ) {
-//                    val colorCode: ColorCode = main.getConfigValues().getRestrictedColor(Feature.SHOW_SWORD_KILLS)
+//                    val colorCode: ColorCode = main.configValues!!.getRestrictedColor(Feature.SHOW_SWORD_KILLS)
 //                    e.toolTip.add(insertAt++, "§7Sword Kills: " + colorCode + extraAttributes.getInteger("sword_kills"))
 //                }
 //
-//                if (main.getConfigValues().isEnabled(Feature.SHOW_ITEM_DUNGEON_FLOOR) && extraAttributes.hasKey(
+//                if (main.configValues!!.isEnabled(Feature.SHOW_ITEM_DUNGEON_FLOOR) && extraAttributes.hasKey(
 //                        "item_tier",
 //                        ItemUtils.NBT_INTEGER
 //                    )
 //                ) {
 //                    val floor = extraAttributes.getInteger("item_tier")
 //                    val colorCode: ColorCode =
-//                        main.getConfigValues().getRestrictedColor(Feature.SHOW_ITEM_DUNGEON_FLOOR)
+//                        main.configValues!!.getRestrictedColor(Feature.SHOW_ITEM_DUNGEON_FLOOR)
 //                    e.toolTip.add(
 //                        insertAt++,
 //                        "§7Obtained on Floor: " + colorCode + (if (floor == 0) "Entrance" else floor)
 //                    )
 //                }
 //
-//                if (main.getConfigValues().isEnabled(Feature.SHOW_RARITY_UPGRADED) && extraAttributes.hasKey(
+//                if (main.configValues!!.isEnabled(Feature.SHOW_RARITY_UPGRADED) && extraAttributes.hasKey(
 //                        "rarity_upgrades",
 //                        ItemUtils.NBT_INTEGER
 //                    )
 //                ) {
 //                    e.toolTip.add(
 //                        insertAt,
-//                        main.getConfigValues().getRestrictedColor(Feature.SHOW_RARITY_UPGRADED) + "§lRARITY UPGRADED"
+//                        main.configValues!!.getRestrictedColor(Feature.SHOW_RARITY_UPGRADED) + "§lRARITY UPGRADED"
 //                    )
 //                }
 //            }
@@ -1118,20 +1118,20 @@ class PlayerListener {
 //    @SubscribeEvent
 //    fun onKeyInput(e: InputEvent.KeyInputEvent?) {
 //        if (main.getOpenSettingsKey().isPressed()) {
-//            main.getUtils().setFadingIn(true)
+//            main.utils!!.setFadingIn(true)
 //            main.getRenderListener().setGuiToOpen(EnumUtils.GUIType.MAIN, 1, EnumUtils.GuiTab.MAIN)
 //        } else if (main.getOpenEditLocationsKey().isPressed()) {
-//            main.getUtils().setFadingIn(false)
+//            main.utils!!.setFadingIn(false)
 //            main.getRenderListener().setGuiToOpen(EnumUtils.GUIType.EDIT_LOCATIONS, 0, null)
-//        } else if (main.getConfigValues().isEnabled(Feature.DEVELOPER_MODE) && main.getDeveloperCopyNBTKey()
+//        } else if (main.configValues!!.isEnabled(Feature.DEVELOPER_MODE) && main.getDeveloperCopyNBTKey()
 //                .isPressed()
 //        ) {
 //            DevUtils.copyData()
 //        }
 //
-//        if (main.getConfigValues().isEnabled(Feature.DUNGEONS_MAP_DISPLAY) &&
-//            main.getConfigValues().isEnabled(Feature.CHANGE_DUNGEON_MAP_ZOOM_WITH_KEYBOARD) &&
-//            main.getUtils().isInDungeon()
+//        if (main.configValues!!.isEnabled(Feature.DUNGEONS_MAP_DISPLAY) &&
+//            main.configValues!!.isEnabled(Feature.CHANGE_DUNGEON_MAP_ZOOM_WITH_KEYBOARD) &&
+//            main.utils!!.isInDungeon()
 //        ) {
 //            if (Keyboard.isKeyDown(main.getKeyBindings().get(5).getKeyCode()) && Keyboard.getEventKeyState()) {
 //                DungeonMapManager.decreaseZoomByStep()
@@ -1148,7 +1148,7 @@ class PlayerListener {
 //     */
 //    @SubscribeEvent
 //    fun onPlaySound(event: PlaySoundEvent) {
-//        if (!main.getUtils().isOnSkyblock()) {
+//        if (!main.utils!!.isOnSkyblock()) {
 //            return
 //        }
 //
@@ -1156,12 +1156,12 @@ class PlayerListener {
 //        if (event.sound is PositionedSoundRecord) {
 //            val eventSound = event.sound as PositionedSoundRecord
 //
-//            if (main.getConfigValues().isEnabled(Feature.STOP_RAT_SOUNDS)) {
+//            if (main.configValues!!.isEnabled(Feature.STOP_RAT_SOUNDS)) {
 //                if (event.category == SoundCategory.ANIMALS) {
 //                    for (sound in RAT_SOUNDS) {
 //                        // Check that the sound matches the rat sound
 //                        if (eventSound.soundLocation == sound.soundLocation && eventSound.pitch == sound.pitch && eventSound.volume == sound.volume) {
-//                            if (main.getConfigValues().isDisabled(Feature.STOP_ONLY_RAT_SQUEAK) ||
+//                            if (main.configValues!!.isDisabled(Feature.STOP_ONLY_RAT_SQUEAK) ||
 //                                eventSound.soundLocation.toString().endsWith("mob.bat.idle")
 //                            ) {
 //                                // Cancel the result
@@ -1172,7 +1172,7 @@ class PlayerListener {
 //                }
 //            }
 //
-//            if (main.getConfigValues().isEnabled(Feature.BACKPACK_OPENING_SOUND) &&
+//            if (main.configValues!!.isEnabled(Feature.BACKPACK_OPENING_SOUND) &&
 //                System.currentTimeMillis() - main.getGuiScreenListener().getLastBackpackOpenMs() < 500
 //            ) {
 //                if (event.name == "random.chestopen") {
@@ -1196,7 +1196,7 @@ class PlayerListener {
 //            }
 //        }
 //
-//        if (main.getConfigValues()
+//        if (main.configValues!!
 //                .isEnabled(Feature.STOP_BONZO_STAFF_SOUNDS) && BONZO_STAFF_SOUNDS.contains(event.name)
 //        ) {
 //            event.result = null
@@ -1213,7 +1213,7 @@ class PlayerListener {
 //        val thisPlayer = Minecraft.getMinecraft().thePlayer
 //
 //        //  Resets all user input on death as to not walk backwards or strafe into the portal
-//        if (main.getConfigValues().isEnabled(Feature.PREVENT_MOVEMENT_ON_DEATH) && e.entityPlayer === thisPlayer) {
+//        if (main.configValues!!.isEnabled(Feature.PREVENT_MOVEMENT_ON_DEATH) && e.entityPlayer === thisPlayer) {
 //            KeyBinding.unPressAllKeys()
 //        }
 //
@@ -1221,14 +1221,14 @@ class PlayerListener {
 //        Don't show log for losing all items when the player dies in dungeons.
 //         The items come back after the player is revived and the large log causes a distraction.
 //         */
-//        if (main.getConfigValues()
-//                .isEnabled(Feature.ITEM_PICKUP_LOG) && e.entityPlayer === thisPlayer && main.getUtils().isInDungeon()
+//        if (main.configValues!!
+//                .isEnabled(Feature.ITEM_PICKUP_LOG) && e.entityPlayer === thisPlayer && main.utils!!.isInDungeon()
 //        ) {
 //            lastDeath = Minecraft.getSystemTime()
 //            main.getInventoryUtils().resetPreviousInventory()
 //        }
 //
-//        if (main.getConfigValues().isEnabled(Feature.DUNGEON_DEATH_COUNTER) && main.getUtils().isInDungeon()) {
+//        if (main.configValues!!.isEnabled(Feature.DUNGEON_DEATH_COUNTER) && main.utils!!.isInDungeon()) {
 //            val dungeonPlayer: DungeonPlayer = main.getDungeonManager().getDungeonPlayerByName(e.username)
 //            if (dungeonPlayer != null) {
 //                // Hypixel sends another death message if the player disconnects. Don't count two deaths if the player
@@ -1262,7 +1262,7 @@ class PlayerListener {
 //        }
 //
 //        // Reset the previous inventory so the screen doesn't get spammed with a large pickup log
-//        if (main.getConfigValues().isEnabled(Feature.ITEM_PICKUP_LOG)) {
+//        if (main.configValues!!.isEnabled(Feature.ITEM_PICKUP_LOG)) {
 //            main.getInventoryUtils().resetPreviousInventory()
 //        }
 //    }
@@ -1272,18 +1272,18 @@ class PlayerListener {
 //        val blockState = Minecraft.getMinecraft().theWorld.getBlockState(e.blockPos)
 //        if (ORES.contains(Block.getStateId(blockState))) {
 //            var shouldIncrement = true
-//            if (main.getUtils().getLocation() === Location.ISLAND) {
+//            if (main.utils!!.getLocation() === Location.ISLAND) {
 //                if (blockState.block === Blocks.diamond_block) {
 //                    shouldIncrement = false
 //                }
 //                // TODO: Check if a minion is nearby to eliminate false positives
 //            }
 //            if (shouldIncrement) {
-//                main.getPersistentValuesManager().getPersistentValues()
-//                    .setOresMined(main.getPersistentValuesManager().getPersistentValues().getOresMined() + 1)
+//                main.persistentValuesManager!!.getPersistentValues()
+//                    .setOresMined(main.persistentValuesManager!!.getPersistentValues().getOresMined() + 1)
 //            }
 //        }
-//        if (main.getConfigValues().isEnabled(Feature.SHOW_ITEM_COOLDOWNS)) {
+//        if (main.configValues!!.isEnabled(Feature.SHOW_ITEM_COOLDOWNS)) {
 //            val itemId = ItemUtils.getSkyblockItemID(Minecraft.getMinecraft().thePlayer.heldItem)
 //            if (itemId != null) {
 //                val block = blockState.block
@@ -1291,9 +1291,9 @@ class PlayerListener {
 //                    (block == Blocks.log || block == Blocks.log2)
 //                ) {
 //                    // Weirdly, the level 100 leg monkey doesn't seem to be a full 50% reduction when accounting for break time
-//                    val multiplier = if (main.getConfigValues().isEnabled(Feature.LEG_MONKEY_LEVEL_100)) .6f else 1f
+//                    val multiplier = if (main.configValues!!.isEnabled(Feature.LEG_MONKEY_LEVEL_100)) .6f else 1f
 //                    var cooldownTime = (CooldownManager.getItemCooldown(itemId) * multiplier) as Long
-//                    cooldownTime -= (if (main.getConfigValues()
+//                    cooldownTime -= (if (main.configValues!!
 //                            .isEnabled(Feature.COOLDOWN_PREDICTION)
 //                    ) e.timeToBreak - 50 else 0).toLong()
 //                    // TODO: Pet detection
@@ -1321,7 +1321,7 @@ class PlayerListener {
 //    fun updateLastSecondHealth() {
 //        val health = getAttribute(Attribute.HEALTH)
 //        // Update the health gained/lost over the last second
-//        if (main.getConfigValues()
+//        if (main.configValues!!
 //                .isEnabled(Feature.HEALTH_UPDATES) && actionBarParser.getLastSecondHealth() !== health
 //        ) {
 //            actionBarParser.setHealthUpdate(health - actionBarParser.getLastSecondHealth())
@@ -1342,11 +1342,11 @@ class PlayerListener {
 //    }
 //
 //    private fun getAttribute(attribute: Attribute): Float {
-//        return main.getUtils().getAttributes().get(attribute).getValue()
+//        return main.utils!!.getAttributes().get(attribute).getValue()
 //    }
 //
 //    private fun setAttribute(attribute: Attribute, value: Float) {
-//        main.getUtils().getAttributes().get(attribute).setValue(value)
+//        main.utils!!.getAttributes().get(attribute).setValue(value)
 //    }
 //
 //    /**
@@ -1368,7 +1368,7 @@ class PlayerListener {
 //    private fun shouldTriggerFishingIndicator(): Boolean {
 //        val mc = Minecraft.getMinecraft()
 //
-//        if (main.getConfigValues()
+//        if (main.configValues!!
 //                .isEnabled(Feature.FISHING_SOUND_INDICATOR) && mc.thePlayer.fishEntity != null && BaitManager.getInstance()
 //                .isHoldingRod()
 //        ) {

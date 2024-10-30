@@ -11,8 +11,9 @@ import java.util.*
  * - A jerry present (3 armor stands)
  * - A zealot (enderman and name tag armor stand)
  */
-class EntityAggregate {
+open class EntityAggregate(present: UUID?, fromLine: UUID?, toLine: UUID?) {
     private val entities: List<UUID> = listOf()
+    fun getEntities(): List<UUID> = entities
 
     val isDead: Boolean
         /**

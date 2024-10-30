@@ -7,7 +7,7 @@ import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.*
 
 class EffectRendererTransformer : ITransformer {
-    override var className: Array<String?>? = arrayOf()
+    override var className: Array<String> = arrayOf()
 
     override fun transform(classNode: ClassNode?, name: String?) {
         for (methodNode in classNode!!.methods) {

@@ -7,7 +7,7 @@ import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.*
 
 class RenderManagerTransformer : ITransformer {
-    override var className: Array<String?>? = arrayOf()
+    override var className: Array<String> = arrayOf()
         /**
          * [net.minecraft.client.renderer.entity.RenderManager]
          */

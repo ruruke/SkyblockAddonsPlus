@@ -8,7 +8,7 @@ import moe.ruruke.skyblock.tweaker.transformer.ITransformer
 import org.objectweb.asm.tree.ClassNode
 
 class EntityRendererTransformer : ITransformer {
-    override var className: Array<String?>? = arrayOf()
+    override var className: Array<String> = arrayOf()
         /**
          * [net.minecraft.client.renderer.EntityRenderer]
          */

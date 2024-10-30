@@ -10,7 +10,7 @@ import org.objectweb.asm.tree.MethodInsnNode
 import org.objectweb.asm.tree.VarInsnNode
 
 class WorldClientTransformer : ITransformer {
-    override var className: Array<String?>? = arrayOf()
+    override var className: Array<String> = arrayOf()
         /**
          * [net.minecraft.client.multiplayer.WorldClient]
          */

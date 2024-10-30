@@ -10,7 +10,7 @@ import org.objectweb.asm.tree.InsnNode
 import org.objectweb.asm.tree.MethodInsnNode
 
 class GuiDisconnectedTransformer : ITransformer {
-    override var className: Array<String?>? = arrayOf()
+    override var className: Array<String> = arrayOf()
         /**
          * [net.minecraft.client.gui.GuiDisconnected]
          */

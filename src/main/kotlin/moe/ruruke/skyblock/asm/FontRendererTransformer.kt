@@ -5,7 +5,7 @@
 //import org.objectweb.asm.tree.*
 //
 //class FontRendererTransformer : ITransformer {
-//    override var className: Array<String?>? = arrayOf()
+//    override var className: Array<String> = arrayOf()
 //        /**
 //         * [net.minecraft.client.gui.FontRenderer]
 //         */

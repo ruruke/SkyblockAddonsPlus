@@ -31,7 +31,6 @@ class ItemUtils {
         val NBT_INTEGER: Int = 3
         val NBT_STRING: Int = 8
         val NBT_LIST: Int = 9
-
         /**
          * This expression matches the line with a Skyblock item's rarity and item type that's at the end of its lore.
          */

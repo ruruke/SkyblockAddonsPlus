@@ -9,7 +9,7 @@ import org.objectweb.asm.tree.ClassNode
 import org.objectweb.asm.tree.MethodInsnNode
 
 class GuiNewChatTransformer : ITransformer {
-    override var className: Array<String?>? = arrayOf()
+    override var className: Array<String> = arrayOf()
         /**
          * [net.minecraft.client.gui.GuiNewChat]
          */

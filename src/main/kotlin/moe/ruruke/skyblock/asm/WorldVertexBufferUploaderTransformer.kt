@@ -5,7 +5,7 @@
 //import org.objectweb.asm.tree.ClassNode
 //
 //class WorldVertexBufferUploaderTransformer : ITransformer {
-//    override var className: Array<String?>? = arrayOf()
+//    override var className: Array<String> = arrayOf()
 //        /**
 //         * [net.minecraft.client.renderer.WorldVertexBufferUploader]
 //         */

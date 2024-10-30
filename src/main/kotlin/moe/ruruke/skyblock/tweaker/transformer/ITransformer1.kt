@@ -3,7 +3,7 @@ package moe.ruruke.skyblock.tweaker.transformer
 import org.objectweb.asm.tree.ClassNode
 
 interface ITransformer {
-    val className: Array<String?>?
+    var className: Array<String>
 
     fun transform(classNode: ClassNode?, name: String?)
 

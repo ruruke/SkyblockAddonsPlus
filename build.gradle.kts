@@ -9,20 +9,23 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     java
     kotlin("jvm")
+
     id("org.polyfrost.multi-version")
     id("org.polyfrost.defaults.repo")
     id("org.polyfrost.defaults.java")
     id("org.polyfrost.defaults.loom")
+
     id ("io.freefair.lombok") version "6.6.1"
     id("com.github.johnrengelman.shadow")
     id("net.kyori.blossom") version "1.3.2"
     id("signing")
+
 }
 
 // Gets the mod name, version and id from the `gradle.properties` file.
 val mod_name: String = "SkyblockAddonsPlus"
-val mod_version: String = "1.0.0"
 val mod_id: String = "skyblockaddonsplus"
+val mod_version: String = "1.0.0"
 val mod_archives_name: String = "SkyblockAddonsPlus"
 
 // Replaces the variables in `ExampleMod.java` to the ones specified in `gradle.properties`.
@@ -58,7 +61,11 @@ loom {
         runConfigs {
             "client" {
                 programArgs("--tweakClass", "cc.polyfrost.oneconfig.loader.stage0.LaunchWrapperTweaker")
+                property("fml.coreMods.load", "moe.ruruke.skyblock.tweaker.SkyblockAddonsLoadingPlugin")
+
                 property("mixin.debug.export", "true") // Outputs all mixin changes to `versions/{mcVersion}/run/.mixin.out/class`
+                property("--mixin", "mixins.skyblockaddonsplus.json")
+
             }
         }
     }
@@ -68,6 +75,7 @@ loom {
             mixinConfig("mixins.skyblockaddonsplus.json")
         }
     }
+
     // Configures the name of the mixin "refmap"
     mixin.defaultRefmapName.set("mixins.skyblockaddonsplus.refmap.json")
 
@@ -84,10 +92,10 @@ val modShade: Configuration by configurations.creating {
 // Configures the output directory for when building from the `src/resources` directory.
 sourceSets {
     main {
+        ext.set("refMap","mixins.skyblockaddonsplus.refmap.json")
         java.srcDir("src/main/kotlin")
         output.setResourcesDir(sourceSets.main.flatMap { it.java.classesDirectory })
 //        output.setResourcesDir("./../../src/")
-//        println("OUTPUTTTT!!!!!!!!!!!! "+output.resourcesDir)
         kotlin.destinationDirectory.set(java.destinationDirectory)
     }
 }
@@ -132,7 +140,7 @@ tasks {
         inputs.property("java_level", compatLevel)
         inputs.property("version", mod_version)
         inputs.property("mcVersionStr", project.platform.mcVersionStr)
-        filesMatching(listOf("mcmod.info", "mixins.skyblockaddonsplus.json", "mods.toml")) {
+        filesMatching(listOf("mcmod.info", "mixins.skyblockaddonsplus.refmap.json", "mods.toml")) {
             expand(
                 mapOf(
                     "id" to mod_id,
@@ -193,10 +201,12 @@ tasks {
                 "ForceLoadAsMod" to true, // We want to load this jar as a mod, so we force Forge to do so.
                 "TweakOrder" to "0", // Makes sure that the OneConfig launch wrapper is loaded as soon as possible.
                 "MixinConfigs" to "mixins.skyblockaddonsplus.json", // We want to use our mixin configuration, so we specify it here.
+
+                "FMLAT" to  "accesstransformer.cfg",
+
                 "TweakClass" to "cc.polyfrost.oneconfig.loader.stage0.LaunchWrapperTweaker", // Loads the OneConfig launch wrapper.
-                "FMLCorePlugin" to "${project.group}.${mod_id}.tweaker.${project.name}LoadingPlugin",
+                "FMLCorePlugin" to "moe.ruruke.skyblock.tweaker.SkyBlockAddonLoadingPlugin",
                 "ForceLoadAsMod" to true,
-                "FMLAT" to  "accesstransformer.cfg"
             )
         }
         dependsOn(shadowJar)

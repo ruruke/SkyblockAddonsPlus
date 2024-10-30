@@ -8,7 +8,7 @@ import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.*
 
 class GuiChestTransformer : ITransformer {
-    override val className: Array<String?>?
+    override var className: Array<String> = arrayOf()
         /**
          * [net.minecraft.client.gui.inventory.GuiChest]
          */

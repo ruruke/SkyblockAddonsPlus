@@ -10,7 +10,7 @@ import org.objectweb.asm.tree.InsnList
 import org.objectweb.asm.tree.MethodInsnNode
 
 class TileEntityEnderChestRendererTransformer : ITransformer {
-    override var className: Array<String?>? = arrayOf()
+    override var className: Array<String> = arrayOf()
         /**
          * [net.minecraft.client.renderer.tileentity.TileEntityEnderChestRenderer]
          */

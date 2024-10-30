@@ -23,6 +23,9 @@ enum class ItemRarity(
     /** The color code for the color of the rarity as it's displayed in an item's lore  */
     private val colorCode: ColorCode
 
+    fun getColorCode(): ColorCode {
+        return colorCode
+    }
     init {
         this.colorCode = colorCode
     }

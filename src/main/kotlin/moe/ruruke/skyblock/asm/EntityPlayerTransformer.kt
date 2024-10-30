@@ -12,7 +12,7 @@ import org.objectweb.asm.tree.InsnNode
 import org.objectweb.asm.tree.VarInsnNode
 
 class EntityPlayerTransformer : ITransformer {
-    override var className: Array<String?>? = arrayOf()
+    override var className: Array<String> = arrayOf()
         /**
          * [net.minecraft.entity.player.EntityPlayer]
          */

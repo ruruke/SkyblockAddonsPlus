@@ -14,7 +14,7 @@ class GuiIngameCustomTransformer : ITransformer {
     private var doneArmor = false
     private var doneMountHealth = false
 
-    override var className: Array<String?>? = arrayOf()
+    override var className: Array<String> = arrayOf()
         /**
          * Labymod: net.labymod.core_implementation.mc18.gui.GuiIngameCustom
          */

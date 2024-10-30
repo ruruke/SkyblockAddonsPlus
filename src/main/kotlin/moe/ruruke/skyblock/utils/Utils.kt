@@ -27,6 +27,7 @@ import net.minecraft.item.ItemAxe
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ChatComponentText
 import net.minecraft.util.MathHelper
+import net.minecraft.util.Vector3d
 import net.minecraft.world.WorldSettings
 import net.minecraft.world.WorldType
 import net.minecraftforge.client.event.ClientChatReceivedEvent
@@ -48,7 +49,6 @@ import java.text.ParseException
 import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-import javax.vecmath.Vector3d
 import kotlin.math.sqrt
 
 class Utils {

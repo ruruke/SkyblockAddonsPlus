@@ -7,7 +7,7 @@ import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.*
 
 class GuiScreenTransformer : ITransformer {
-    override var className: Array<String?>? = arrayOf()
+    override var className: Array<String> = arrayOf()
         /**
          * [net.minecraft.client.gui.GuiScreen]
          */

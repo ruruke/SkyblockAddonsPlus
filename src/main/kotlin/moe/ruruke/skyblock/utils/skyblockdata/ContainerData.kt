@@ -24,17 +24,24 @@ class ContainerData {
     /**
      * The data tag where a compressed array of item stacks are stored.
      */
-    val compressedDataTag: String? = null
-
+    private val compressedDataTag: String? = null
+    fun getCompressedDataTag(): String? {
+        return compressedDataTag
+    }
     /**
      * Data tags where individual item stacks are stored.
      */
-    val itemStackDataTags: List<String>? = null
-
+    private val itemStackDataTags: List<String>? = null
+    fun getItemStackDataTags(): List<String>? {
+        return itemStackDataTags
+    }
     /**
      * The ExtraAttributes NBT tag for retrieving backpack color
      */
     val colorTag: String? = null
+//    fun getColorTag(): String? {
+//        return colorTag
+//    }
 
     /**
      * The container (item array) dimensions
@@ -42,18 +49,22 @@ class ContainerData {
     private val dimensions = intArrayOf(6, 9)
 
 
-    val isBackpack: Boolean
-        /* Functions that check the container type */
-        get() = type == ContainerType.BACKPACK
+    fun isBackpack(): Boolean {
+        return type == ContainerType.BACKPACK
+    }
 
-    val isCakeBag: Boolean
-        get() = type == ContainerType.NEW_YEARS_CAKE
+    fun isCakeBag(): Boolean {
+        return type == ContainerType.NEW_YEARS_CAKE
+    }
 
-    val isPersonalCompactor: Boolean
-        get() = type == ContainerType.PERSONAL_COMPACTOR
+    fun isPersonalCompactor(): Boolean {
+        return type == ContainerType.PERSONAL_COMPACTOR
+    }
 
-    val isBuildersWand: Boolean
-        get() = type == ContainerType.BUILDERS_WAND
+    fun isBuildersWand(): Boolean {
+        return type == ContainerType.BUILDERS_WAND
+    }
+
 
     /* Functions that check the size of the container */
     /**
@@ -63,15 +74,23 @@ class ContainerData {
         return min(size.toDouble(), 54.0).toInt()
     }
 
-    val numRows: Int
-        /**
-         * @return the number of rows in the container, or a maximum of 6
-         */
-        get() = if (dimensions.size == 2) min(dimensions[0].toDouble(), 6.0).toInt() else 6
+    private val numRows: Int = 0
 
-    val numCols: Int
-        /**
-         * @return the number of columns in the container, or a maximum of 9
-         */
-        get() = if (dimensions.size == 2) min(dimensions[1].toDouble(), 9.0).toInt() else 9
+
+    private val numCols: Int = 0
+
+    /**
+     * @return the number of rows in the container, or a maximum of 6
+     */
+    fun getNumRows(): Int {
+        return if (dimensions.size === 2) Math.min(dimensions[0], 6) else 6
+    }
+
+    /**
+     * @return the number of columns in the container, or a maximum of 9
+     */
+    fun getNumCols(): Int {
+        return if (dimensions.size === 2) Math.min(dimensions[1], 9) else 9
+    }
+
 }

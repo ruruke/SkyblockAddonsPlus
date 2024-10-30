@@ -122,14 +122,22 @@ class Utils {
         set(value) {
             field = value
         }
-    private val lastHoveredSlot = -1
-        get() = field
+    private var lastHoveredSlot = -1
+    fun setLastHoveredSlot(lastHoveredSlot: Int) {
+        this.lastHoveredSlot = lastHoveredSlot;
+    }
+    fun getLastHoveredSlot(): Int{
+        return this.lastHoveredSlot
+    }
 
     /**
      * Whether the player is using the FSR container preview
      */
     private val usingFSRcontainerPreviewTexture = false
         get() = field
+    fun isUsingFSRcontainerPreviewTexture(): Boolean{
+        return usingFSRcontainerPreviewTexture
+    }
 
     private var currentDate: SkyblockDate = SkyblockDate(SkyblockDate.SkyblockMonth.EARLY_WINTER, 1, 1, 1, "am")
         get() = field

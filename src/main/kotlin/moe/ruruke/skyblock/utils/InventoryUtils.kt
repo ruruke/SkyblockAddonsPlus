@@ -42,7 +42,9 @@ class InventoryUtils {
     fun setInventoryWarningShown(value: Boolean){
         inventoryWarningShown = value
     }
-
+    fun getInventoryType(): InventoryType{
+        return inventoryType!!
+    }
     /**
      * Whether the player is wearing a Skeleton Helmet.
      */
@@ -59,7 +61,7 @@ class InventoryUtils {
     private var inventoryType: InventoryType? = null
 
     
-    var inventoryKey: String? = null
+    private var inventoryKey: String? = null
 
     
     private var inventoryPageNum = 0
@@ -459,11 +461,14 @@ class InventoryUtils {
         return inventoryType
     }
 
-    private fun getInventoryKey(inventoryType: InventoryType?, inventoryPageNum: Int): String? {
+    fun getInventoryKey(inventoryType: InventoryType?, inventoryPageNum: Int): String? {
         if (inventoryType == null) {
             return null
         }
         return inventoryType.getInventoryName() + inventoryPageNum
+    }
+    fun getInventoryKey(): String? {
+        return inventoryKey
     }
 
     companion object {

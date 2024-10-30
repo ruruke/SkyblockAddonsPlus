@@ -20,7 +20,9 @@ class SkyblockKeyBinding(
     )
     private var registered = false
     private var isFirstRegistration = true
-
+    fun getKeyBinding(): KeyBinding {
+        return keyBinding
+    }
     /*
     This is the key code stored before the key binding is de-registered
     It's set to a number larger than Keyboard.KEYBOARD_SIZE by default to indicate no previous key code is stored.

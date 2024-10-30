@@ -257,13 +257,13 @@ class ItemUtils {
         fun isBackpack(stack: ItemStack): Boolean {
             val extraAttributes = getExtraAttributes(stack)
             val containerData = containers!![getSkyblockItemID(extraAttributes)]
-            return containerData != null && containerData.isBackpack
+            return containerData != null && containerData.isBackpack()
         }
 
         fun isBuildersWand(stack: ItemStack): Boolean {
             val extraAttributes = getExtraAttributes(stack)
             val containerData = containers!![getSkyblockItemID(extraAttributes)]
-            return containerData != null && containerData.isBuildersWand
+            return containerData != null && containerData.isBuildersWand()
         }
 
         /**

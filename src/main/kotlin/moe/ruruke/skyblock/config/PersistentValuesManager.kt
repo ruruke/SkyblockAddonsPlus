@@ -32,9 +32,12 @@ class PersistentValuesManager(configDir: File) {
 
         private val slayerTracker: SlayerTrackerData = SlayerTrackerData()
         private val dragonTracker: DragonTrackerData = DragonTrackerData()
-        private val storageCache: Map<String, CompressedStorage> = HashMap<String, CompressedStorage>()
+        private val storageCache: MutableMap<String, CompressedStorage> = HashMap<String, CompressedStorage>()
         fun getLastTimeFetchur(): Long {
             return lastTimeFetchur
+        }
+        fun getStorageCache(): MutableMap<String, CompressedStorage> {
+            return storageCache
         }
         fun setLastTimeFetchur(lasttime: Long){
             lastTimeFetchur = lasttime

@@ -23,6 +23,7 @@ import moe.ruruke.skyblock.utils.Utils
 import moe.ruruke.skyblock.utils.data.DataUtils
 import moe.ruruke.skyblock.utils.gson.GsonInitializableTypeAdapter
 import moe.ruruke.skyblock.utils.gson.PatternAdapter
+import net.minecraft.client.settings.KeyBinding
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod
@@ -116,6 +117,22 @@ class SkyblockAddonsPlus() {
         }
         fun getDeveloperCopyNBTKey(): SkyblockKeyBinding {
             return keyBindings.get(6)
+        }
+
+        fun getOpenSettingsKey(): KeyBinding {
+            return keyBindings.get(0).getKeyBinding()
+        }
+
+        fun getOpenEditLocationsKey(): KeyBinding {
+            return keyBindings.get(1).getKeyBinding()
+        }
+
+        fun getLockSlotKey(): KeyBinding {
+            return keyBindings.get(2).getKeyBinding()
+        }
+
+        fun getFreezeBackpackKey(): KeyBinding {
+            return keyBindings.get(3).getKeyBinding()
         }
     }
     // Register the config and commands.

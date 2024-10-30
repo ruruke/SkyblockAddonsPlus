@@ -9,6 +9,15 @@ class OnlineData {
     private val updateInfo: UpdateInfo? = null
 
     private val languageJSONFormat: String? = null
+    fun getBannerImageURL(): String? {
+        return bannerImageURL
+    }
+    fun getBannerLink(): String? {
+        return bannerLink
+    }
+    fun getUpdateInfo(): UpdateInfo? {
+        return updateInfo
+    }
 
     /**
      * This is the list of features in the mod that should be disabled. Features in this list will be disabled for all

@@ -1,7 +1,7 @@
 package moe.ruruke.skyblock.features
 
-import lombok.Getter
-import lombok.Setter
+
+
 import moe.ruruke.skyblock.SkyblockAddonsPlus
 import moe.ruruke.skyblock.core.Feature
 import moe.ruruke.skyblock.misc.scheduler.Scheduler
@@ -17,15 +17,15 @@ import java.util.*
  * @author Pedro9558
  */
 class FetchurManager {
-    @Getter
+    
     private val fetchurTaskCompletedPhrase = "thanks thats probably what i needed"
 
-    @Getter
+    
     private val fetchurAlreadyDidTaskPhrase = "come back another time, maybe tmrw"
 
     // Used for storage, essential for Fetchur Warner
-    @Getter
-    @Setter
+    
+    
     private var currentItemSaved: FetchurItem? = null
 
     val currentFetchurItem: FetchurItem
@@ -110,7 +110,7 @@ class FetchurManager {
      * A class representing the item fetchur wants
      * containing the item instance and the text format of the item
      */
-    class FetchurItem(@field:Getter private val itemStack: ItemStack, @field:Getter private val itemText: String) {
+    class FetchurItem(private val itemStack: ItemStack, private val itemText: String) {
         fun getItemText(): String {
             return itemText
         }
@@ -129,7 +129,7 @@ class FetchurManager {
 
         // Hypixel timezone
         // Currently using new york timezone, gotta check november 7th to see if this still works
-        @Getter
+        
         private val fetchurZone: TimeZone = TimeZone.getTimeZone("America/New_York")
         private val fetchurCalendar: Calendar = GregorianCalendar(TimeZone.getTimeZone("America/New_York"))
 
@@ -162,7 +162,7 @@ class FetchurManager {
             FetchurItem(ItemStack(Blocks.wool, 50, 14), "Red Wool")
         )
 
-        @Getter
+        
         private val instance = FetchurManager()
 
         fun getInstance(): FetchurManager {

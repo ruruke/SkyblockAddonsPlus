@@ -211,7 +211,7 @@ class ButtonSelect(
     }
 
     companion object {
-        private val ARROW_LEFT = ResourceLocation("skyblockaddons", "gui/flatarrowleft.png")
-        private val ARROW_RIGHT = ResourceLocation("skyblockaddons", "gui/flatarrowright.png")
+        val ARROW_LEFT = ResourceLocation("skyblockaddons", "gui/flatarrowleft.png")
+        val ARROW_RIGHT = ResourceLocation("skyblockaddons", "gui/flatarrowright.png")
     }
 }

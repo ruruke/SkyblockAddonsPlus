@@ -1,10 +1,10 @@
 package moe.ruruke.skyblock.shader
 
-import lombok.Getter
+
 import moe.ruruke.skyblock.SkyblockAddonsPlus
 import java.lang.reflect.TypeVariable
 
-@Getter
+
 enum class ShaderManager {
     INSTANCE;
 

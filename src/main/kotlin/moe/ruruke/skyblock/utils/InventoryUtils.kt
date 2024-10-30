@@ -2,8 +2,8 @@ package moe.ruruke.skyblock.utils
 
 import com.google.common.collect.ArrayListMultimap
 import com.google.common.collect.Multimap
-import lombok.Getter
-import lombok.Setter
+
+
 import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.configValues
 import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.instance
 import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.scheduler
@@ -38,31 +38,33 @@ class InventoryUtils {
     private var previousInventory: List<ItemStack?>? = null
     private val itemPickupLog: Multimap<String, ItemDiff> = ArrayListMultimap.create()
 
-    @Setter
     private var inventoryWarningShown = false
+    fun setInventoryWarningShown(value: Boolean){
+        inventoryWarningShown = value
+    }
 
     /**
      * Whether the player is wearing a Skeleton Helmet.
      */
-    @Getter
+    
     private var wearingSkeletonHelmet = false
 
-    @Getter
+    
     private var usingToxicArrowPoison = false
 
-    @Getter
+    
     private val slayerArmorProgresses = arrayOfNulls<SlayerArmorProgress>(4)
 
-    @Getter
+    
     private var inventoryType: InventoryType? = null
 
-    @Getter
+    
     var inventoryKey: String? = null
 
-    @Getter
+    
     private var inventoryPageNum = 0
 
-    @Getter
+    
     private var inventorySubtype: String? = null
     private val main = instance
 

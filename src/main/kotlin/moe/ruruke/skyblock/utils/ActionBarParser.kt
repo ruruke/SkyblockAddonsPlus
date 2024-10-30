@@ -1,7 +1,7 @@
 package moe.ruruke.skyblock.utils
 
-import lombok.Getter
-import lombok.Setter
+
+
 import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.configValues
 import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.getLogger
 import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.instance
@@ -51,7 +51,7 @@ import kotlin.math.min
  * To add something new to parse, add an else-if case in [.parseActionBar] to call a method that
  * parses information from that section.
  */
-@Getter
+
 class ActionBarParser {
     /**
      * The amount of usable tickers or -1 if none are in the action bar.
@@ -63,13 +63,13 @@ class ActionBarParser {
      */
     private var maxTickers = 0
 
-    @Setter
+    
     private val lastSecondHealth = -1f
 
-    @Setter
+    
     private val healthUpdate: Float? = null
 
-    @Setter
+    
     private val lastHealthUpdate: Long = 0
 
     private var currentSkillXP = 0f

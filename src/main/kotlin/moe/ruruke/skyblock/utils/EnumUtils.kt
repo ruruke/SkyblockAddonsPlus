@@ -93,17 +93,19 @@ class EnumUtils {
         STYLE_ONE("settings.textStyles.one"),
         STYLE_TWO("settings.textStyles.two");
 
-        val message: String?
-            get() = getMessage(TRANSLATION_KEY)
+        private val message: String? = ""
+        fun getMessage(): String? {
+            return message
+        }
 
-        val nextType: TextStyle
-            get() {
-                var nextType = ordinal + 1
-                if (nextType > entries.size - 1) {
-                    nextType = 0
-                }
-                return entries[nextType]
+
+        fun getNextType(): TextStyle {
+            var nextType = ordinal + 1
+            if (nextType > values().size - 1) {
+                nextType = 0
             }
+            return values()[nextType]
+        }
     }
 
     enum class GuiTab {
@@ -405,6 +407,9 @@ class EnumUtils {
             "skyblockaddons",
             "gui/$resourcePath.png"
         )
+        fun getResourceLocation(): ResourceLocation {
+            return resourceLocation
+        }
         private var url: URI? = null
 
         init {

@@ -1,8 +1,8 @@
 package moe.ruruke.skyblock.shader
 
-import lombok.AllArgsConstructor
 
-@AllArgsConstructor
+
+
 class UniformType<T>(i: Int) {
     private val amount = 0
 

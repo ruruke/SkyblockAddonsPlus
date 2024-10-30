@@ -2,31 +2,26 @@
 
 import org.polyfrost.gradle.util.noServerRunConfigs
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 // Adds support for kotlin, and adds the Polyfrost Gradle Toolkit
 // which we use to prepare the environment.
 plugins {
-    java
     kotlin("jvm")
-
     id("org.polyfrost.multi-version")
     id("org.polyfrost.defaults.repo")
     id("org.polyfrost.defaults.java")
     id("org.polyfrost.defaults.loom")
-
-    id ("io.freefair.lombok") version "6.6.1"
     id("com.github.johnrengelman.shadow")
     id("net.kyori.blossom") version "1.3.2"
     id("signing")
-
+    java
 }
 
 // Gets the mod name, version and id from the `gradle.properties` file.
-val mod_name: String = "SkyblockAddonsPlus"
-val mod_id: String = "skyblockaddonsplus"
-val mod_version: String = "1.0.0"
-val mod_archives_name: String = "SkyblockAddonsPlus"
+val mod_name: String by project
+val mod_version: String by project
+val mod_id: String by project
+val mod_archives_name: String by project
 
 // Replaces the variables in `ExampleMod.java` to the ones specified in `gradle.properties`.
 blossom {
@@ -51,34 +46,24 @@ base {
 loom {
     // Removes the server configs from IntelliJ IDEA, leaving only client runs.
     noServerRunConfigs()
-    silentMojangMappingsLicense()
 
     // Adds the tweak class if we are building legacy version of forge as per the documentation (https://docs.polyfrost.org)
-    forge {
-        accessTransformer("./../../src/main/resources/META-INF/accesstransformer.cfg")
-    }
     if (project.platform.isLegacyForge) {
         runConfigs {
             "client" {
                 programArgs("--tweakClass", "cc.polyfrost.oneconfig.loader.stage0.LaunchWrapperTweaker")
-                property("fml.coreMods.load", "moe.ruruke.skyblock.tweaker.SkyblockAddonsLoadingPlugin")
-
                 property("mixin.debug.export", "true") // Outputs all mixin changes to `versions/{mcVersion}/run/.mixin.out/class`
-                property("--mixin", "mixins.skyblockaddonsplus.json")
-
             }
         }
     }
     // Configures the mixins if we are building for forge
     if (project.platform.isForge) {
         forge {
-            mixinConfig("mixins.skyblockaddonsplus.json")
+            mixinConfig("mixins.${mod_id}.json")
         }
     }
-
     // Configures the name of the mixin "refmap"
-    mixin.defaultRefmapName.set("mixins.skyblockaddonsplus.refmap.json")
-
+    mixin.defaultRefmapName.set("mixins.${mod_id}.refmap.json")
 }
 
 // Creates the shade/shadow configuration, so we can include libraries inside our mod, rather than having to add them separately.
@@ -92,11 +77,7 @@ val modShade: Configuration by configurations.creating {
 // Configures the output directory for when building from the `src/resources` directory.
 sourceSets {
     main {
-        ext.set("refMap","mixins.skyblockaddonsplus.refmap.json")
-        java.srcDir("src/main/kotlin")
-        output.setResourcesDir(sourceSets.main.flatMap { it.java.classesDirectory })
-//        output.setResourcesDir("./../../src/")
-        kotlin.destinationDirectory.set(java.destinationDirectory)
+        output.setResourcesDir(java.classesDirectory)
     }
 }
 
@@ -109,19 +90,19 @@ repositories {
 dependencies {
     // Adds the OneConfig library, so we can develop with it.
     modCompileOnly("cc.polyfrost:oneconfig-$platform:0.2.2-alpha+")
-    compileOnly("org.jetbrains.kotlin:kotlin-reflect:1.9.10")
+
     // Adds DevAuth, which we can use to log in to Minecraft in development.
     modRuntimeOnly("me.djtheredstoner:DevAuth-${if (platform.isFabric) "fabric" else if (platform.isLegacyForge) "forge-legacy" else "forge-latest"}:1.2.0")
-//    shade("com.ibm.icu.text:normalizer:1.3.1")
+
     // If we are building for legacy forge, includes the launch wrapper with `shade` as we configured earlier, as well as mixin 0.7.11
     if (platform.isLegacyForge) {
-        shade("cc.polyfrost:oneconfig-wrapper-launchwrapper:1.0.0-beta17")
         compileOnly("org.spongepowered:mixin:0.7.11-SNAPSHOT")
+        shade("cc.polyfrost:oneconfig-wrapper-launchwrapper:1.0.0-beta17")
     }
 }
 
 tasks {
-    // Processes the `src/resources/mcmod.info`, `fabric.mod.json`, or `mixins.skyblockaddonsplus.json` and replaces
+    // Processes the `src/resources/mcmod.info`, `fabric.mod.json`, or `mixins.${mod_id}.json` and replaces
     // the mod id, name and version with the ones in `gradle.properties`
     processResources {
         inputs.property("id", mod_id)
@@ -140,7 +121,7 @@ tasks {
         inputs.property("java_level", compatLevel)
         inputs.property("version", mod_version)
         inputs.property("mcVersionStr", project.platform.mcVersionStr)
-        filesMatching(listOf("mcmod.info", "mixins.skyblockaddonsplus.refmap.json", "mods.toml")) {
+        filesMatching(listOf("mcmod.info", "mixins.${mod_id}.json", "mods.toml")) {
             expand(
                 mapOf(
                     "id" to mod_id,
@@ -200,22 +181,14 @@ tasks {
                 "ModSide" to "CLIENT", // We aren't developing a server-side mod
                 "ForceLoadAsMod" to true, // We want to load this jar as a mod, so we force Forge to do so.
                 "TweakOrder" to "0", // Makes sure that the OneConfig launch wrapper is loaded as soon as possible.
-                "MixinConfigs" to "mixins.skyblockaddonsplus.json", // We want to use our mixin configuration, so we specify it here.
-
-                "FMLAT" to  "accesstransformer.cfg",
-
+                "MixinConfigs" to "mixins.${mod_id}.json", // We want to use our mixin configuration, so we specify it here.
                 "TweakClass" to "cc.polyfrost.oneconfig.loader.stage0.LaunchWrapperTweaker", // Loads the OneConfig launch wrapper.
+                "FMLAT" to  "accesstransformer.cfg",
                 "FMLCorePlugin" to "moe.ruruke.skyblock.tweaker.SkyBlockAddonLoadingPlugin",
-                "ForceLoadAsMod" to true,
-            )
+                )
         }
         dependsOn(shadowJar)
         archiveClassifier.set("")
         enabled = false
     }
-}
-
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    jvmTarget = "1.8"
 }

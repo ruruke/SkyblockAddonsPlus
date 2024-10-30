@@ -9,7 +9,7 @@ import java.util.*
  */
 enum class ColorCode(
     val code: Char,
-    val isFormat: Boolean,
+    val format: Boolean,
     private val jsonName: String?,
     rgb: Int = -1
 ) {
@@ -51,6 +51,10 @@ enum class ColorCode(
         this.color = (255 shl 24) or (rgb and 0x00FFFFFF)
     }
 
+    fun isFormat(): Boolean {
+        return format
+    }
+
     val colorObject: Color
         get() = Color(color)
     fun getColor(alpha: Int): Int {
@@ -67,7 +71,7 @@ enum class ColorCode(
     }
 
     fun isColor(): Boolean {
-        return !this.isFormat && this != RESET
+        return !this.format && this != RESET
     }
 
     val nextFormat: ColorCode

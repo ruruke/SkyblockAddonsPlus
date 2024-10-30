@@ -1,9 +1,8 @@
 {
   "compatibilityLevel": "JAVA_8",
-  "minVersion": "0.7.10",
-  "required": true,
+  "minVersion": "0.7",
   "package": "moe.ruruke.skyblock.mixin",
-  "refmap": "mixins.skyblockaddonsplus.refmap.json",
+  "refmap": "mixins.${id}.refmap.json",
   "injectors": {
     "maxShiftBy": 5
   },

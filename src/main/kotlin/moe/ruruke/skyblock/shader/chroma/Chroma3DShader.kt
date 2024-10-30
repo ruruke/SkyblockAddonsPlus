@@ -1,6 +1,6 @@
 package moe.ruruke.skyblock.shader.chroma
 
-import lombok.Setter
+
 import moe.ruruke.skyblock.shader.UniformType
 import moe.ruruke.skyblock.utils.Utils
 import net.minecraft.util.Vector3d

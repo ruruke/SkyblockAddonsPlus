@@ -2,11 +2,11 @@ package moe.ruruke.skyblock.features.slayertracker
 
 import com.google.common.collect.Lists
 import moe.ruruke.skyblock.features.slayertracker.SlayerDrop.*
-import lombok.Getter
+
 import moe.ruruke.skyblock.core.Translations
 import kotlin.collections.ArrayList
 
-enum class SlayerBoss(@field:Getter private val mobType: String, vararg drops: SlayerDrop?) {
+enum class SlayerBoss(private val mobType: String, vararg drops: SlayerDrop?) {
     REVENANT(
         "Zombie", REVENANT_FLESH, FOUL_FLESH, PESTILENCE_RUNE, UNDEAD_CATALYST, SMITE_SIX, BEHEADED_HORROR,
         REVENANT_CATALYST, SNAKE_RUNE, SCYTHE_BLADE, SMITE_SEVEN, SHARD_OF_SHREDDED, WARDEN_HEART

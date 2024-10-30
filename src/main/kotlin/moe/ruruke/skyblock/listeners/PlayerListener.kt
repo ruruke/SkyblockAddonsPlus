@@ -1071,7 +1071,6 @@ class PlayerListener {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     fun onItemTooltipLast(e: ItemTooltipEvent) {
         val hoveredItem = e.itemStack
-
         if (e.toolTip != null && main.utils!!.isOnSkyblock()) {
             if (SkyblockAddonsPlus.configValues!!.isEnabled(Feature.ENCHANTMENT_LORE_PARSING)) {
                 EnchantManager.parseEnchants(e.toolTip, hoveredItem)
@@ -1304,9 +1303,9 @@ class PlayerListener {
 //        }
 //    }
 
-//    fun aboutToJoinSkyblockServer(): Boolean {
-//        return Minecraft.getSystemTime() - lastSkyblockServerJoinAttempt < 6000
-//    }
+    fun aboutToJoinSkyblockServer(): Boolean {
+        return Minecraft.getSystemTime() - lastSkyblockServerJoinAttempt < 6000
+    }
 //
     fun didntRecentlyJoinWorld(): Boolean {
         return (Minecraft.getSystemTime() - lastWorldJoin) > 3000

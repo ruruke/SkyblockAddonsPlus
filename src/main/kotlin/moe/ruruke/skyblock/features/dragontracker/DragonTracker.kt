@@ -1,7 +1,7 @@
 package moe.ruruke.skyblock.features.dragontracker
 
 import com.google.common.collect.Lists
-import lombok.Getter
+
 import moe.ruruke.skyblock.SkyblockAddonsPlus
 import moe.ruruke.skyblock.features.ItemDiff
 
@@ -128,11 +128,11 @@ class DragonTracker {
     }
 
     companion object {
-        @Getter
+        
         private val dummyDragons: List<DragonType> =
             Lists.newArrayList(DragonType.PROTECTOR, DragonType.SUPERIOR, DragonType.WISE)
 
-        @Getter
+        
         private val instance = DragonTracker()
     }
 }

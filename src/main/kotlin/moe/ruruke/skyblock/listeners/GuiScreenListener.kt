@@ -1,6 +1,6 @@
 package moe.ruruke.skyblock.listeners
 
-import lombok.Getter
+
 import moe.ruruke.skyblock.SkyblockAddonsPlus
 import moe.ruruke.skyblock.core.Feature
 import moe.ruruke.skyblock.core.InventoryType
@@ -35,11 +35,11 @@ class GuiScreenListener {
     private var inventoryChangeTimeCheckTask: ScheduledTask? = null
 
     /** Time in milliseconds of the last time a `GuiContainer` was closed  */
-    @Getter
+    
     private var lastContainerCloseMs: Long = -1
 
     /** Time in milliseconds of the last time a backpack was opened, used by [Feature.BACKPACK_OPENING_SOUND].  */
-    @Getter
+    
     private var lastBackpackOpenMs: Long = -1
 
     /** Time in milliseconds of the last time an item in the currently open `GuiContainer` changed  */

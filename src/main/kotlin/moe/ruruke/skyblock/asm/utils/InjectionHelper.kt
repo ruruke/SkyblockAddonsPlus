@@ -1,10 +1,10 @@
 package moe.ruruke.skyblock.asm.utils
 
 import com.google.common.collect.Sets
-import lombok.AccessLevel
-import lombok.Getter
-import lombok.Setter
-import lombok.experimental.Accessors
+
+
+
+
 import moe.ruruke.skyblock.asm.utils.InstructionBuilder
 import moe.ruruke.skyblock.asm.utils.TransformerClass
 import moe.ruruke.skyblock.asm.utils.TransformerField
@@ -14,8 +14,8 @@ import java.util.*
 import java.util.function.Consumer
 
 
-@Accessors(chain = true)
-@Setter(value = AccessLevel.PRIVATE)
+
+
 class InjectionHelper {
     private var method: TransformerMethod? = null
     private var methodNode: MethodNode? = null
@@ -24,14 +24,14 @@ class InjectionHelper {
         TreeMap() // Instruction Offset -> Condition Injection Point
     private var injectionPosition: InjectionPosition? = null
 
-    @Setter
+    
     private var injectionOffset = 0
     fun setInjectionOffset(offset: Int): InjectionHelper {
         injectionOffset = offset
         return this
     }
 
-    @Setter(value = AccessLevel.PUBLIC)
+    
     private var instructions: InsnList? = null
     private var instructionConsumer: Consumer<AbstractInsnNode>? = null
 
@@ -234,7 +234,7 @@ class InjectionHelper {
                 false
             })
 
-        @Getter
+        
         private val matchers: Set<InstructionMatcher<*>> = Sets.newHashSet<InstructionMatcher<*>>(
             ownerMatcher,
             opcodeMatcher,

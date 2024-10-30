@@ -37,13 +37,13 @@ object RenderGlobalHook {
 
     fun onAddBlockBreakParticle(breakerId: Int, pos: BlockPos, progress: Int) {
         //TODO:
-//        val main: SkyblockAddonsPlus.Companion = SkyblockAddonsPlus.instance
-//        // On public islands, hypixel sends a progress = 10 update once it registers the start of block breaking
-//        if (breakerId == 0 && main.utils!!.getLocation() !== Location.ISLAND &&
-//            pos == MinecraftHook.prevClickBlock && progress == 10
-//        ) {
-//            //System.out.println(progress);
-//            MinecraftHook.startMineTime = System.currentTimeMillis()
-//        }
+        val main: SkyblockAddonsPlus.Companion = SkyblockAddonsPlus.instance
+        // On public islands, hypixel sends a progress = 10 update once it registers the start of block breaking
+        if (breakerId == 0 && main.utils!!.getLocation() !== Location.ISLAND &&
+            pos == MinecraftHook.prevClickBlock && progress == 10
+        ) {
+            //System.out.println(progress);
+            MinecraftHook.startMineTime = System.currentTimeMillis()
+        }
     }
 }

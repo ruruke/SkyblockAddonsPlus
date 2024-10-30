@@ -1,8 +1,8 @@
 package moe.ruruke.skyblock.utils.objects
 
-import lombok.Getter
 
-@Getter
+
+
 class FloatPairString(x: Float, y: Float, private var enchant: String) {
     private var floatPair: FloatPair = FloatPair(x, y)
 
@@ -11,10 +11,10 @@ class FloatPairString(x: Float, y: Float, private var enchant: String) {
         this.enchant = enchant!!
     }
     fun getX(): Float {
-        return floatPair.x
+        return floatPair.getX()
     }
 
     fun getY(): Float {
-        return floatPair.y
+        return floatPair.getY()
     }
 }

@@ -3,8 +3,10 @@ package moe.ruruke.skyblock.core
 import com.google.common.collect.Sets
 import moe.ruruke.skyblock.SkyblockAddonsPlus
 import moe.ruruke.skyblock.config.ConfigValues
+import moe.ruruke.skyblock.gui.buttons.ButtonLocation
 import moe.ruruke.skyblock.utils.ColorCode
 import moe.ruruke.skyblock.utils.EnumUtils
+import net.minecraft.client.Minecraft
 import java.util.*
 
 
@@ -645,7 +647,9 @@ enum class Feature(
 
         return null
     }
-
+    fun getSettings(): List<EnumUtils.FeatureSetting> {
+        return settings
+    }
     val isGuiFeature: Boolean
         get() {
             return guiFeatures.contains(this)
@@ -656,41 +660,42 @@ enum class Feature(
             return guiFeatureData?.getDefaultColor() != null
         }
 
-//    fun draw(scale: Float, mc: Minecraft?, buttonLocation: ButtonLocation?) {
-//        if (guiFeatureData != null) {
-//            //TODO
-////            val main: SkyblockAddons = SkyblockAddons.getInstance()
-////            if (guiFeatureData.getDrawType() === EnumUtils.DrawType.BAR) {
-////                main.getRenderListener().drawBar(this, scale, mc, buttonLocation)
-////            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.SKELETON_BAR) {
-////                main.getRenderListener().drawSkeletonBar(mc, scale, buttonLocation)
-////            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.TEXT) {
-////                main.getRenderListener().drawText(this, scale, mc, buttonLocation)
-////            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.PICKUP_LOG) {
-////                main.getRenderListener().drawItemPickupLog(scale, buttonLocation)
-////            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.DEFENCE_ICON) {
-////                main.getRenderListener().drawIcon(scale, mc, buttonLocation)
-////            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.REVENANT_PROGRESS) {
-////                main.getRenderListener().drawRevenantIndicator(scale, mc, buttonLocation)
-////            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.POWER_ORB_DISPLAY) {
-////                main.getRenderListener().drawPowerOrbStatus(mc, scale, buttonLocation)
-////            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.TICKER) {
-////                main.getRenderListener().drawScorpionFoilTicker(mc, scale, buttonLocation)
+    fun draw(scale: Float, mc: Minecraft?, buttonLocation: ButtonLocation?) {
+        if (guiFeatureData != null) {
+            //TODO
+//            val main: SkyblockAddonsPlus = SkyblockAddonsPlus().instance
+//            if (guiFeatureData.getDrawType() === EnumUtils.DrawType.BAR) {
+//                main.getRenderListener().drawBar(this, scale, mc, buttonLocation)
+//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.SKELETON_BAR) {
+//                main.getRenderListener().drawSkeletonBar(mc, scale, buttonLocation)
+//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.TEXT) {
+//                main.getRenderListener().drawText(this, scale, mc, buttonLocation)
+//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.PICKUP_LOG) {
+//                main.getRenderListener().drawItemPickupLog(scale, buttonLocation)
+//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.DEFENCE_ICON) {
+//                main.getRenderListener().drawIcon(scale, mc, buttonLocation)
+//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.REVENANT_PROGRESS) {
+//                main.getRenderListener().drawRevenantIndicator(scale, mc, buttonLocation)
+//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.POWER_ORB_DISPLAY) {
+//                main.getRenderListener().drawPowerOrbStatus(mc, scale, buttonLocation)
+//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.TICKER) {
+//                main.getRenderListener().drawScorpionFoilTicker(mc, scale, buttonLocation)
+//            //TODO:
 ////            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.PROXIMITY_INDICATOR) {
 ////                FeatureTrackerQuest.drawTrackerLocationIndicator(mc, scale, buttonLocation)
-////            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.TAB_EFFECT_TIMERS) {
-////                main.getRenderListener().drawPotionEffectTimers(scale, buttonLocation)
-////            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.BAIT_LIST_DISPLAY) {
-////                main.getRenderListener().drawBaitList(mc, scale, buttonLocation)
-////            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.DUNGEONS_MAP) {
-////                DungeonMapManager.drawDungeonsMap(mc, scale, buttonLocation)
-////            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.SLAYER_TRACKERS) {
-////                main.getRenderListener().drawSlayerTrackers(this, mc, scale, buttonLocation)
-////            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.DRAGON_STATS_TRACKER) {
-////                main.getRenderListener().drawDragonTrackers(mc, scale, buttonLocation)
-////            }
-//        }
-//    }
+//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.TAB_EFFECT_TIMERS) {
+//                main.getRenderListener().drawPotionEffectTimers(scale, buttonLocation)
+//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.BAIT_LIST_DISPLAY) {
+//                main.getRenderListener().drawBaitList(mc, scale, buttonLocation)
+//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.DUNGEONS_MAP) {
+//                DungeonMapManager.drawDungeonsMap(mc, scale, buttonLocation)
+//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.SLAYER_TRACKERS) {
+//                main.getRenderListener().drawSlayerTrackers(this, mc, scale, buttonLocation)
+//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.DRAGON_STATS_TRACKER) {
+//                main.getRenderListener().drawDragonTrackers(mc, scale, buttonLocation)
+//            }
+        }
+    }
 
     val defaultColor: ColorCode?
         get() {
@@ -725,6 +730,10 @@ enum class Feature(
 ////            }
 //            onToggle()
 //        }
+
+    fun draw(){
+        return draw()
+    }
 
     /**
      * Sets whether the current feature is enabled.

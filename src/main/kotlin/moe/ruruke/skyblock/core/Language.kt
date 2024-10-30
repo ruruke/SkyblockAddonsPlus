@@ -58,6 +58,10 @@ enum class Language(private val path: String) {
             ResourceLocation("skyblockaddons", "flags/" + path.lowercase(Locale.getDefault()) + ".png")
     }
 
+    fun getResourceLocation(): ResourceLocation {
+        return resourceLocation
+    }
+
     fun getPath(): String {
         return path
     }

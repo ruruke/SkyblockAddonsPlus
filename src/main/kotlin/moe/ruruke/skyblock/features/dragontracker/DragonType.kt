@@ -1,11 +1,11 @@
 package moe.ruruke.skyblock.features.dragontracker
 
-import lombok.AllArgsConstructor
-import lombok.Getter
+
+
 import moe.ruruke.skyblock.core.Translations.getMessage
 import moe.ruruke.skyblock.utils.ColorCode
 
-@AllArgsConstructor
+
 enum class DragonType(color: ColorCode) {
     PROTECTOR(ColorCode.DARK_BLUE),
     OLD(ColorCode.GRAY),
@@ -15,7 +15,7 @@ enum class DragonType(color: ColorCode) {
     STRONG(ColorCode.RED),
     SUPERIOR(ColorCode.GOLD);
 
-    @Getter
+    
     private val color: ColorCode? = null
 
     val displayName: String?

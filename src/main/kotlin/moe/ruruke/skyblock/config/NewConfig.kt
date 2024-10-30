@@ -59,11 +59,13 @@ class NewConfig {
          */
         fun isDisabled(feature: Feature): Boolean {
             if(isRemoteDisabled(feature)){
+                SkyblockAddonsPlus.utils!!.sendErrorMessage("RemoteDisabled")
                 return true
             }
             when(feature.getId()) {
                 45 -> return SkyblockAddonsPlus.config!!.replaceRomanNumeralsWithNumbers
             }
+            SkyblockAddonsPlus.utils!!.sendErrorMessage("Other!")
             return false
         }
 

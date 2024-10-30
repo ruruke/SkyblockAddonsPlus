@@ -2,13 +2,7 @@ package moe.ruruke.skyblock.utils.draw
 
 import moe.ruruke.skyblock.core.chroma.MulticolorShaderManager.Companion.instance
 import moe.ruruke.skyblock.utils.ColorUtils
-import moe.ruruke.skyblock.utils.ColorUtils.getAlpha
-import moe.ruruke.skyblock.utils.ColorUtils.getBlue
-import moe.ruruke.skyblock.utils.ColorUtils.getGreen
-import moe.ruruke.skyblock.utils.ColorUtils.getRed
-import moe.ruruke.skyblock.utils.DrawUtils.disableOutlineMode
-import moe.ruruke.skyblock.utils.DrawUtils.enableOutlineMode
-import moe.ruruke.skyblock.utils.DrawUtils.outlineColor
+import moe.ruruke.skyblock.utils.DrawUtils
 import moe.ruruke.skyblock.utils.SkyblockColor
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.Tessellator
@@ -72,12 +66,12 @@ abstract class DrawState {
             GlStateManager.shadeModel(GL11.GL_SMOOTH)
         }
         if (textured && ignoreTexture) {
-            enableOutlineMode()
+            DrawUtils.enableOutlineMode()
             // Textured shader needs white color to work properly
             if (color.drawMulticolorUsingShader()) {
-                outlineColor(-0x1)
+                DrawUtils.outlineColor(-0x1)
             } else {
-                outlineColor(color.color)
+                DrawUtils.outlineColor(color.color)
             }
         }
     }
@@ -85,7 +79,7 @@ abstract class DrawState {
     protected fun bindColor(colorInt: Int) {
         if (textured && ignoreTexture) {
             if (color.isPositionalMulticolor && color.drawMulticolorManually()) {
-                outlineColor(colorInt)
+                DrawUtils.outlineColor(colorInt)
             }
         } else {
             GlStateManager.color(
@@ -103,7 +97,7 @@ abstract class DrawState {
             GlStateManager.shadeModel(GL11.GL_FLAT)
         }
         if (textured && ignoreTexture) {
-            disableOutlineMode()
+            DrawUtils.disableOutlineMode()
         }
     }
 

@@ -25,8 +25,7 @@ class SkyblockAddonsLoadingPlugin : IFMLLoadingPlugin {
     override fun getAccessTransformerClass(): String? {
         return null
     }
-
-    companion object {
+    companion object{
         var coremodList: List<Any>? = null
     }
 }

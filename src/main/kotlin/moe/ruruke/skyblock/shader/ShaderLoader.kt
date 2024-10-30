@@ -1,6 +1,6 @@
 package moe.ruruke.skyblock.shader
 
-import lombok.Getter
+
 import moe.ruruke.skyblock.shader.ShaderHelper.glAttachShader
 import moe.ruruke.skyblock.shader.ShaderHelper.glCompileShader
 import moe.ruruke.skyblock.shader.ShaderHelper.glCreateShader
@@ -37,7 +37,7 @@ class ShaderLoader private constructor(
         }
     }
 
-    @Getter
+    
     enum class ShaderType(private val shaderExtension: String, private val glShaderType: Int) {
         VERTEX(".vsh", ShaderHelper.GL_VERTEX_SHADER),
         FRAGMENT(".fsh", ShaderHelper.GL_FRAGMENT_SHADER);

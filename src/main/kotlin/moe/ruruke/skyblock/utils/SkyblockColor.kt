@@ -118,7 +118,7 @@ class SkyblockColor {
         fun shouldUseChromaShaders(): Boolean {
             //TODO:
 //        ConfigValues config = SkyblockAddons.getInstance().configValues!!;
-//        return config.getChromaMode() != EnumUtils.ChromaMode.ALL_SAME_COLOR && ShaderManager.getInstance().areShadersSupported() && config.isEnabled(Feature.USE_NEW_CHROMA_EFFECT);
+//        return config.getChromaMode() != EnumUtils.ChromaMode.ALL_SAME_COLOR && ShaderManager.instance.areShadersSupported() && config.isEnabled(Feature.USE_NEW_CHROMA_EFFECT);
             return false
         }
     }

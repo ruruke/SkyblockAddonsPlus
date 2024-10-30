@@ -1,11 +1,11 @@
 package moe.ruruke.skyblock.asm.utils
 
-import lombok.Getter
+
 import moe.ruruke.skyblock.tweaker.SkyblockAddonsTransformer
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.FieldInsnNode
 
-@Getter
+
 enum class TransformerField(deobfName: String, seargeName: String, notchName18: String, private val type: String) {
     // GuiScreen
     width("width", "field_146294_l", "l", "I"),

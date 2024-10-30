@@ -5,24 +5,24 @@ import org.apache.commons.lang3.builder.HashCodeBuilder
 import org.apache.commons.lang3.mutable.MutableFloat
 
 class FloatPair(x: Float, y: Float) {
-    var x = x.toFloat()
-    var y = y.toFloat()
+    private var x = x.toFloat()
+    private var y = y.toFloat()
 
-//    fun getX(): Float {
-//        return x
-//    }
-//
-//    fun getY(): Float {
-//        return y
-//    }
-//
-//    fun setY(y: Float) {
-//        this.y = y
-//    }
-//
-//    fun setX(x: Float) {
-//        this.x = x
-//    }
+    fun getX(): Float {
+        return x
+    }
+
+    fun getY(): Float {
+        return y
+    }
+
+    fun setY(y: Float) {
+        this.y = y
+    }
+
+    fun setX(x: Float) {
+        this.x = x
+    }
 
     override fun equals(other: Any?): Boolean {
         if (other == null) {

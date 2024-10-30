@@ -1,6 +1,6 @@
 package moe.ruruke.skyblock.features.slayertracker
 
-import lombok.Getter
+
 import moe.ruruke.skyblock.SkyblockAddonsPlus
 import moe.ruruke.skyblock.core.Feature
 import moe.ruruke.skyblock.core.Translations

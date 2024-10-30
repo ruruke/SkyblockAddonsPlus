@@ -59,6 +59,10 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
     private val disabledFeatures: MutableSet<Feature> = EnumSet.noneOf(
         Feature::class.java
     )
+
+    fun getLockedSlots(): Set<Int> {
+        return lockedSlots
+    }
     private val colors: MutableMap<Feature, Int> = HashMap()
     private var guiScales: MutableMap<Feature, Float> = EnumMap(
         Feature::class.java
@@ -274,21 +278,21 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
                 putDefaultBarSizes()
                 for ((key, coords) in coordinates) {
                     if (getAnchorPoint(key!!) == AnchorPoint.BOTTOM_MIDDLE) {
-                        coords.x = coords.x - 91
-                        coords.y = coords.y - 39
+                        coords.setX(coords.getX() - 91)
+                        coords.setY(coords.getY() - 39)
                     }
                 }
             } else if (configVersion <= 7) {
                 for ((feature, coords) in coordinates) {
                     if (feature === Feature.DARK_AUCTION_TIMER || feature === Feature.FARM_EVENT_TIMER || feature === Feature.ZEALOT_COUNTER || feature === Feature.SKILL_DISPLAY || feature === Feature.SHOW_TOTAL_ZEALOT_COUNT || feature === Feature.SHOW_SUMMONING_EYE_COUNT || feature === Feature.SHOW_AVERAGE_ZEALOTS_PER_EYE || feature === Feature.BIRCH_PARK_RAINMAKER_TIMER || feature === Feature.ENDSTONE_PROTECTOR_DISPLAY) {
-                        coords.y = coords.y + 2 / 2f
-                        coords.x = coords.x - 18 / 2f
-                        coords.y = coords.y - 9 / 2f
+                        coords.setY(coords.getY() + 2 / 2f)
+                        coords.setX(coords.getX() - 18 / 2f)
+                        coords.setY(coords.getY() - 9 / 2f)
                     }
 
                     if (feature.getGuiFeatureData() != null && feature.getGuiFeatureData()!!.getDrawType() === DrawType.BAR
                     ) {
-                        coords.y = coords.y + 1
+                        coords.setY(coords.getY() + 1)
                     }
                 }
             }
@@ -410,14 +414,14 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
                     coordinatesArray.add(
                         GsonBuilder().create().toJsonTree(
                             Math.round(
-                                coordinates[feature]!!.x
+                                coordinates[feature]!!.getX()
                             )
                         )
                     )
                     coordinatesArray.add(
                         GsonBuilder().create().toJsonTree(
                             Math.round(
-                                coordinates[feature]!!.y
+                                coordinates[feature]!!.getY()
                             )
                         )
                     )
@@ -429,10 +433,10 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
                 for (feature in coordinates.keys) {
                     val coordinatesArray = JsonArray()
                     coordinatesArray.add(
-                        GsonBuilder().create().toJsonTree(coordinates[feature]!!.x)
+                        GsonBuilder().create().toJsonTree(coordinates[feature]!!.getX())
                     )
                     coordinatesArray.add(
-                        GsonBuilder().create().toJsonTree(coordinates[feature]!!.y)
+                        GsonBuilder().create().toJsonTree(coordinates[feature]!!.getY())
                     )
                     coordinatesObject.add(java.lang.String.valueOf(feature.getId()), coordinatesArray)
                 }
@@ -441,8 +445,8 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
                 val barSizesObject = JsonObject()
                 for (feature in barSizes.keys) {
                     val sizesArray = JsonArray()
-                    sizesArray.add(GsonBuilder().create().toJsonTree(barSizes[feature]!!.x))
-                    sizesArray.add(GsonBuilder().create().toJsonTree(barSizes[feature]!!.y))
+                    sizesArray.add(GsonBuilder().create().toJsonTree(barSizes[feature]!!.getX()))
+                    sizesArray.add(GsonBuilder().create().toJsonTree(barSizes[feature]!!.getY()))
                     barSizesObject.add(java.lang.String.valueOf(feature.getId()), sizesArray)
                 }
                 saveConfig.add("barSizes", barSizesObject)
@@ -758,7 +762,7 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
      * @param feature The feature to check
      * @return `true` if the feature should be disabled, `false` otherwise
      */
-    fun isRemoteDisabled(feature: Feature?): Boolean {
+    infix fun isRemoteDisabled(feature: Feature?): Boolean {
         if (feature == null) return false
         if(Minecraft.getMinecraft().isSingleplayer) return false;
 
@@ -886,12 +890,12 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
 
     fun getActualX(feature: Feature): Float {
         val maxX = ScaledResolution(Minecraft.getMinecraft()).scaledWidth
-        return getAnchorPoint(feature).getX(maxX) + getRelativeCoords(feature)!!.x
+        return getAnchorPoint(feature).getX(maxX) + getRelativeCoords(feature)!!.getX()
     }
 
     fun getActualY(feature: Feature): Float {
         val maxY = ScaledResolution(Minecraft.getMinecraft()).scaledHeight
-        return getAnchorPoint(feature).getY(maxY) + getRelativeCoords(feature)!!.y
+        return getAnchorPoint(feature).getY(maxY) + getRelativeCoords(feature)!!.getY()
     }
 
     fun getSizes(feature: Feature): FloatPair {
@@ -902,21 +906,21 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
     }
 
     fun getSizesX(feature: Feature): Float {
-        return min(max(getSizes(feature).x.toDouble(), .25), 1.0).toFloat()
+        return min(max(getSizes(feature).getX().toDouble(), .25), 1.0).toFloat()
     }
 
     fun getSizesY(feature: Feature): Float {
-        return min(max(getSizes(feature).y.toDouble(), .25), 1.0).toFloat()
+        return min(max(getSizes(feature).getY().toDouble(), .25), 1.0).toFloat()
     }
 
     fun setScaleX(feature: Feature, x: Float) {
         val coords = getSizes(feature)
-        coords.x = x
+        coords.setX(x)
     }
 
     fun setScaleY(feature: Feature, y: Float) {
         val coords = getSizes(feature)
-        coords.y = y
+        coords.setY(y)
     }
 
     fun getRelativeCoords(feature: Feature): FloatPair? {
@@ -934,8 +938,8 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
 
     fun setCoords(feature: Feature, x: Float, y: Float) {
         if (coordinates.containsKey(feature)) {
-            coordinates[feature]!!.x = x
-            coordinates[feature]!!.y = y
+            coordinates[feature]!!.setX(x)
+            coordinates[feature]!!.setY(y)
         } else {
             coordinates[feature] = FloatPair(x, y)
         }
@@ -989,16 +993,7 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
         return anchorPoints.getOrDefault(feature, defaultAnchorPoints.getOrDefault(feature, AnchorPoint.BOTTOM_MIDDLE))
     }
 
-    val lockedSlots: Set<Int>
-        get() {
-            val profile: String =
-                main.utils!!.getProfileName()
-            if (!profileLockedSlots.containsKey(profile)) {
-                profileLockedSlots[profile] = HashSet()
-            }
-
-            return profileLockedSlots[profile]!!
-        }
+    private val lockedSlots: Set<Int> = setOf() //TODO: Fix.
 
     fun setGuiScale(feature: Feature, scale: Float) {
         guiScales[feature] = scale
@@ -1047,8 +1042,9 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
         return warningSeconds.value
     }
 
-    fun setWarningSeconds(warningSeconds: Int) {
+    fun setWarningSeconds(warningSeconds: Int): ConfigValues {
         this.warningSeconds.setValue(warningSeconds)
+        return this
     }
 
     fun getLanguage(): Language {

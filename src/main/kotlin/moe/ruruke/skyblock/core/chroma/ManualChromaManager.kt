@@ -1,7 +1,7 @@
 package moe.ruruke.skyblock.core.chroma
 
-import lombok.Getter
-import lombok.Setter
+
+
 import moe.ruruke.skyblock.SkyblockAddonsPlus
 import moe.ruruke.skyblock.core.Feature
 import moe.ruruke.skyblock.utils.ColorUtils
@@ -15,11 +15,11 @@ import java.awt.Color
  * This class is used to manual
  */
 object ManualChromaManager {
-    @Getter
-    @Setter
+    
+    
     private var coloringTextChroma = false
 
-    @Getter
+    
     private var featureScale = 0f
 
     private val defaultColorHSB = floatArrayOf(0f, 0.75f, 0.9f)

@@ -1,5 +1,6 @@
 package moe.ruruke.skyblock.core
 
+import com.sun.org.apache.xpath.internal.operations.Bool
 import moe.ruruke.skyblock.utils.ColorCode
 import moe.ruruke.skyblock.utils.EnumUtils
 
@@ -22,6 +23,9 @@ class GuiFeatureData {
      * Colors that cannot be used include other hex colors such as #FF00FF.
      */
     private var colorsRestricted: Boolean
+    fun isColorsRestricted(): Boolean{
+        return colorsRestricted
+    }
 
     constructor(defaultColor: ColorCode?) : this(defaultColor, false)
 

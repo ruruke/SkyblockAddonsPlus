@@ -1,10 +1,10 @@
 package moe.ruruke.skyblock.features
 
-import lombok.AccessLevel
-import lombok.Getter
+
+
 import net.minecraft.nbt.NBTTagCompound
 
-@Getter
+
 class ItemDiff @JvmOverloads constructor(
     /** The item's display name.  */
     private val displayName: String,
@@ -13,9 +13,9 @@ class ItemDiff @JvmOverloads constructor(
     /**
      * The item's ExtraAttributes from the NBT
      */
-    @field:Getter private val extraAttributes: NBTTagCompound? = null
+    private val extraAttributes: NBTTagCompound? = null
 ) {
-    @Getter(AccessLevel.NONE)
+    
     private var timestamp: Long
 
     /**

@@ -1,8 +1,8 @@
 package moe.ruruke.skyblock.config
 
 import codes.biscuit.hypixellocalizationlib.HypixelLanguage
-import lombok.Getter
-import lombok.Setter
+
+
 import moe.ruruke.skyblock.SkyblockAddonsPlus
 import moe.ruruke.skyblock.core.Language
 import moe.ruruke.skyblock.features.FetchurManager
@@ -17,8 +17,8 @@ import java.io.FileReader
 import java.io.FileWriter
 import java.util.concurrent.locks.ReentrantLock
 
-@Setter
-@Getter
+
+
 class PersistentValuesManager(configDir: File) {
     private val persistentValuesFile =
         File(configDir.absolutePath + "/skyblockaddons_persistent.cfg")
@@ -57,11 +57,20 @@ class PersistentValuesManager(configDir: File) {
         fun setSeaCreaturesKilled(killed: Int){
             seaCreaturesKilled = killed
         }
-        private val blockCraftingIncompletePatterns = true // unused after crafting pattern removal
+        fun setSelectedCraftingPattern(pattern: CraftingPattern){
+            selectedCraftingPattern = pattern
+        }
+        private var blockCraftingIncompletePatterns = true // unused after crafting pattern removal
         fun getBlockCraftingIncompletePatterns(): Boolean {
             return blockCraftingIncompletePatterns
         }
-        private val selectedCraftingPattern: CraftingPattern =
+        fun isBlockCraftingIncompletePatterns(): Boolean {
+            return blockCraftingIncompletePatterns
+        }
+        fun setBlockCraftingIncompletePatterns(value: Boolean){
+            blockCraftingIncompletePatterns = value
+        }
+        private var selectedCraftingPattern: CraftingPattern =
             CraftingPattern.FREE // unused after crafting pattern removal
         fun getSelectedCraftingPattern(): CraftingPattern {
             return selectedCraftingPattern

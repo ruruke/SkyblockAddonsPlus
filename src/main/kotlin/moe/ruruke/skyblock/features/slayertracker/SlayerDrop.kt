@@ -2,7 +2,7 @@ package moe.ruruke.skyblock.features.slayertracker
 
 import moe.ruruke.skyblock.core.ItemRarity
 import com.google.common.base.CaseFormat
-import lombok.Getter
+
 import moe.ruruke.skyblock.utils.ItemUtils
 import net.minecraft.init.Blocks
 import net.minecraft.init.Items
@@ -230,16 +230,16 @@ enum class SlayerDrop {
     ),
     ENDER_SLAYER_SEVEN("Enchanted Book", "ENCHANTED_BOOK", ItemRarity.RARE, "ender_slayer", 7);
 
-    @Getter
+    
     private val skyblockID: String?
 
-    @Getter
+    
     private val rarity: ItemRarity?
 
-    @Getter
+    
     private val itemStack: ItemStack
 
-    @Getter
+    
     private var runeID: String? = null
 
     /**

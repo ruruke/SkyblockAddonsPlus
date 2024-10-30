@@ -65,7 +65,9 @@ class Utils {
      * This is the item checker that makes sure items being dropped or sold are allowed to be dropped or sold.
      */
     private val itemDropChecker: ItemDropChecker = ItemDropChecker()
-        get() = field
+    fun getItemDropChecker(): ItemDropChecker{
+        return itemDropChecker
+    }
 
     /**
      * List of reforges that the player is looking to find.
@@ -156,13 +158,19 @@ class Utils {
             field = value
         }
     private var inDungeon = false
-        get() = field
-        set(value) {
-            field = value
-        }
+    fun isInDungeon(): Boolean
+    {
+        return isInDungeon()
+    }
 
-    private val fadingIn = false
+    private var fadingIn = false
         get() = field
+    fun isFadingIn(): Boolean{
+        return fadingIn
+    }
+    fun setFadingIn(bool: Boolean) {
+        fadingIn = bool
+    }
 
     private var slayerQuest: EnumUtils.SlayerQuest? = null
         get() = field
@@ -238,7 +246,9 @@ class Utils {
         if(Minecraft.getMinecraft().isSingleplayer) {
             return true
         }
-        return onSkyblock
+        return true
+        //TODO:
+        //return onSkyblock
     }
     fun parseSidebar() {
         var foundScoreboard = false
@@ -567,17 +577,15 @@ class Utils {
          */
         get() = Loader.instance().activeModContainer().source.parentFile
 
-    val isHalloween: Boolean
-        /**
-         * Checks if it is currently Halloween according to the system calendar.
-         *
-         * @return `true` if it is Halloween, `false` otherwise
-         */
-        get() {
-            val calendar = Calendar.getInstance()
-            return calendar[Calendar.MONTH] == Calendar.OCTOBER && calendar[Calendar.DAY_OF_MONTH] == 31
-        }
-
+    /**
+     * Checks if it is currently Halloween according to the system calendar.
+     *
+     * @return `true` if it is Halloween, `false` otherwise
+     */
+    fun isHalloween(): Boolean {
+        val calendar = Calendar.getInstance()
+        return calendar[Calendar.MONTH] === Calendar.OCTOBER && calendar[Calendar.DAY_OF_MONTH] === 31
+    }
     fun getDefaultBlue(alpha: Int): Int {
         return Color(160, 225, 229, alpha).rgb
     }

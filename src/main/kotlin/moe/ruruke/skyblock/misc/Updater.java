@@ -4,7 +4,7 @@
 //import moe.ruruke.skyblock.core.Translations;
 //import moe.ruruke.skyblock.core.UpdateInfo;
 //import moe.ruruke.skyblock.tweaker.SkyblockAddonsTransformer;
-//import lombok.Getter;
+//;
 //import net.minecraft.event.ClickEvent;
 //import net.minecraft.event.HoverEvent;
 //import net.minecraft.util.ChatComponentText;
@@ -29,7 +29,7 @@
 //
 //    private ComparableVersion target = null;
 //
-//    @Getter
+//    
 //    private String messageToRender;
 //    private String downloadLink;
 //    private String changelogLink;

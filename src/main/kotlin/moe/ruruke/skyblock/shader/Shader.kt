@@ -1,6 +1,6 @@
 package moe.ruruke.skyblock.shader
 
-import lombok.Getter
+
 import moe.ruruke.skyblock.SkyblockAddonsPlus
 import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.instance
 import moe.ruruke.skyblock.utils.Utils
@@ -16,7 +16,7 @@ abstract class Shader private constructor(vertex: String, fragment: String, vert
     private val FRAGMENT: String? = fragment
     private val VERTEX_FORMAT = vertexFormat
 
-    @Getter
+    
     var program: Int = 0
     private val uniforms: MutableList<Uniform<*>> = ArrayList<Uniform<*>>()
 

@@ -11,6 +11,7 @@ import moe.ruruke.skyblock.config.ConfigValues
 import moe.ruruke.skyblock.config.NewConfigValue
 import moe.ruruke.skyblock.config.PersistentValuesManager
 import moe.ruruke.skyblock.core.OnlineData
+import moe.ruruke.skyblock.core.SkillXpManager
 import moe.ruruke.skyblock.listeners.GuiScreenListener
 import moe.ruruke.skyblock.listeners.PlayerListener
 import moe.ruruke.skyblock.misc.SkyblockKeyBinding
@@ -80,6 +81,7 @@ class SkyblockAddonsPlus() {
         var scheduler: Scheduler? = null
         var newScheduler: NewScheduler? = null
         var inventoryUtils: InventoryUtils? = null
+        var skillXpManager: SkillXpManager? = null
         val THREAD_EXECUTOR: ThreadPoolExecutor = ThreadPoolExecutor(
             0, 1, 60L, TimeUnit.SECONDS,
             LinkedBlockingDeque(), ThreadFactoryBuilder().setNameFormat(NAME + " - #%d").build()
@@ -148,6 +150,7 @@ class SkyblockAddonsPlus() {
     init {
         playerListener = PlayerListener()
         guiScreenListener = GuiScreenListener()
+        skillXpManager = SkillXpManager()
         scheduler = Scheduler()
         newScheduler = NewScheduler()
         inventoryUtils = InventoryUtils()

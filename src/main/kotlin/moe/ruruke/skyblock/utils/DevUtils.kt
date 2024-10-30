@@ -1,7 +1,7 @@
 package moe.ruruke.skyblock.utils
 
-import lombok.Getter
-import lombok.Setter
+
+
 import moe.ruruke.skyblock.SkyblockAddonsPlus
 import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.getLogger
 import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.instance
@@ -66,8 +66,8 @@ object DevUtils {
     )
     private const val DEFAULT_SIDEBAR_FORMATTED = false
 
-    @Getter
-    @Setter
+    
+    
     private val loggingActionBarMessages = false
     private var copyMode = CopyMode.ENTITY
     private var entityNames = DEFAULT_ENTITY_NAMES

@@ -1,7 +1,7 @@
 package moe.ruruke.skyblock.features.slayertracker
 
-import lombok.Getter
-import lombok.Setter
+
+
 import moe.ruruke.skyblock.features.slayertracker.SlayerDrop
 import java.util.*
 

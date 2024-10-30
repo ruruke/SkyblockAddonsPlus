@@ -4,17 +4,17 @@ import moe.ruruke.skyblock.utils.ColorCode
 import net.minecraft.item.ItemArmor
 import net.minecraft.item.ItemStack
 
-@lombok.Getter
+
 class SlayerArmorProgress {
     /** The itemstack that this progress is representing.  */
     private val itemStack: ItemStack
 
     /** The current slayer progress % of the item.  */
-    @lombok.Getter
+    
     private var percent: String
 
     /** The current slayer defence reward of the item.  */
-    @lombok.Getter
+    
     private var defence: String
 
     constructor(itemStack: ItemStack) {

@@ -1,6 +1,6 @@
 package moe.ruruke.skyblock.shader
 
-import lombok.Getter
+
 import moe.ruruke.skyblock.utils.SkyblockAddonsMessageFactory
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
@@ -19,14 +19,14 @@ object ShaderHelper {
         )
     )
 
-    @Getter
+    
     private val SHADERS_SUPPORTED: Boolean
 
 
-    @Getter
+    
     private val VBOS_SUPPORTED: Boolean
 
-    @Getter
+    
     private val VAOS_SUPPORTED: Boolean
 
     private var USING_ARB_SHADERS = false

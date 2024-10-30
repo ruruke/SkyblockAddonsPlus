@@ -3,14 +3,18 @@ package moe.ruruke.skyblock.features.dragontracker
 
 
 import java.util.*
+import kotlin.collections.HashMap
 
 
 class DragonTrackerData {
-    private val recentDragons: List<DragonType> = LinkedList()
-    private val dragonsSince: Map<DragonsSince, Int> = EnumMap(
-        DragonsSince::class.java
-    )
+    private val recentDragons: ArrayList<DragonType> = arrayListOf()
+    private val dragonsSince: HashMap<DragonsSince, Int> = hashMapOf()
+    fun getDragonsSince(): HashMap<DragonsSince, Int> = dragonsSince
+    fun getRecentDragons(): ArrayList<DragonType> = recentDragons
 
-    
-    private val eyesPlaced = 0
+    private var eyesPlaced = 0
+    fun getEyesPlaced(): Int = eyesPlaced
+    fun setEyesPlaced(eyesPlaced: Int) {
+        this.eyesPlaced = eyesPlaced
+    }
 }

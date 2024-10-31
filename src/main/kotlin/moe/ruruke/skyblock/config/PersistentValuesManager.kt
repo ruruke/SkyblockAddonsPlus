@@ -26,7 +26,13 @@ class PersistentValuesManager(configDir: File) {
     private var persistentValues = PersistentValues()
 
     class PersistentValues {
-        var kills: Int = 0 // Kills since last eye
+        private var kills: Int = 0 // Kills since last eye
+        fun getKills(): Int {
+            return kills
+        }
+        fun setKills(v: Int){
+            kills = v
+        }
         var totalKills: Int = 0 // Lifetime zealots killed
         var summoningEyeCount: Int = 0 // Lifetime summoning eyes
 
@@ -152,9 +158,8 @@ class PersistentValuesManager(configDir: File) {
      */
     fun addEyeResetKills() {
         persistentValues.summoningEyeCount++
-        persistentValues.totalKills += persistentValues.kills
-        persistentValues.kills =
-            -1 // This is triggered before the death of the killed zealot, so the kills are set to -1 to account for that.
+        persistentValues.totalKills += persistentValues.getKills()
+        persistentValues.setKills(-1) // This is triggered before the death of the killed zealot, so the kills are set to -1 to account for that.
         saveValues()
     }
     fun getPersistentValues(): PersistentValues {
@@ -166,7 +171,7 @@ class PersistentValuesManager(configDir: File) {
     fun resetZealotCounter() {
         persistentValues.summoningEyeCount = 0
         persistentValues.totalKills = 0
-        persistentValues.kills = 0
+        persistentValues.setKills(0)
         saveValues()
     }
 

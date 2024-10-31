@@ -1,28 +1,36 @@
 package moe.ruruke.skyblock.listeners
 
+import com.google.common.collect.Sets
 import moe.ruruke.skyblock.SkyblockAddonsPlus
 import moe.ruruke.skyblock.config.NewConfig
 import moe.ruruke.skyblock.core.Attribute
 import moe.ruruke.skyblock.core.Feature
-import moe.ruruke.skyblock.core.InventoryType
-import moe.ruruke.skyblock.core.SkillType
 import moe.ruruke.skyblock.core.npc.NPCUtils
+import moe.ruruke.skyblock.core.seacreatures.SeaCreatureManager
+import moe.ruruke.skyblock.events.SkyblockPlayerDeathEvent
 import moe.ruruke.skyblock.features.EndstoneProtectorManager
 import moe.ruruke.skyblock.features.JerryPresent
+import moe.ruruke.skyblock.features.cooldowns.CooldownManager
 import moe.ruruke.skyblock.features.enchants.EnchantManager
 import moe.ruruke.skyblock.features.fishParticles.FishParticleManager
+import moe.ruruke.skyblock.features.slayertracker.SlayerTracker
 import moe.ruruke.skyblock.features.tablist.TabListParser
-import moe.ruruke.skyblock.utils.ActionBarParser
-import moe.ruruke.skyblock.utils.ItemUtils
+import moe.ruruke.skyblock.misc.scheduler.Scheduler
+import moe.ruruke.skyblock.utils.*
 import moe.ruruke.skyblock.utils.RomanNumeralParser.replaceNumeralsWithIntegers
+import net.minecraft.block.Block
+import net.minecraft.block.BlockPrismarine
+import net.minecraft.block.BlockStone
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.inventory.GuiChest
+import net.minecraft.client.audio.PositionedSoundRecord
 import net.minecraft.entity.Entity
 import net.minecraft.entity.item.EntityArmorStand
 import net.minecraft.entity.monster.EntityEnderman
-import net.minecraft.inventory.ContainerChest
+import net.minecraft.init.Blocks
+import net.minecraft.item.EnumDyeColor
 import net.minecraft.util.*
 import net.minecraftforge.client.event.ClientChatReceivedEvent
+import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.EntityJoinWorldEvent
 import net.minecraftforge.event.entity.player.AttackEntityEvent
 import net.minecraftforge.event.entity.player.ItemTooltipEvent
@@ -31,9 +39,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent
 import java.util.*
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 //TODO Fix for Hypixel localization
 class PlayerListener {
+
     private var lastWorldJoin: Long = -1
     private var lastBoss: Long = -1
     private var lastBal: Long = -1
@@ -121,49 +132,49 @@ class PlayerListener {
         }
     }
 
-//    /**
-//     * Interprets the action bar to extract mana, health, and defence. Enables/disables mana/health prediction,
-//     * and looks for mana usage messages in chat while predicting.
-//     */
-//    @SubscribeEvent(priority = EventPriority.HIGH)
-//    fun onChatReceive(e: ClientChatReceivedEvent) {
-//        if (!main.utils!!.isOnHypixel()) {
-//            return
-//        }
-//
-//        val formattedText = e.message.formattedText
-//        val unformattedText = e.message.unformattedText
-//        val strippedText: String = TextUtils.stripColor(formattedText)
-//
+    /**
+     * Interprets the action bar to extract mana, health, and defence. Enables/disables mana/health prediction,
+     * and looks for mana usage messages in chat while predicting.
+     */
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    fun onChatReceive(e: ClientChatReceivedEvent) {
+        if (!main.utils!!.isOnHypixel) {
+            return
+        }
+
+        val formattedText = e.message.formattedText
+        val unformattedText = e.message.unformattedText
+        val strippedText: String = TextUtils.stripColor(formattedText)
+
+        //TODO:
 //        if (formattedText.startsWith("§7Sending to server ")) {
 //            lastSkyblockServerJoinAttempt = Minecraft.getSystemTime()
 //            DragonTracker.getInstance().reset()
 //            return
 //        }
-//
-//        if (main.configValues!!
-//                .isEnabled(Feature.OUTBID_ALERT_SOUND) && formattedText.matches("§6\\[Auction] §..*§eoutbid you .*".toRegex())
-//            && (main.configValues!!.isEnabled(Feature.OUTBID_ALERT_SOUND_IN_OTHER_GAMES) || main.utils!!
-//                .isOnSkyblock())
-//        ) {
-//            main.utils!!.playLoudSound("random.orb", 0.5)
-//        }
-//
-//        if (main.utils!!.isOnSkyblock()) {
-//            // Type 2 means it's an action bar message.
-//            if (e.type.toInt() == 2) {
-//                // Log the message to the game log if action bar message logging is enabled.
-//                if (main.configValues!!.isEnabled(Feature.DEVELOPER_MODE) && DevUtils.isLoggingActionBarMessages()) {
-//                    logger.info("[ACTION BAR] $unformattedText")
-//                }
-//
-//                // Parse using ActionBarParser and display the rest message instead
-//                val restMessage: String = actionBarParser.parseActionBar(unformattedText)
-//                if (main.isUsingOofModv1() && restMessage.trim { it <= ' ' }.length == 0) {
-//                    e.isCanceled = true
-//                    return
-//                }
-//
+
+        if (main.configValues!!.isEnabled(Feature.OUTBID_ALERT_SOUND) && formattedText.matches("§6\\[Auction] §..*§eoutbid you .*".toRegex())
+            && (main.configValues!!.isEnabled(Feature.OUTBID_ALERT_SOUND_IN_OTHER_GAMES) || main.utils!!
+                .isOnSkyblock())
+        ) {
+            main.utils!!.playLoudSound("random.orb", 0.5)
+        }
+
+        if (main.utils!!.isOnSkyblock()) {
+            // Type 2 means it's an action bar message.
+            if (e.type.toInt() == 2) {
+                // Log the message to the game log if action bar message logging is enabled.
+                if (main.configValues!!.isEnabled(Feature.DEVELOPER_MODE) && DevUtils.isLoggingActionBarMessages()) {
+                    logger.info("[ACTION BAR] $unformattedText")
+                }
+
+                // Parse using ActionBarParser and display the rest message instead
+                val restMessage: String = actionBarParser.parseActionBar(unformattedText)
+                if (main.isUsingOofModv1() && restMessage.trim { it <= ' ' }.length == 0) {
+                    e.isCanceled = true
+                    return
+                }
+
 //                if (main.utils!!.isInDungeon()) {
 //                    if (main.configValues!!.isEnabled(Feature.DUNGEONS_COLLECTED_ESSENCES_DISPLAY)) {
 //                        main.getDungeonManager().addEssence(restMessage)
@@ -173,187 +184,216 @@ class PlayerListener {
 //                        main.getDungeonManager().addSecrets(restMessage)
 //                    }
 //                }
-//                // Mark the message for change
-//            } else {
-//                var matcher: Matcher
-//
-//                if (main.getRenderListener()
-//                        .isPredictMana() && unformattedText.startsWith("Used ") && unformattedText.endsWith("Mana)")
-//                ) {
-//                    val manaLost = unformattedText.split(Pattern.quote("! (").toRegex()).dropLastWhile { it.isEmpty() }
-//                        .toTypedArray()[1].split(
-//                        Pattern.quote(" Mana)").toRegex()
-//                    ).dropLastWhile { it.isEmpty() }.toTypedArray()[0].toInt()
-//                    changeMana(-manaLost.toFloat())
-//                } else if ((DEATH_MESSAGE_PATTERN.matcher(unformattedText).also { matcher = it }).matches()) {
-//                    // Hypixel's dungeon reconnect messages look exactly like death messages.
-//                    val causeOfDeath = matcher.group("causeOfDeath")
-//                    if (causeOfDeath != "reconnected") {
-//                        val username = matcher.group("username")
-//                        val deadPlayer = if (username == "You") {
-//                            Minecraft.getMinecraft().thePlayer
-//                        } else {
-//                            Minecraft.getMinecraft().theWorld.getPlayerEntityByName(username)
+                // Mark the message for change
+            } else {
+                var matcher: Matcher
+
+                when {
+                    main.renderListener!!.isPredictMana() && unformattedText.startsWith("Used ") && unformattedText.endsWith(
+                        "Mana)"
+                    ) -> {
+                        val manaLost =
+                            unformattedText.split(Pattern.quote("! (").toRegex()).dropLastWhile { it.isEmpty() }
+                                .toTypedArray()[1].split(
+                                Pattern.quote(" Mana)").toRegex()
+                            ).dropLastWhile { it.isEmpty() }.toTypedArray()[0].toInt()
+                        changeMana(-manaLost.toFloat())
+                    }
+
+                    (DEATH_MESSAGE_PATTERN.matcher(unformattedText).also { matcher = it }).matches() -> {
+                        // Hypixel's dungeon reconnect messages look exactly like death messages.
+                        val causeOfDeath = matcher.group("causeOfDeath")
+                        if (causeOfDeath != "reconnected") {
+                            val username = matcher.group("username")
+                            val deadPlayer = if (username == "You") {
+                                Minecraft.getMinecraft().thePlayer
+                            } else {
+                                Minecraft.getMinecraft().theWorld.getPlayerEntityByName(username)
+                            }
+
+                            MinecraftForge.EVENT_BUS.post(SkyblockPlayerDeathEvent(deadPlayer, username, causeOfDeath))
+                        }
+                    }
+
+                    main.configValues!!
+                        .isEnabled(Feature.SUMMONING_EYE_ALERT) && formattedText == "§r§6§lRARE DROP! §r§5Summoning Eye§r" -> {
+                        main.utils!!.playLoudSound("random.orb", 0.5) // credits to tomotomo, thanks lol
+                        main.renderListener!!.setTitleFeature(Feature.SUMMONING_EYE_ALERT)
+                        main.scheduler!!
+                            .schedule(
+                                Scheduler.CommandType.RESET_TITLE_FEATURE,
+                                main.configValues!!.getWarningSeconds()
+                            )
+                    }
+
+                    formattedText == "§r§aA special §r§5Zealot §r§ahas spawned nearby!§r" -> {
+                        if (main.configValues!!.isEnabled(Feature.SPECIAL_ZEALOT_ALERT)) {
+                            main.utils!!.playLoudSound("random.orb", 0.5)
+                            main.renderListener!!.setTitleFeature(Feature.SUMMONING_EYE_ALERT)
+                            main.renderListener!!.setTitleFeature(Feature.SPECIAL_ZEALOT_ALERT)
+                            main.scheduler!!.schedule(
+                                Scheduler.CommandType.RESET_TITLE_FEATURE,
+                                main.configValues!!.getWarningSeconds()
+                            )
+                        }
+                        if (main.configValues!!.isEnabled(Feature.ZEALOT_COUNTER)) {
+                            // Edit the message to include counter.
+                            e.message = ChatComponentText(
+                                (formattedText + ColorCode.GRAY + " (" + main.persistentValuesManager!!
+                                    .getPersistentValues().getKills()).toString() + ")"
+                            )
+                        }
+                        main.persistentValuesManager!!.addEyeResetKills()
+                        // TODO: Seems like leg warning and num sc killed should be separate features
+                    }
+
+                    main.configValues!!
+                        .isEnabled(Feature.LEGENDARY_SEA_CREATURE_WARNING) && SeaCreatureManager.instance
+                        .getAllSeaCreatureSpawnMessages().contains(unformattedText) -> {
+                        main.persistentValuesManager!!.getPersistentValues().setSeaCreaturesKilled(
+                            main.persistentValuesManager!!.getPersistentValues().getSeaCreaturesKilled() + 1
+                        )
+                        if (SeaCreatureManager.instance.getLegendarySeaCreatureSpawnMessages()
+                                .contains(unformattedText)
+                        ) {
+                            main.utils!!.playLoudSound("random.orb", 0.5)
+                            main.renderListener!!.setTitleFeature(Feature.LEGENDARY_SEA_CREATURE_WARNING)
+                            main.scheduler!!.schedule(
+                                Scheduler.CommandType.RESET_TITLE_FEATURE,
+                                main.configValues!!.getWarningSeconds()
+                            )
+                        }
+                    }
+
+                    main.configValues!!
+                        .isEnabled(Feature.DISABLE_MAGICAL_SOUP_MESSAGES) && SOUP_RANDOM_MESSAGES.contains(
+                        unformattedText
+                    ) -> {
+                        e.isCanceled = true
+                    }
+
+                    main.configValues!!
+                        .isEnabled(Feature.DISABLE_TELEPORT_PAD_MESSAGES) && (formattedText.startsWith("§r§aWarped from ") || formattedText == "§r§cThis Teleport Pad does not have a destination set!§r") -> {
+                        e.isCanceled = true
+                    }
+
+                    main.configValues!!
+                        .isEnabled(Feature.DISABLE_MORT_MESSAGES) && strippedText.startsWith("[NPC] Mort:") -> {
+                        e.isCanceled = true
+                    }
+
+                    main.configValues!!
+                        .isEnabled(Feature.DISABLE_BOSS_MESSAGES) && strippedText.startsWith("[BOSS] ") -> {
+                        e.isCanceled = true
+                    }
+
+                    main.configValues!!
+                        .isEnabled(Feature.SPIRIT_SCEPTRE_DISPLAY) && strippedText.startsWith("Your Implosion hit") || strippedText.startsWith(
+                        "Your Spirit Sceptre hit"
+                    ) -> {
+                        matcher = SPIRIT_SCEPTRE_MESSAGE_PATTERN.matcher(unformattedText)
+                        // Ensure matcher.group gets what it wants, we don't need the whole result
+                        if (matcher.find()) {
+                            this.spiritSceptreHitEnemies = matcher.group("hitEnemies").toInt()
+                            this.spiritSceptreDealtDamage = matcher.group("dealtDamage").replace(",", "").toFloat()
+
+                            if (main.configValues!!.isEnabled(Feature.DISABLE_SPIRIT_SCEPTRE_MESSAGES)) {
+                                e.isCanceled = true
+                            }
+                        }
+                    }
+
+                    SlayerTracker.getInstance().isTrackerEnabled() &&
+                            (SLAYER_COMPLETED_PATTERN.matcher(strippedText).also {
+                                matcher = it
+                            }).matches() -> { // §r   §r§5§l» §r§7Talk to Maddox to claim your Wolf Slayer XP!§r
+                        SlayerTracker.getInstance().completedSlayer(matcher.group("slayerType"))
+                    }
+
+                    SlayerTracker.getInstance().isTrackerEnabled() &&
+                            (SLAYER_COMPLETED_PATTERN_AUTO1.matcher(strippedText)
+                                .also { matcher = it }).matches() -> { // Spider Slayer LVL 7 - Next LVL in 181,000 XP!
+                        lastMaddoxLevelTime = System.currentTimeMillis()
+                        lastMaddoxSlayerType = matcher.group("slayerType")
+                    }
+                    //TODO
+//                    SLAYER_COMPLETED_PATTERN_AUTO2.matcher(strippedText)
+//                        .matches() && System.currentTimeMillis() - lastMaddoxLevelTime < 100 -> {
+//                        SlayerTracker.getInstance().completedSlayer(lastMaddoxSlayerType)
+//                    }
+//                    main.configValues!!.isEnabled(Feature.DRAGON_STATS_TRACKER) &&
+//                            strippedText.startsWith("☬ You placed a Summoning Eye!") -> { // §r§5☬ §r§dYou placed a Summoning Eye! §r§7(§r§e5§r§7/§r§a8§r§7)§r
+//                        DragonTracker.getInstance().addEye()
+//                    }
+//                    main.configValues!!.isEnabled(Feature.DRAGON_STATS_TRACKER) &&
+//                            strippedText == "You recovered a Summoning Eye!" -> {
+//                        DragonTracker.getInstance().removeEye()
+//                    }
+//                    main.configValues!!.isEnabled(Feature.DRAGON_STATS_TRACKER) &&
+//                            (DRAGON_SPAWNED_PATTERN.matcher(strippedText).also { matcher = it }).matches() -> {
+//                        DragonTracker.getInstance().dragonSpawned(matcher.group("dragonType"))
+//                    }
+//                    main.configValues!!.isEnabled(Feature.DRAGON_STATS_TRACKER) &&
+//                            DRAGON_KILLED_PATTERN.matcher(strippedText).matches() -> {
+//                        DragonTracker.getInstance().dragonKilled()
+//                    }
+                    main.configValues!!.isEnabled(Feature.SHOW_ITEM_COOLDOWNS) &&
+                            unformattedText == "You laid an egg!" -> { // Put the Chicken Head on cooldown for 20 seconds when the player lays an egg.
+                        CooldownManager.put(InventoryUtils.CHICKEN_HEAD_ID)
+                    }
+
+                    main.configValues!!.isEnabled(Feature.BIRCH_PARK_RAINMAKER_TIMER) &&
+                            formattedText.startsWith("§r§eYou added a minute of rain!") -> {
+                        if (this.rainmakerTimeEnd == -1L || this.rainmakerTimeEnd < System.currentTimeMillis()) {
+                            this.rainmakerTimeEnd =
+                                System.currentTimeMillis() + (1000 * 60) // Set the timer to a minute from now.
+                        } else {
+                            this.rainmakerTimeEnd += (1000 * 60).toLong() // Extend the timer one minute.
+                        }
+                    }
+
+                    //TODO:
+//                    main.configValues!!.isEnabled(Feature.FETCHUR_TODAY) &&
+//                            formattedText.startsWith("§e[NPC] Fetchur§f:") -> {
+//                        val fetchur: FetchurManager = FetchurManager.getInstance()
+//                        // Triggered if player has just given the correct item to Fetchur, or if sba isn't in sync (already handed in quest)
+//                        if (unformattedText.contains(fetchur.getFetchurTaskCompletedPhrase()) ||
+//                            !fetchur.hasFetchedToday() && unformattedText.contains(fetchur.getFetchurAlreadyDidTaskPhrase())
+//                        ) {
+//                            FetchurManager.getInstance().saveLastTimeFetched()
 //                        }
-//
-//                        MinecraftForge.EVENT_BUS.post(SkyblockPlayerDeathEvent(deadPlayer, username, causeOfDeath))
+//                        // Tries to check if a message is from a player to add the player profile icon
 //                    }
-//                } else if (main.configValues!!
-//                        .isEnabled(Feature.SUMMONING_EYE_ALERT) && formattedText == "§r§6§lRARE DROP! §r§5Summoning Eye§r"
-//                ) {
-//                    main.utils!!.playLoudSound("random.orb", 0.5) // credits to tomotomo, thanks lol
-//                    main.getRenderListener().setTitleFeature(Feature.SUMMONING_EYE_ALERT)
-//                    main.getScheduler()
-//                        .schedule(Scheduler.CommandType.RESET_TITLE_FEATURE, main.configValues!!.getWarningSeconds())
-//                } else if (formattedText == "§r§aA special §r§5Zealot §r§ahas spawned nearby!§r") {
-//                    if (main.configValues!!.isEnabled(Feature.SPECIAL_ZEALOT_ALERT)) {
-//                        main.utils!!.playLoudSound("random.orb", 0.5)
-//                        main.getRenderListener().setTitleFeature(Feature.SUMMONING_EYE_ALERT)
-//                        main.getRenderListener().setTitleFeature(Feature.SPECIAL_ZEALOT_ALERT)
-//                        main.getScheduler().schedule(
-//                            Scheduler.CommandType.RESET_TITLE_FEATURE,
-//                            main.configValues!!.getWarningSeconds()
-//                        )
+
+                    //TODO:
+//                    main.configValues!!.isEnabled(Feature.PLAYER_SYMBOLS_IN_CHAT) &&
+//                            unformattedText.contains(":") -> {
+//                        playerSymbolsDisplay(e, unformattedText)
 //                    }
-//                    if (main.configValues!!.isEnabled(Feature.ZEALOT_COUNTER)) {
-//                        // Edit the message to include counter.
-//                        e.message = ChatComponentText(
-//                            (formattedText + ColorCode.GRAY + " (" + main.persistentValuesManager!!
-//                                .getPersistentValues().getKills()).toString() + ")"
-//                        )
-//                    }
-//                    main.persistentValuesManager!!.addEyeResetKills()
-//                    // TODO: Seems like leg warning and num sc killed should be separate features
-//                } else if (main.configValues!!
-//                        .isEnabled(Feature.LEGENDARY_SEA_CREATURE_WARNING) && SeaCreatureManager.getInstance()
-//                        .getAllSeaCreatureSpawnMessages().contains(unformattedText)
-//                ) {
-//                    main.persistentValuesManager!!.getPersistentValues().setSeaCreaturesKilled(
-//                        main.persistentValuesManager!!.getPersistentValues().getSeaCreaturesKilled() + 1
-//                    )
-//                    if (SeaCreatureManager.getInstance().getLegendarySeaCreatureSpawnMessages()
-//                            .contains(unformattedText)
-//                    ) {
-//                        main.utils!!.playLoudSound("random.orb", 0.5)
-//                        main.getRenderListener().setTitleFeature(Feature.LEGENDARY_SEA_CREATURE_WARNING)
-//                        main.getScheduler().schedule(
-//                            Scheduler.CommandType.RESET_TITLE_FEATURE,
-//                            main.configValues!!.getWarningSeconds()
-//                        )
-//                    }
-//                } else if (main.configValues!!
-//                        .isEnabled(Feature.DISABLE_MAGICAL_SOUP_MESSAGES) && SOUP_RANDOM_MESSAGES.contains(
-//                        unformattedText
-//                    )
-//                ) {
-//                    e.isCanceled = true
-//                } else if (main.configValues!!
-//                        .isEnabled(Feature.DISABLE_TELEPORT_PAD_MESSAGES) && (formattedText.startsWith("§r§aWarped from ") || formattedText == "§r§cThis Teleport Pad does not have a destination set!§r")
-//                ) {
-//                    e.isCanceled = true
-//                } else if (main.configValues!!
-//                        .isEnabled(Feature.DISABLE_MORT_MESSAGES) && strippedText.startsWith("[NPC] Mort:")
-//                ) {
-//                    e.isCanceled = true
-//                } else if (main.configValues!!
-//                        .isEnabled(Feature.DISABLE_BOSS_MESSAGES) && strippedText.startsWith("[BOSS] ")
-//                ) {
-//                    e.isCanceled = true
-//                } else if (main.configValues!!
-//                        .isEnabled(Feature.SPIRIT_SCEPTRE_DISPLAY) && strippedText.startsWith("Your Implosion hit") || strippedText.startsWith(
-//                        "Your Spirit Sceptre hit"
-//                    )
-//                ) {
-//                    matcher = SPIRIT_SCEPTRE_MESSAGE_PATTERN.matcher(unformattedText)
-//                    // Ensure matcher.group gets what it wants, we don't need the whole result
-//                    if (matcher.find()) {
-//                        this.spiritSceptreHitEnemies = matcher.group("hitEnemies").toInt()
-//                        this.spiritSceptreDealtDamage = matcher.group("dealtDamage").replace(",", "").toFloat()
-//
-//                        if (main.configValues!!.isEnabled(Feature.DISABLE_SPIRIT_SCEPTRE_MESSAGES)) {
-//                            e.isCanceled = true
-//                        }
-//                    }
-//                } else if (SlayerTracker.getInstance().isTrackerEnabled() &&
-//                    (SLAYER_COMPLETED_PATTERN.matcher(strippedText).also { matcher = it }).matches()
-//                ) { // §r   §r§5§l» §r§7Talk to Maddox to claim your Wolf Slayer XP!§r
-//                    SlayerTracker.getInstance().completedSlayer(matcher.group("slayerType"))
-//                } else if (SlayerTracker.getInstance().isTrackerEnabled() &&
-//                    (SLAYER_COMPLETED_PATTERN_AUTO1.matcher(strippedText).also { matcher = it }).matches()
-//                ) { // Spider Slayer LVL 7 - Next LVL in 181,000 XP!
-//                    lastMaddoxLevelTime = System.currentTimeMillis()
-//                    lastMaddoxSlayerType = matcher.group("slayerType")
-//                } else if (SLAYER_COMPLETED_PATTERN_AUTO2.matcher(strippedText)
-//                        .matches() && System.currentTimeMillis() - lastMaddoxLevelTime < 100
-//                ) {
-//                    SlayerTracker.getInstance().completedSlayer(lastMaddoxSlayerType)
-//                } else if (main.configValues!!.isEnabled(Feature.DRAGON_STATS_TRACKER) &&
-//                    strippedText.startsWith("☬ You placed a Summoning Eye!")
-//                ) { // §r§5☬ §r§dYou placed a Summoning Eye! §r§7(§r§e5§r§7/§r§a8§r§7)§r
-//                    DragonTracker.getInstance().addEye()
-//                } else if (main.configValues!!.isEnabled(Feature.DRAGON_STATS_TRACKER) &&
-//                    strippedText == "You recovered a Summoning Eye!"
-//                ) {
-//                    DragonTracker.getInstance().removeEye()
-//                } else if (main.configValues!!.isEnabled(Feature.DRAGON_STATS_TRACKER) &&
-//                    (DRAGON_SPAWNED_PATTERN.matcher(strippedText).also { matcher = it }).matches()
-//                ) {
-//                    DragonTracker.getInstance().dragonSpawned(matcher.group("dragonType"))
-//                } else if (main.configValues!!.isEnabled(Feature.DRAGON_STATS_TRACKER) &&
-//                    DRAGON_KILLED_PATTERN.matcher(strippedText).matches()
-//                ) {
-//                    DragonTracker.getInstance().dragonKilled()
-//                } else if (main.configValues!!.isEnabled(Feature.SHOW_ITEM_COOLDOWNS) &&
-//                    unformattedText == "You laid an egg!"
-//                ) { // Put the Chicken Head on cooldown for 20 seconds when the player lays an egg.
-//                    CooldownManager.put(InventoryUtils.CHICKEN_HEAD_ID)
-//                } else if (main.configValues!!.isEnabled(Feature.BIRCH_PARK_RAINMAKER_TIMER) &&
-//                    formattedText.startsWith("§r§eYou added a minute of rain!")
-//                ) {
-//                    if (this.rainmakerTimeEnd == -1L || this.rainmakerTimeEnd < System.currentTimeMillis()) {
-//                        this.rainmakerTimeEnd =
-//                            System.currentTimeMillis() + (1000 * 60) // Set the timer to a minute from now.
-//                    } else {
-//                        this.rainmakerTimeEnd += (1000 * 60).toLong() // Extend the timer one minute.
-//                    }
-//                } else if (main.configValues!!.isEnabled(Feature.FETCHUR_TODAY) &&
-//                    formattedText.startsWith("§e[NPC] Fetchur§f:")
-//                ) {
-//                    val fetchur: FetchurManager = FetchurManager.getInstance()
-//                    // Triggered if player has just given the correct item to Fetchur, or if sba isn't in sync (already handed in quest)
-//                    if (unformattedText.contains(fetchur.getFetchurTaskCompletedPhrase()) ||
-//                        !fetchur.hasFetchedToday() && unformattedText.contains(fetchur.getFetchurAlreadyDidTaskPhrase())
-//                    ) {
-//                        FetchurManager.getInstance().saveLastTimeFetched()
-//                    }
-//                    // Tries to check if a message is from a player to add the player profile icon
-//                } else if (main.configValues!!.isEnabled(Feature.PLAYER_SYMBOLS_IN_CHAT) &&
-//                    unformattedText.contains(":")
-//                ) {
-//                    playerSymbolsDisplay(e, unformattedText)
-//                }
-//
-//                if (main.configValues!!.isEnabled(Feature.NO_ARROWS_LEFT_ALERT)) {
-//                    if (NO_ARROWS_LEFT_PATTERN.matcher(formattedText).matches()) {
-//                        main.utils!!.playLoudSound("random.orb", 0.5)
-//                        main.getRenderListener().setSubtitleFeature(Feature.NO_ARROWS_LEFT_ALERT)
-//                        main.getRenderListener().setArrowsLeft(-1)
-//                        main.getScheduler().schedule(
-//                            Scheduler.CommandType.RESET_SUBTITLE_FEATURE,
-//                            main.configValues!!.getWarningSeconds()
-//                        )
-//                    } else if ((ONLY_HAVE_ARROWS_LEFT_PATTERN.matcher(formattedText).also { matcher = it }).matches()) {
-//                        val arrowsLeft = matcher.group("arrows").toInt()
-//                        main.utils!!.playLoudSound("random.orb", 0.5)
-//                        main.getRenderListener().setSubtitleFeature(Feature.NO_ARROWS_LEFT_ALERT)
-//                        main.getRenderListener().setArrowsLeft(arrowsLeft)
-//                        main.getScheduler().schedule(
-//                            Scheduler.CommandType.RESET_SUBTITLE_FEATURE,
-//                            main.configValues!!.getWarningSeconds()
-//                        )
-//                    }
-//                }
-//
+                }
+
+                if (main.configValues!!.isEnabled(Feature.NO_ARROWS_LEFT_ALERT)) {
+                    if (NO_ARROWS_LEFT_PATTERN.matcher(formattedText).matches()) {
+                        main.utils!!.playLoudSound("random.orb", 0.5)
+                        main.renderListener!!.setSubtitleFeature(Feature.NO_ARROWS_LEFT_ALERT)
+                        main.renderListener!!.setArrowsLeft(-1)
+                        main.scheduler!!.schedule(
+                            Scheduler.CommandType.RESET_SUBTITLE_FEATURE,
+                            main.configValues!!.getWarningSeconds()
+                        )
+                    } else if ((ONLY_HAVE_ARROWS_LEFT_PATTERN.matcher(formattedText).also { matcher = it }).matches()) {
+                        val arrowsLeft = matcher.group("arrows").toInt()
+                        main.utils!!.playLoudSound("random.orb", 0.5)
+                        main.renderListener!!.setSubtitleFeature(Feature.NO_ARROWS_LEFT_ALERT)
+                        main.renderListener!!.setArrowsLeft(arrowsLeft)
+                        main.scheduler!!.schedule(
+                            Scheduler.CommandType.RESET_SUBTITLE_FEATURE,
+                            main.configValues!!.getWarningSeconds()
+                        )
+                    }
+                }
+
+                //TODO:
 //                if (main.inventoryUtils!!.getInventoryType() === InventoryType.SALVAGING && main.configValues!!
 //                        .isEnabled(Feature.SHOW_SALVAGE_ESSENCES_COUNTER)
 //                ) {
@@ -399,30 +439,30 @@ class PlayerListener {
 //                    if (main.configValues!!.isEnabled(Feature.DUNGEONS_COLLECTED_ESSENCES_DISPLAY)) {
 //                        main.getDungeonManager().addBonusEssence(formattedText)
 //                    }
-//                }
-//
-//
-//                if (ABILITY_CHAT_PATTERN.matcher(formattedText).matches()) {
-//                    CooldownManager.put(Minecraft.getMinecraft().thePlayer.heldItem)
-//                } else if ((PROFILE_CHAT_PATTERN.matcher(strippedText).also { matcher = it }).matches()) {
-//                    val profile = matcher.group(1)
-//
-//                    // TODO: Slothpixel can no longer handle our queries
-//                    /*                    if (!profile.equals(main.utils!!.getProfileName())) {
-//                        APIManager.getInstance().onProfileSwitch(profile);
-//                    }*/
-//                    main.utils!!.setProfileName(profile)
-//                } else if ((SWITCH_PROFILE_CHAT_PATTERN.matcher(strippedText).also { matcher = it }).matches()) {
-//                    val profile = matcher.group(1)
-//
-//                    /*                    if (!profile.equals(main.utils!!.getProfileName())) {
-//                        APIManager.getInstance().onProfileSwitch(profile);
-//                    }*/
-//                    main.utils!!.setProfileName(profile)
-//                }
 //            }
-//        }
-//    }
+
+
+                if (ABILITY_CHAT_PATTERN.matcher(formattedText).matches()) {
+                    CooldownManager.put(Minecraft.getMinecraft().thePlayer.heldItem)
+                } else if ((PROFILE_CHAT_PATTERN.matcher(strippedText).also { matcher = it }).matches()) {
+                    val profile = matcher.group(1)
+
+                    // TODO: Slothpixel can no longer handle our queries
+                    /*                    if (!profile.equals(main.utils!!.getProfileName())) {
+                        APIManager.getInstance().onProfileSwitch(profile);
+                    }*/
+                    main.utils!!.setProfileName(profile)
+                } else if ((SWITCH_PROFILE_CHAT_PATTERN.matcher(strippedText).also { matcher = it }).matches()) {
+                    val profile = matcher.group(1)
+
+                    /*                    if (!profile.equals(main.utils!!.getProfileName())) {
+                        APIManager.getInstance().onProfileSwitch(profile);
+                    }*/
+                    main.utils!!.setProfileName(profile)
+                }
+            }
+        }
+    }
 
 //    private fun playerSymbolsDisplay(e: ClientChatReceivedEvent, unformattedText: String) {
 //        // For some reason guild chat messages still contain color codes in the unformatted text
@@ -566,11 +606,11 @@ class PlayerListener {
             timerTick++
 
             if (mc != null) { // Predict health every tick if needed.
-//                tick()
+                ScoreboardManager.tick()
 //
-//                if (actionBarParser.getHealthUpdate() != null && System.currentTimeMillis() - actionBarParser.getLastHealthUpdate() > 3000) {
-//                    actionBarParser.setHealthUpdate(null)
-//                }
+                if (actionBarParser.getHealthUpdate() != null && System.currentTimeMillis() - actionBarParser.getLastHealthUpdate() > 3000) {
+                    actionBarParser.setHealthUpdate(null)
+                }
 //                val p = mc.thePlayer
 //                if (p != null && main.configValues!!
 //                        .isEnabled(Feature.HEALTH_PREDICTION)
@@ -584,7 +624,7 @@ class PlayerListener {
 
                 if (timerTick == 20) {
 //                     Add natural mana every second (increase is based on your max mana).
-//                    if (main.getRenderListener().isPredictMana()) {
+//                    if (main.renderListener!!.isPredictMana()) {
 //                        // If regen-ing, cap at the max mana
 //                        if (getAttribute(Attribute.MANA) < getAttribute(Attribute.MAX_MANA)) {
 //                            setAttribute(
@@ -691,7 +731,7 @@ class PlayerListener {
         }
     }
 
-    // TODO Feature Rewrite
+// TODO Feature Rewrite
 //    fun parseTabList() {
 //        val tabFooterChatComponent = Minecraft.getMinecraft().ingameGUI.tabList.footer
 //
@@ -758,8 +798,8 @@ class PlayerListener {
 //                    if (now - lastMinionSound > cooldown) {
 //                        lastMinionSound = now
 //                        main.utils!!.playLoudSound("random.pop", 1)
-//                        main.getRenderListener().setSubtitleFeature(Feature.MINION_FULL_WARNING)
-//                        main.getScheduler().schedule(
+//                        main.renderListener!!.setSubtitleFeature(Feature.MINION_FULL_WARNING)
+//                        main.scheduler!!.schedule(
 //                            Scheduler.CommandType.RESET_SUBTITLE_FEATURE,
 //                            main.configValues!!.getWarningSeconds()
 //                        )
@@ -773,9 +813,9 @@ class PlayerListener {
 //                            main.utils!!.playLoudSound("random.orb", 1)
 //
 //                            val mobName = matcher.group("mobName")
-//                            main.getRenderListener().setCannotReachMobName(mobName)
-//                            main.getRenderListener().setSubtitleFeature(Feature.MINION_STOP_WARNING)
-//                            main.getScheduler().schedule(
+//                            main.renderListener!!.setCannotReachMobName(mobName)
+//                            main.renderListener!!.setSubtitleFeature(Feature.MINION_STOP_WARNING)
+//                            main.scheduler!!.schedule(
 //                                Scheduler.CommandType.RESET_SUBTITLE_FEATURE,
 //                                main.configValues!!.getWarningSeconds()
 //                            )
@@ -873,8 +913,8 @@ class PlayerListener {
 //                if (entity.name.contains("Brood Mother") && (lastBroodmother == -1L || System.currentTimeMillis() - lastBroodmother > 15000)) { //Brood Mother
 //                    lastBroodmother = System.currentTimeMillis()
 //                    //                  main.utils!!.sendMessage("Broodmother spawned."); //testers said to remove message
-//                    main.getRenderListener().setTitleFeature(Feature.BROOD_MOTHER_ALERT)
-//                    main.getScheduler()
+//                    main.renderListener!!.setTitleFeature(Feature.BROOD_MOTHER_ALERT)
+//                    main.scheduler!!
 //                        .schedule(Scheduler.CommandType.RESET_TITLE_FEATURE, main.configValues!!.getWarningSeconds())
 //                    main.utils!!.playLoudSound("random.orb", 0.5)
 //                }
@@ -893,15 +933,15 @@ class PlayerListener {
 //                        if (magma.slimeSize > 10) { // Find a big bal boss
 //                            if ((lastBal == -1L || System.currentTimeMillis() - lastBal > 240000)) {
 //                                lastBal = System.currentTimeMillis()
-//                                main.getRenderListener()
+//                                main.renderListener!!
 //                                    .setTitleFeature(Feature.BAL_BOSS_ALERT) // Enable warning and disable again in four seconds.
 //                                balTick = 16 // so the sound plays instantly
-//                                main.getScheduler().schedule(
+//                                main.scheduler!!.schedule(
 //                                    Scheduler.CommandType.RESET_TITLE_FEATURE,
 //                                    main.configValues!!.getWarningSeconds()
 //                                )
 //                            }
-//                            if (main.getRenderListener()
+//                            if (main.renderListener!!
 //                                    .getTitleFeature() === Feature.BAL_BOSS_ALERT && balTick % 4 == 0
 //                            ) { // Play sound every 4 ticks or 1/5 second.
 //                                main.utils!!.playLoudSound("random.orb", 0.5)
@@ -1131,10 +1171,10 @@ class PlayerListener {
 //    fun onKeyInput(e: InputEvent.KeyInputEvent?) {
 //        if (main.getOpenSettingsKey().isPressed()) {
 //            main.utils!!.setFadingIn(true)
-//            main.getRenderListener().setGuiToOpen(EnumUtils.GUIType.MAIN, 1, EnumUtils.GuiTab.MAIN)
+//            main.renderListener!!.setGuiToOpen(EnumUtils.GUIType.MAIN, 1, EnumUtils.GuiTab.MAIN)
 //        } else if (main.getOpenEditLocationsKey().isPressed()) {
 //            main.utils!!.setFadingIn(false)
-//            main.getRenderListener().setGuiToOpen(EnumUtils.GUIType.EDIT_LOCATIONS, 0, null)
+//            main.renderListener!!.setGuiToOpen(EnumUtils.GUIType.EDIT_LOCATIONS, 0, null)
 //        } else if (main.configValues!!.isEnabled(Feature.DEVELOPER_MODE) && main.getDeveloperCopyNBTKey()
 //                .isPressed()
 //        ) {
@@ -1322,28 +1362,30 @@ class PlayerListener {
         }
         return Minecraft.getSystemTime() - lastSkyblockServerJoinAttempt < 6000
     }
-//
+
+    //
     fun didntRecentlyJoinWorld(): Boolean {
         return (Minecraft.getSystemTime() - lastWorldJoin) > 3000
     }
-//
+
+    //
 //    val maxTickers: Int
 //        get() = actionBarParser.getMaxTickers()
 //
 //    val tickers: Int
 //        get() = actionBarParser.getTickers()
 //
-//    fun updateLastSecondHealth() {
-//        val health = getAttribute(Attribute.HEALTH)
-//        // Update the health gained/lost over the last second
-//        if (main.configValues!!
-//                .isEnabled(Feature.HEALTH_UPDATES) && actionBarParser.getLastSecondHealth() !== health
-//        ) {
-//            actionBarParser.setHealthUpdate(health - actionBarParser.getLastSecondHealth())
-//            actionBarParser.setLastHealthUpdate(System.currentTimeMillis())
-//        }
-//        actionBarParser.setLastSecondHealth(health)
-//    }
+    fun updateLastSecondHealth() {
+        val health = main.renderListener!!.getAttribute(Attribute.HEALTH)
+        // Update the health gained/lost over the last second
+        if (main.configValues!!
+                .isEnabled(Feature.HEALTH_UPDATES) && actionBarParser.getLastSecondHealth() !== health
+        ) {
+            actionBarParser.setHealthUpdate(health - actionBarParser.getLastSecondHealth())
+            actionBarParser.setLastHealthUpdate(System.currentTimeMillis())
+        }
+        actionBarParser.setLastSecondHealth(health)
+    }
 //
     fun shouldResetMouse(): Boolean {
         //TODO:
@@ -1355,11 +1397,13 @@ class PlayerListener {
     fun getHealthUpdate(): Float? {
         return actionBarParser.getHealthUpdate()
     }
-//
-//    private fun changeMana(change: Float) {
-//        setAttribute(Attribute.MANA, getAttribute(Attribute.MANA) + change)
-//    }
-//
+
+    //
+    private fun changeMana(change: Float) {
+        setAttribute(Attribute.MANA, getAttribute(Attribute.MANA) + change)
+    }
+
+    //
     private fun getAttribute(attribute: Attribute): Float {
         return main.utils!!.getAttributes().get(attribute)?.getValue()!!
     }
@@ -1367,7 +1411,8 @@ class PlayerListener {
     private fun setAttribute(attribute: Attribute, value: Float) {
         main.utils!!.getAttributes().get(attribute)?.setValue(value)
     }
-//
+
+    //
 //    /**
 //     * Checks if the fishing indicator sound should be played. To play the sound, these conditions have to be met:
 //     *
@@ -1413,85 +1458,95 @@ class PlayerListener {
 //        return actionBarParser
 //    }
 //
-//    companion object {
-//        private val logger: Logger = SkyblockAddons.getLogger()
-//
-//        private val NO_ARROWS_LEFT_PATTERN: Pattern =
-//            Pattern.compile("(?:§r)?§cYou don't have any more Arrows left in your Quiver!§r")
-//        private val ONLY_HAVE_ARROWS_LEFT_PATTERN: Pattern =
-//            Pattern.compile("(?:§r)?§cYou only have (?<arrows>[0-9]+) Arrows left in your Quiver!§r")
-//        private const val ENCHANT_LINE_STARTS_WITH = "§5§o§9"
-//        private val ABILITY_CHAT_PATTERN: Pattern =
-//            Pattern.compile("§r§aUsed §r§6[A-Za-z ]+§r§a! §r§b\\([0-9]+ Mana\\)§r")
-//        private val PROFILE_CHAT_PATTERN: Pattern = Pattern.compile("You are playing on profile: ([A-Za-z]+).*")
-//        private val SWITCH_PROFILE_CHAT_PATTERN: Pattern = Pattern.compile("Your profile was changed to: ([A-Za-z]+).*")
-//        private val MINION_CANT_REACH_PATTERN: Pattern = Pattern.compile("§cI can't reach any (?<mobName>[A-Za-z]*)s")
-//        private val DRAGON_KILLED_PATTERN: Pattern = Pattern.compile(" *[A-Z]* DRAGON DOWN!")
-//        private val DRAGON_SPAWNED_PATTERN: Pattern =
-//            Pattern.compile("☬ The (?<dragonType>[A-Za-z ]+) Dragon has spawned!")
-//        private val SLAYER_COMPLETED_PATTERN: Pattern =
-//            Pattern.compile(" {3}» Talk to Maddox to claim your (?<slayerType>[A-Za-z]+) Slayer XP!")
-//        private val SLAYER_COMPLETED_PATTERN_AUTO1: Pattern =
-//            Pattern.compile(" *(?<slayerType>[A-Za-z]+) Slayer LVL \\d+ - Next LVL in [\\d,]+ XP!")
-//        private val SLAYER_COMPLETED_PATTERN_AUTO2: Pattern = Pattern.compile(" *SLAYER QUEST STARTED!")
-//        private val DEATH_MESSAGE_PATTERN: Pattern = Pattern.compile(" ☠ (?<username>\\w+) (?<causeOfDeath>.+)\\.")
-//        private val REVIVE_MESSAGE_PATTERN: Pattern =
-//            Pattern.compile(" ❣ (?<revivedPlayer>\\w+) was revived(?: by (?<reviver>\\w+))*!")
-//        private val NEXT_TIER_PET_PROGRESS: Pattern = Pattern.compile("Next tier: (?<total>[0-9,]+)/.*")
-//        private val MAXED_TIER_PET_PROGRESS: Pattern = Pattern.compile(".*: (?<total>[0-9,]+)")
-//        private val SPIRIT_SCEPTRE_MESSAGE_PATTERN: Pattern =
-//            Pattern.compile("Your (?:Implosion|Spirit Sceptre) hit (?<hitEnemies>[0-9]+) enem(?:y|ies) for (?<dealtDamage>[0-9]{1,3}(?:,[0-9]{3})*(?:\\.[0-9]+)*) damage\\.")
-//        private val PROFILE_TYPE_SYMBOL: Pattern = Pattern.compile("(?i)§[0-9A-FK-ORZ][♲Ⓑ]")
-//        private val NETHER_FACTION_SYMBOL: Pattern = Pattern.compile("(?i)§[0-9A-FK-ORZ][⚒ቾ]")
-//
-//        private val SOUP_RANDOM_MESSAGES: Set<String> = HashSet(
-//            mutableListOf(
-//                "I feel like I can fly!",
-//                "What was in that soup?",
-//                "Hmm… tasty!",
-//                "Hmm... tasty!",
-//                "You can now fly for 2 minutes.",
-//                "Your flight has been extended for 2 extra minutes.",
-//                "You can now fly for 200 minutes.",
-//                "Your flight has been extended for 200 extra minutes."
-//            )
-//        )
-//
-//        private val BONZO_STAFF_SOUNDS: Set<String> = HashSet(
-//            mutableListOf(
-//                "fireworks.blast", "fireworks.blast_far",
-//                "fireworks.twinkle", "fireworks.twinkle_far", "mob.ghast.moan"
-//            )
-//        )
-//
-//        // All Rat pet sounds as instance with their respective sound categories, except the sound when it lays a cheese
-//        private val RAT_SOUNDS: Set<PositionedSoundRecord> = HashSet(
-//            Arrays.asList(
-//                PositionedSoundRecord(
-//                    ResourceLocation("minecraft", "mob.bat.idle"), 1.0f, 1.1904762f, 0.0f, 0.0f, 0.0f
-//                ),
-//                PositionedSoundRecord(ResourceLocation("minecraft", "mob.chicken.step"), 0.15f, 1.0f, 0.0f, 0.0f, 0.0f)
-//            )
-//        )
-//
-//        private val ORES: Set<Int> = Sets.newHashSet<E>(
-//            Block.getIdFromBlock(Blocks.coal_ore),
-//            Block.getIdFromBlock(Blocks.iron_ore),
-//            Block.getIdFromBlock(Blocks.gold_ore),
-//            Block.getIdFromBlock(Blocks.redstone_ore),
-//            Block.getIdFromBlock(Blocks.emerald_ore),
-//            Block.getIdFromBlock(Blocks.lapis_ore),
-//            Block.getIdFromBlock(Blocks.diamond_ore),
-//            Block.getIdFromBlock(Blocks.lit_redstone_ore),
-//            Block.getIdFromBlock(Blocks.obsidian),
-//            Block.getIdFromBlock(Blocks.diamond_block),
-//            Utils.getBlockMetaId(Blocks.stone, BlockStone.EnumType.DIORITE_SMOOTH.metadata),
-//            Utils.getBlockMetaId(Blocks.stained_hardened_clay, EnumDyeColor.CYAN.metadata),
-//            Utils.getBlockMetaId(Blocks.prismarine, BlockPrismarine.EnumType.ROUGH.metadata),
-//            Utils.getBlockMetaId(Blocks.prismarine, BlockPrismarine.EnumType.DARK.metadata),
-//            Utils.getBlockMetaId(Blocks.prismarine, BlockPrismarine.EnumType.BRICKS.metadata),
-//            Utils.getBlockMetaId(Blocks.wool, EnumDyeColor.LIGHT_BLUE.metadata),
-//            Utils.getBlockMetaId(Blocks.wool, EnumDyeColor.GRAY.metadata)
-//        )
+    companion object {
+        private val logger: org.apache.logging.log4j.Logger = SkyblockAddonsPlus.instance.getLogger()
+
+        private val NO_ARROWS_LEFT_PATTERN: Pattern =
+            Pattern.compile("(?:§r)?§cYou don't have any more Arrows left in your Quiver!§r")
+        private val ONLY_HAVE_ARROWS_LEFT_PATTERN: Pattern =
+            Pattern.compile("(?:§r)?§cYou only have (?<arrows>[0-9]+) Arrows left in your Quiver!§r")
+        private const val ENCHANT_LINE_STARTS_WITH = "§5§o§9"
+        private val ABILITY_CHAT_PATTERN: Pattern =
+            Pattern.compile("§r§aUsed §r§6[A-Za-z ]+§r§a! §r§b\\([0-9]+ Mana\\)§r")
+        private val PROFILE_CHAT_PATTERN: Pattern = Pattern.compile("You are playing on profile: ([A-Za-z]+).*")
+        private val SWITCH_PROFILE_CHAT_PATTERN: Pattern =
+            Pattern.compile("Your profile was changed to: ([A-Za-z]+).*")
+        private val MINION_CANT_REACH_PATTERN: Pattern =
+            Pattern.compile("§cI can't reach any (?<mobName>[A-Za-z]*)s")
+        private val DRAGON_KILLED_PATTERN: Pattern = Pattern.compile(" *[A-Z]* DRAGON DOWN!")
+        private val DRAGON_SPAWNED_PATTERN: Pattern =
+            Pattern.compile("☬ The (?<dragonType>[A-Za-z ]+) Dragon has spawned!")
+        private val SLAYER_COMPLETED_PATTERN: Pattern =
+            Pattern.compile(" {3}» Talk to Maddox to claim your (?<slayerType>[A-Za-z]+) Slayer XP!")
+        private val SLAYER_COMPLETED_PATTERN_AUTO1: Pattern =
+            Pattern.compile(" *(?<slayerType>[A-Za-z]+) Slayer LVL \\d+ - Next LVL in [\\d,]+ XP!")
+        private val SLAYER_COMPLETED_PATTERN_AUTO2: Pattern = Pattern.compile(" *SLAYER QUEST STARTED!")
+        private val DEATH_MESSAGE_PATTERN: Pattern = Pattern.compile(" ☠ (?<username>\\w+) (?<causeOfDeath>.+)\\.")
+        private val REVIVE_MESSAGE_PATTERN: Pattern =
+            Pattern.compile(" ❣ (?<revivedPlayer>\\w+) was revived(?: by (?<reviver>\\w+))*!")
+        private val NEXT_TIER_PET_PROGRESS: Pattern = Pattern.compile("Next tier: (?<total>[0-9,]+)/.*")
+        private val MAXED_TIER_PET_PROGRESS: Pattern = Pattern.compile(".*: (?<total>[0-9,]+)")
+        private val SPIRIT_SCEPTRE_MESSAGE_PATTERN: Pattern =
+            Pattern.compile("Your (?:Implosion|Spirit Sceptre) hit (?<hitEnemies>[0-9]+) enem(?:y|ies) for (?<dealtDamage>[0-9]{1,3}(?:,[0-9]{3})*(?:\\.[0-9]+)*) damage\\.")
+        private val PROFILE_TYPE_SYMBOL: Pattern = Pattern.compile("(?i)§[0-9A-FK-ORZ][♲Ⓑ]")
+        private val NETHER_FACTION_SYMBOL: Pattern = Pattern.compile("(?i)§[0-9A-FK-ORZ][⚒ቾ]")
+
+        private val SOUP_RANDOM_MESSAGES: Set<String> = HashSet(
+            mutableListOf(
+                "I feel like I can fly!",
+                "What was in that soup?",
+                "Hmm… tasty!",
+                "Hmm... tasty!",
+                "You can now fly for 2 minutes.",
+                "Your flight has been extended for 2 extra minutes.",
+                "You can now fly for 200 minutes.",
+                "Your flight has been extended for 200 extra minutes."
+            )
+        )
+
+        private val BONZO_STAFF_SOUNDS: Set<String> = HashSet(
+            mutableListOf(
+                "fireworks.blast", "fireworks.blast_far",
+                "fireworks.twinkle", "fireworks.twinkle_far", "mob.ghast.moan"
+            )
+        )
+
+        // All Rat pet sounds as instance with their respective sound categories, except the sound when it lays a cheese
+        private val RAT_SOUNDS: Set<PositionedSoundRecord> = HashSet(
+            Arrays.asList(
+                PositionedSoundRecord(
+                    ResourceLocation("minecraft", "mob.bat.idle"), 1.0f, 1.1904762f, 0.0f, 0.0f, 0.0f
+                ),
+                PositionedSoundRecord(
+                    ResourceLocation("minecraft", "mob.chicken.step"),
+                    0.15f,
+                    1.0f,
+                    0.0f,
+                    0.0f,
+                    0.0f
+                )
+            )
+        )
+
+        private val ORES: Set<Int> = Sets.newHashSet(
+            Block.getIdFromBlock(Blocks.coal_ore),
+            Block.getIdFromBlock(Blocks.iron_ore),
+            Block.getIdFromBlock(Blocks.gold_ore),
+            Block.getIdFromBlock(Blocks.redstone_ore),
+            Block.getIdFromBlock(Blocks.emerald_ore),
+            Block.getIdFromBlock(Blocks.lapis_ore),
+            Block.getIdFromBlock(Blocks.diamond_ore),
+            Block.getIdFromBlock(Blocks.lit_redstone_ore),
+            Block.getIdFromBlock(Blocks.obsidian),
+            Block.getIdFromBlock(Blocks.diamond_block),
+            Utils.getBlockMetaId(Blocks.stone, BlockStone.EnumType.DIORITE_SMOOTH.metadata),
+            Utils.getBlockMetaId(Blocks.stained_hardened_clay, EnumDyeColor.CYAN.metadata),
+            Utils.getBlockMetaId(Blocks.prismarine, BlockPrismarine.EnumType.ROUGH.metadata),
+            Utils.getBlockMetaId(Blocks.prismarine, BlockPrismarine.EnumType.DARK.metadata),
+            Utils.getBlockMetaId(Blocks.prismarine, BlockPrismarine.EnumType.BRICKS.metadata),
+            Utils.getBlockMetaId(Blocks.wool, EnumDyeColor.LIGHT_BLUE.metadata),
+            Utils.getBlockMetaId(Blocks.wool, EnumDyeColor.GRAY.metadata)
+        )
+    }
 }
 

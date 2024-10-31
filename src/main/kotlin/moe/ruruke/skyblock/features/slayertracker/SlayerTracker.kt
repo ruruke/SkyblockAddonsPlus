@@ -2,6 +2,7 @@ package moe.ruruke.skyblock.features.slayertracker
 
 
 import moe.ruruke.skyblock.SkyblockAddonsPlus
+import moe.ruruke.skyblock.config.NewConfig
 import moe.ruruke.skyblock.core.Feature
 import moe.ruruke.skyblock.core.Translations
 import moe.ruruke.skyblock.features.ItemDiff
@@ -30,18 +31,17 @@ class SlayerTracker {
             main.persistentValuesManager!!.getPersistentValues().getSlayerTracker()
         return slayerTrackerData.getSlayerDropCounts().getOrDefault(slayerDrop, 0)
     }
-
-    val isTrackerEnabled: Boolean
-        /**
-         * Returns whether any slayer trackers are enabled
-         *
-         * @return `true` if at least one slayer tracker is enabled, `false` otherwise
-         */
-        get() = main.configValues!!.isEnabled(Feature.REVENANT_SLAYER_TRACKER) ||
-                main.configValues!!.isEnabled(Feature.TARANTULA_SLAYER_TRACKER) ||
-                main.configValues!!.isEnabled(Feature.SVEN_SLAYER_TRACKER) ||
-                main.configValues!!.isEnabled(Feature.VOIDGLOOM_SLAYER_TRACKER)
-
+    /**
+     * Returns whether any slayer trackers are enabled
+     *
+     * @return {@code true} if at least one slayer tracker is enabled, {@code false} otherwise
+     */
+    fun isTrackerEnabled(): Boolean {
+        return NewConfig.isEnabled(Feature.REVENANT_SLAYER_TRACKER) ||
+                NewConfig.isEnabled(Feature.TARANTULA_SLAYER_TRACKER) ||
+                NewConfig.isEnabled(Feature.SVEN_SLAYER_TRACKER) ||
+                NewConfig.isEnabled(Feature.VOIDGLOOM_SLAYER_TRACKER)
+    }
     /**
      * Adds a kill to the slayer type
      */

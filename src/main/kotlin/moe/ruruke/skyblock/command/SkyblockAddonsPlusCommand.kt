@@ -33,7 +33,7 @@ public class SkyblockAddonsPlusCommand : CommandBase() {
 
     override fun processCommand(sender: ICommandSender?, args: Array<out String>?) {
         var s = Utils.getPlayerViewPosition()
-        main.utils!!.sendMessage("skyblockaddonsplus ${s.x} ${s.y} ${s.z}")
+        main.utils!!.sendMessage("skyblockaddonsplus  Skyblock? > ${main.utils!!.isOnSkyblock()} Hypixel? > ${main.utils!!.isOnHypixel} ProfileName > ${main.utils!!.getProfileName()}")
         Test().a()
     }
 }

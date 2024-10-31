@@ -69,6 +69,9 @@ object DevUtils {
     
     
     private val loggingActionBarMessages = false
+    fun isLoggingActionBarMessages(): Boolean {
+        return loggingActionBarMessages
+    }
     private var copyMode = CopyMode.ENTITY
     private var entityNames = DEFAULT_ENTITY_NAMES
     private var entityCopyRadius = DEFAULT_ENTITY_COPY_RADIUS

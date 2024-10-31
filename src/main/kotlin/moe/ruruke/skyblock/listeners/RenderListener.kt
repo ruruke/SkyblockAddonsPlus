@@ -39,7 +39,7 @@ import kotlin.math.min
 class RenderListener {
     private val main: SkyblockAddonsPlus.Companion = SkyblockAddonsPlus.instance
     private var predictHealth = false
-    fun getPredictHealth(): Boolean {
+    fun isPredictHealth(): Boolean {
         return predictHealth
     }
 
@@ -48,7 +48,7 @@ class RenderListener {
     }
 
     private var predictMana = false
-    fun getPredictMana(): Boolean {
+    fun isPredictMana(): Boolean {
         return predictMana
     }
 
@@ -80,7 +80,10 @@ class RenderListener {
     }
 
 
-    private val arrowsLeft = 0
+    private var arrowsLeft = 0
+    fun setArrowsLeft(v: Int){
+        arrowsLeft = v
+    }
     fun getArrowsLeft(): Int {
         return arrowsLeft
     }
@@ -2528,7 +2531,7 @@ class RenderListener {
     /**
      * Easily grab an attribute from utils.
      */
-    private fun getAttribute(attribute: Attribute): Float {
+    fun getAttribute(attribute: Attribute): Float {
         return main.utils!!.getAttributes().get(attribute)!!.getValue()
     }
 //

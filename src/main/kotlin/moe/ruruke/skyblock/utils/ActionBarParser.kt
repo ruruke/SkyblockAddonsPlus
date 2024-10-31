@@ -64,17 +64,32 @@ class ActionBarParser {
     private var maxTickers = 0
 
     
-    private val lastSecondHealth = -1f
+    private var lastSecondHealth = -1f
 
     
-    private val healthUpdate: Float? = null
+    private var healthUpdate: Float? = null
     fun getHealthUpdate(): Float? {
         return healthUpdate
     }
 
     
-    private val lastHealthUpdate: Long = 0
-
+    private var lastHealthUpdate: Long = 0
+    fun setLastHealthUpdate(health: Long){
+        lastHealthUpdate = health
+    }
+    fun setHealthUpdate(health: Float?){
+        healthUpdate =health
+    }
+    fun setLastSecondHealth(helath: Float){
+        lastSecondHealth = helath
+    }
+    fun getLastHealthUpdate(): Long {
+        return lastHealthUpdate
+    }
+    fun getLastSecondHealth(): Float
+    {
+        return lastSecondHealth
+    }
     private var currentSkillXP = 0f
     private var totalSkillXP = 0
     private var percent = 0f

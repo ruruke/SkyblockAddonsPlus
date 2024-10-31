@@ -14,6 +14,7 @@ import moe.ruruke.skyblock.core.SkillXpManager
 import moe.ruruke.skyblock.features.EntityOutlines.EntityOutlineRenderer
 import moe.ruruke.skyblock.features.EntityOutlines.FeatureItemOutlines
 import moe.ruruke.skyblock.listeners.GuiScreenListener
+import moe.ruruke.skyblock.listeners.NetworkListener
 import moe.ruruke.skyblock.listeners.PlayerListener
 import moe.ruruke.skyblock.listeners.RenderListener
 import moe.ruruke.skyblock.misc.SkyblockKeyBinding
@@ -61,7 +62,7 @@ class SkyblockAddonsPlus() {
         fun getTimer(): Float {
             return elapsedPartialTicks;
         }
-        private var playerListener: PlayerListener = PlayerListener()
+        private var playerListener: PlayerListener? = null
         private var guiScreenListener: GuiScreenListener? = null
         @kotlin.jvm.JvmField
         var registeredFeatureIDs: MutableSet<Int> = HashSet()
@@ -161,7 +162,7 @@ class SkyblockAddonsPlus() {
             DataUtils.loadOnlineData();
         }
 
-//        MinecraftForge.EVENT_BUS.register(NetworkListener())
+        MinecraftForge.EVENT_BUS.register(NetworkListener())
         MinecraftForge.EVENT_BUS.register(playerListener)
         MinecraftForge.EVENT_BUS.register(guiScreenListener)
         MinecraftForge.EVENT_BUS.register(renderListener)

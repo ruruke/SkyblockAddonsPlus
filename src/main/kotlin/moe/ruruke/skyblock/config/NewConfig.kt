@@ -66,6 +66,7 @@ class NewConfig {
                 7 -> return config.fullInventoryWarning
                 45 -> return config.replaceRomanNumeralsWithNumbers
                 96 -> return config.changeZealotColor
+                212 -> return config.forceOnSkyblock
             }
             return false
         }

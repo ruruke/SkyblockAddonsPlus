@@ -91,7 +91,7 @@ class Utils {
     /**
      * Whether the player is on skyblock.
      */
-    private val onSkyblock = false
+    private var onSkyblock = false
         get() = field
 
     /**
@@ -115,6 +115,10 @@ class Utils {
      * The skyblock profile that the player is currently on. Ex. "Grapefruit"
      */
     private var profileName = "Unknown"
+    fun setProfileName(name: String){
+        main.utils!!.sendMessage("Debug > setProfineName > "+name)
+        profileName = name
+    }
 
     public fun getProfileName(): String {
         return profileName
@@ -254,6 +258,7 @@ class Utils {
          * @return `true` if the player is on Hypixel, `false` otherwise
          */
         get() {
+            if (main.config!!.forceOnSkyblock) return true
             val player = Minecraft.getMinecraft().thePlayer ?: return false
             val brand = player.clientBrand
             if (brand != null) {
@@ -266,6 +271,9 @@ class Utils {
             return false
         }
 
+    fun setOnSkyblock(v: Boolean){
+        onSkyblock = v
+    }
     fun isOnSkyblock(): Boolean {
         //TODO: DEBUG
 //        return true
@@ -755,7 +763,7 @@ class Utils {
         if (matcher.matches()) {
             try {
                 val oldCoins = purse
-                purse = TextUtils.NUMBER_FORMAT.parse(matcher.group("coins")) as Double
+                purse = TextUtils.NUMBER_FORMAT.parse(matcher.group("coins")).toDouble()
 
                 if (oldCoins != purse) {
                     onCoinsChange(purse - oldCoins)
@@ -784,7 +792,7 @@ class Utils {
 
         if (matcher.matches()) {
             bits = try {
-                TextUtils.NUMBER_FORMAT.parse(matcher.group("bits")) as Double
+                TextUtils.NUMBER_FORMAT.parse(matcher.group("bits")).toDouble()
             } catch (ignored: ParseException) {
                 0.0
             }

@@ -1,4 +1,4 @@
-package moe.ruruke.skyblock.asm.hooks.utils
+package moe.ruruke.skyblock.asm.utils
 
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
@@ -183,7 +183,7 @@ class InstructionBuilder {
     }
 //TODO:
     fun endCode(): InjectionHelper {
-        return InjectionHelper.Companion.resume().setInstructions(this.instructions)
+        return InjectionHelper.resume().setInstructions(this.instructions)
     }
 
     private val firstUnusedVariableIndex: Int

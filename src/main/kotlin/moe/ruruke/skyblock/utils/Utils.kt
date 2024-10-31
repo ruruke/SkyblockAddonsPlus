@@ -71,14 +71,22 @@ class Utils {
     /**
      * List of reforges that the player is looking to find.
      */
-    private val reforgeMatches: List<String> = LinkedList()
-        get() = field
+    private var reforgeMatches: List<String> = LinkedList()
+    fun getReforgeMatches(): List<String> {
+        return reforgeMatches
+    }
+    fun setReforgeMatches(reforgeMatches: List<String>){
+        this.reforgeMatches = reforgeMatches
+    }
 
     /**
      * List of reforge substrings that the player doesn't want to match.
      */
-    private val reforgeExclusions: List<String> = LinkedList()
-        get() = field
+    private var reforgeExclusions: List<String> = LinkedList()
+    fun getReforgeExclusions(): List<String> {return reforgeExclusions}
+    fun setReforgeExclusions(reforgeExclusions: List<String>) {
+        this.reforgeExclusions = reforgeExclusions
+    }
 
     /**
      * Whether the player is on skyblock.
@@ -92,6 +100,14 @@ class Utils {
     private var location: Location = Location.UNKNOWN
 
     fun getLocation(): Location {
+        if (main.config!!.forceLocation != 0){
+            return when(main.config!!.forceLocation) {
+                1 -> Location.ISLAND
+                2 -> Location.DRAGONS_NEST
+                3 -> Location.CRIMSON_ISLE
+                else -> Location.UNKNOWN
+            }
+        }
         return location;
     }
 

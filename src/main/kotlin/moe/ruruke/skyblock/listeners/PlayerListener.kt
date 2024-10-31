@@ -1317,6 +1317,9 @@ class PlayerListener {
 //    }
 
     fun aboutToJoinSkyblockServer(): Boolean {
+        if (main.config!!.forceOnSkyblock) {
+            return true
+        }
         return Minecraft.getSystemTime() - lastSkyblockServerJoinAttempt < 6000
     }
 //

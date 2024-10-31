@@ -1,7 +1,7 @@
 package moe.ruruke.skyblock.asm
 
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerClass
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerMethod
+import moe.ruruke.skyblock.asm.utils.TransformerClass
+import moe.ruruke.skyblock.asm.utils.TransformerMethod
 import moe.ruruke.skyblock.tweaker.transformer.ITransformer
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.ClassNode
@@ -10,11 +10,12 @@ import org.objectweb.asm.tree.MethodInsnNode
 import org.objectweb.asm.tree.VarInsnNode
 
 class WorldClientTransformer : ITransformer {
-    override var className: Array<String> = arrayOf()
-        /**
-         * [net.minecraft.client.multiplayer.WorldClient]
-         */
-        get() = arrayOf(TransformerClass.WorldClient.transformerName)
+    /**
+     * [net.minecraft.client.multiplayer.WorldClient]
+     */
+    override fun getClassName(): Array<String> {
+        return  arrayOf(TransformerClass.WorldClient.getTransformerName())
+    }
 
     override fun transform(classNode: ClassNode?, name: String?) {
         for (methodNode in classNode!!.methods) {

@@ -212,7 +212,7 @@ object ContainerPreviewManager {
                     val color: BackpackColor = currentContainerPreview!!.getBackpackColor()
                     if (color != null) {
                         GlStateManager.color(color.getR(), color.getG(), color.getB(), 1f)
-                        textColor = color.inventoryTextColor
+                        textColor = color.getInventoryTextColor()
                     }
                 }
 

@@ -24,8 +24,11 @@ class NewConfigValue : Config(Mod(SkyblockAddonsPlus.NAME, ModType.SKYBLOCK), Sk
     //            WIP           //
     @Switch(name = "Full Inventory Warning", size = OptionSize.SINGLE, category = "WIP")
     var fullInventoryWarning: Boolean = false // The default value for the boolean Switch.
-    @Switch(name = "Drop Confirm(仮称)", size = OptionSize.SINGLE, category = "WIP")
+    @Switch(name = "Drop Confirm(DummyName)", size = OptionSize.SINGLE, category = "WIP")
     var dropConfirm: Boolean = false // The default value for the boolean Switch.
+
+    @Switch(name = "CHANGE_ZEALOT_COLOR(DummyName)", size = OptionSize.SINGLE, category = "WIP")
+    var changeZealotColor: Boolean = false // The default value for the boolean Switch.
 //    @Switch(name = "Full Inventory Warning", size = OptionSize.SINGLE, category = "WIP")
 //    var fullInventoryWarning: Boolean = false // The default value for the boolean Switch.
     //            WIP           //
@@ -34,6 +37,14 @@ class NewConfigValue : Config(Mod(SkyblockAddonsPlus.NAME, ModType.SKYBLOCK), Sk
     //            DEBUG           //
     @Switch(name = "Force OnSkyblock", size = OptionSize.SINGLE, category = "Debug")
     var forceOnSkyblock: Boolean = false // The default value for the boolean Switch.
+
+    @Dropdown(
+        name = "Force Location",        // name of the component
+        options = ["None","Island", "DRAGONS_NEST"],
+        category = "Debug"
+    )
+    var forceLocation: Int = 0 // default option (here "Another Option")
+
     //            DEBUG           //
     //Dummy
     @Exclude

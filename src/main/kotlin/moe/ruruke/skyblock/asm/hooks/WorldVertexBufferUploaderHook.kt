@@ -3,13 +3,16 @@ package moe.ruruke.skyblock.asm.hooks
 import moe.ruruke.skyblock.shader.ShaderManager
 import net.minecraft.client.renderer.Tessellator
 
-object WorldVertexBufferUploaderHook {
-    fun onRenderWorldRendererBuffer(): Boolean {
+class WorldVertexBufferUploaderHook {
+    companion object {
+        @JvmStatic
+        fun onRenderWorldRendererBuffer(): Boolean {
 //        if (true) return false;
-        val canceled: Boolean = ShaderManager.instance.onRenderWorldRendererBuffer()
-        if (canceled) {
-            Tessellator.getInstance().worldRenderer.reset()
+            val canceled: Boolean = ShaderManager.instance.onRenderWorldRendererBuffer()
+            if (canceled) {
+                Tessellator.getInstance().worldRenderer.reset()
+            }
+            return canceled
         }
-        return canceled
     }
 }

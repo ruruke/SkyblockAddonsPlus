@@ -1,4 +1,4 @@
-package moe.ruruke.skyblock.asm.hooks.utils
+package moe.ruruke.skyblock.asm.utils
 
 import com.google.common.collect.Sets
 
@@ -221,9 +221,9 @@ class InjectionHelper {
         private val ownerMatcher = InstructionMatcher(
             InstructionMatcher.InstructionMatcherFunction() { instruction: AbstractInsnNode?, matchAgainst: TransformerClass ->
                 if (instruction is FieldInsnNode) {
-                    return@InstructionMatcherFunction matchAgainst.nameRaw == instruction.owner
+                    return@InstructionMatcherFunction matchAgainst.getNameRaw() == instruction.owner
                 } else if (instruction is MethodInsnNode) {
-                    return@InstructionMatcherFunction matchAgainst.nameRaw == instruction.owner
+                    return@InstructionMatcherFunction matchAgainst.getNameRaw() == instruction.owner
                 }
                 false
             })

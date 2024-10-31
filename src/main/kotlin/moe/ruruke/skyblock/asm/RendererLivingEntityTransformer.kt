@@ -1,18 +1,18 @@
 package moe.ruruke.skyblock.asm
 
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerClass
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerMethod
+import moe.ruruke.skyblock.asm.utils.TransformerClass
+import moe.ruruke.skyblock.asm.utils.TransformerMethod
 import moe.ruruke.skyblock.tweaker.transformer.ITransformer
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.*
 
 class RendererLivingEntityTransformer : ITransformer {
-    override var className: Array<String> = arrayOf()
-        /**
-         * [net.minecraft.client.renderer.entity.RendererLivingEntity]
-         */
-        get() = arrayOf(TransformerClass.RendererLivingEntity.transformerName)
-
+    /**
+     * [net.minecraft.client.renderer.entity.RendererLivingEntity]
+     */
+    override fun getClassName(): Array<String> {
+        return arrayOf(TransformerClass.RendererLivingEntity.getTransformerName())
+    }
     override fun transform(classNode: ClassNode?, name: String?) {
         for (methodNode in classNode!!.methods) {
             if (TransformerMethod.rotateCorpse.matches(methodNode)) {
@@ -41,7 +41,7 @@ class RendererLivingEntityTransformer : ITransformer {
                             ) // RendererLivingEntityHook.equals(s, "Dinnerbone");
 
                             iterator.remove() // Remove the old line.
-                        } else if (methodInsnNode.owner == TransformerClass.EntityPlayer.nameRaw && TransformerMethod.isWearing.matches(
+                        } else if (methodInsnNode.owner == TransformerClass.EntityPlayer.getNameRaw() && TransformerMethod.isWearing.matches(
                                 methodInsnNode
                             )
                         ) {

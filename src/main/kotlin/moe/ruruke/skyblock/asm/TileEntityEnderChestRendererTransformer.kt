@@ -1,7 +1,7 @@
 package moe.ruruke.skyblock.asm
 
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerClass
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerMethod
+import moe.ruruke.skyblock.asm.utils.TransformerClass
+import moe.ruruke.skyblock.asm.utils.TransformerMethod
 import moe.ruruke.skyblock.tweaker.transformer.ITransformer
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.AbstractInsnNode
@@ -10,11 +10,12 @@ import org.objectweb.asm.tree.InsnList
 import org.objectweb.asm.tree.MethodInsnNode
 
 class TileEntityEnderChestRendererTransformer : ITransformer {
-    override var className: Array<String> = arrayOf()
-        /**
-         * [net.minecraft.client.renderer.tileentity.TileEntityEnderChestRenderer]
-         */
-        get() = arrayOf(TransformerClass.TileEntityEnderChestRenderer.transformerName)
+    /**
+     * [net.minecraft.client.renderer.tileentity.TileEntityEnderChestRenderer]
+     */
+    override fun getClassName(): Array<String> {
+        return  arrayOf(TransformerClass.TileEntityEnderChestRenderer.getTransformerName())
+    }
 
     override fun transform(classNode: ClassNode?, name: String?) {
         for (methodNode in classNode!!.methods) {
@@ -36,7 +37,7 @@ class TileEntityEnderChestRendererTransformer : ITransformer {
 
                     if (abstractNode is MethodInsnNode && abstractNode.getOpcode() == Opcodes.INVOKEVIRTUAL) {
                         val methodInsnNode = abstractNode
-                        if (methodInsnNode.owner == TransformerClass.TileEntityEnderChestRenderer.nameRaw
+                        if (methodInsnNode.owner == TransformerClass.TileEntityEnderChestRenderer.getNameRaw()
                             && TransformerMethod.bindTexture.matches(methodInsnNode)
                         ) { // TileEntityEnderChestRendererHook.bindTexture(ENDER_CHEST_TEXTURE);
                             if (bindTextureCount == 1) { // Find the second statement, not the first one.
@@ -52,7 +53,7 @@ class TileEntityEnderChestRendererTransformer : ITransformer {
                                 iterator.remove() // Remove the old method call.
                             }
                             bindTextureCount++
-                        } else if (methodInsnNode.owner == TransformerClass.ModelChest.nameRaw
+                        } else if (methodInsnNode.owner == TransformerClass.ModelChest.getNameRaw()
                             && TransformerMethod.renderAll.matches(methodInsnNode)
                         ) { // The two lines are to make sure its before the "this" & the "field_147521_c".
                             methodNode.instructions.insertBefore(

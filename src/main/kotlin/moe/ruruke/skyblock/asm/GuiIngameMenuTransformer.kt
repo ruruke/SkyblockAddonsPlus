@@ -1,18 +1,19 @@
 package moe.ruruke.skyblock.asm
 
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerClass
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerField
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerMethod
+import moe.ruruke.skyblock.asm.utils.TransformerClass
+import moe.ruruke.skyblock.asm.utils.TransformerField
+import moe.ruruke.skyblock.asm.utils.TransformerMethod
 import moe.ruruke.skyblock.tweaker.transformer.ITransformer
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.*
 
 class GuiIngameMenuTransformer : ITransformer {
-    override var className: Array<String> = arrayOf()
-        /**
-         * [net.minecraft.client.gui.GuiIngameMenu]
-         */
-        get() = arrayOf(TransformerClass.GuiIngameMenu.transformerName)
+    /**
+     * [net.minecraft.client.gui.GuiIngameMenu]
+     */
+    override fun getClassName(): Array<String> {
+        return arrayOf(TransformerClass.GuiIngameMenu.getTransformerName())
+    }
 
     override fun transform(classNode: ClassNode?, name: String?) {
         for (methodNode in classNode!!.methods) {
@@ -35,7 +36,7 @@ class GuiIngameMenuTransformer : ITransformer {
                     val abstractNode = iterator.next()
                     if (abstractNode is MethodInsnNode && abstractNode.getOpcode() == Opcodes.INVOKEVIRTUAL) {
                         val methodInsnNode = abstractNode
-                        if (methodInsnNode.owner == TransformerClass.Minecraft.nameRaw &&
+                        if (methodInsnNode.owner == TransformerClass.Minecraft.getNameRaw() &&
                             TransformerMethod.isIntegratedServerRunning.matches(methodInsnNode)
                         ) {
                             // Go two backwards because of this & this.mc.

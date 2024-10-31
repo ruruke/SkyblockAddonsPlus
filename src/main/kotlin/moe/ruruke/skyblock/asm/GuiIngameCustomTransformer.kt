@@ -1,6 +1,6 @@
 package moe.ruruke.skyblock.asm
 
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerClass
+import moe.ruruke.skyblock.asm.utils.TransformerClass
 import moe.ruruke.skyblock.tweaker.transformer.ITransformer
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.*
@@ -14,11 +14,12 @@ class GuiIngameCustomTransformer : ITransformer {
     private var doneArmor = false
     private var doneMountHealth = false
 
-    override var className: Array<String> = arrayOf()
-        /**
-         * Labymod: net.labymod.core_implementation.mc18.gui.GuiIngameCustom
-         */
-        get() = arrayOf("net.labymod.core_implementation.mc18.gui.GuiIngameCustom")
+    /**
+     * Labymod: net.labymod.core_implementation.mc18.gui.GuiIngameCustom
+     */
+    override fun getClassName(): Array<String> {
+        return arrayOf("net.labymod.core_implementation.mc18.gui.GuiIngameCustom")
+    }
 
     override fun transform(classNode: ClassNode?, name: String?) {
         for (methodNode in classNode!!.methods) {
@@ -58,7 +59,7 @@ class GuiIngameCustomTransformer : ITransformer {
                     if (!doneMountHealth && foundFoodBlock && abstractNode is TypeInsnNode && abstractNode.getOpcode() == Opcodes.INSTANCEOF) {
                         val typeInsnNode = abstractNode
 
-                        if (typeInsnNode.desc == TransformerClass.EntityLivingBase.nameRaw && typeInsnNode.next.opcode == Opcodes.IFEQ && typeInsnNode.next is JumpInsnNode) {
+                        if (typeInsnNode.desc == TransformerClass.EntityLivingBase.getNameRaw() && typeInsnNode.next.opcode == Opcodes.IFEQ && typeInsnNode.next is JumpInsnNode) {
                             val jumpInsnNode = typeInsnNode.next as JumpInsnNode
 
                             doneMountHealth = true

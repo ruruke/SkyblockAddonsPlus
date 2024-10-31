@@ -1,13 +1,20 @@
 package moe.ruruke.skyblock.asm
 
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerClass
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerMethod
+import moe.ruruke.skyblock.asm.utils.TransformerClass
+import moe.ruruke.skyblock.asm.utils.TransformerMethod
 import moe.ruruke.skyblock.tweaker.transformer.ITransformer
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.*
 
+
 class EffectRendererTransformer : ITransformer {
-    override var className: Array<String> = arrayOf()
+
+    /**
+     * [net.minecraft.client.particle.EffectRenderer]
+     */
+    override fun getClassName(): Array<String> {
+        return arrayOf(TransformerClass.EffectRenderer.getTransformerName())
+    }
 
     override fun transform(classNode: ClassNode?, name: String?) {
         for (methodNode in classNode!!.methods) {
@@ -21,8 +28,8 @@ class EffectRendererTransformer : ITransformer {
                     val abstractNode = iterator.next()
 
                     if (abstractNode is MethodInsnNode && abstractNode.getOpcode() == Opcodes.INVOKESTATIC &&
-                        abstractNode.owner == TransformerClass.GlStateManager.nameRaw &&
-                        abstractNode.name == TransformerMethod.depthMask._name
+                        abstractNode.owner == TransformerClass.GlStateManager.getNameRaw() &&
+                        abstractNode.name == TransformerMethod.depthMask.name
                     ) {
                         last_depthFunc = abstractNode
                     } else if (last_depthFunc != null &&

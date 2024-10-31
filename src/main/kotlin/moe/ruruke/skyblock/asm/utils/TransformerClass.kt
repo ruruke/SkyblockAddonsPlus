@@ -1,10 +1,10 @@
-package moe.ruruke.skyblock.asm.hooks.utils
+package moe.ruruke.skyblock.asm.utils
 
 import moe.ruruke.skyblock.tweaker.SkyblockAddonsTransformer
 
 enum class TransformerClass(
-    private val seargeClass: String,
-    @field:Suppress("unused") private val notchClass18: String
+    private val seargeClass: String?,
+    @field:Suppress("unused") private val notchClass18: String?,
 ) {
     Minecraft("net/minecraft/client/Minecraft", "ave"),
     EntityItem("net/minecraft/entity/item/EntityItem", "uz"),
@@ -79,23 +79,32 @@ enum class TransformerClass(
     /**
      * @return The name used for the owner of a field or method, or a field type.
      */
-    var nameRaw: String? = null
+    private var nameRaw: String? = null
 
     init {
-        if (SkyblockAddonsTransformer.isDeobfuscated || !SkyblockAddonsTransformer.isUsingNotchMappings() ) {
+        if (SkyblockAddonsTransformer.isDeobfuscated() || !SkyblockAddonsTransformer.isUsingNotchMappings() ) {
             nameRaw = seargeClass
         } else {
             nameRaw = notchClass18
         }
     }
 
+
+    /**
+     * @return The name used for the owner of a field or method, or a field type.
+     */
+    fun getNameRaw(): String? {
+        return nameRaw
+    }
+
     /**
      * @return The name used in a method descriptor to represent an object.
      */
     fun getName(): String {
-        return "L" + nameRaw + ";"
+        return "L$nameRaw;"
     }
 
-    val transformerName: String
-        get() = seargeClass.replace("/".toRegex(), ".")
+    fun getTransformerName(): String {
+        return seargeClass!!.replace("/".toRegex(), ".")
+    }
 }

@@ -1,18 +1,19 @@
 package moe.ruruke.skyblock.asm
 
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerClass
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerField
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerMethod
+import moe.ruruke.skyblock.asm.utils.TransformerClass
+import moe.ruruke.skyblock.asm.utils.TransformerField
+import moe.ruruke.skyblock.asm.utils.TransformerMethod
 import moe.ruruke.skyblock.tweaker.transformer.ITransformer
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.*
 
 class GuiContainerTransformer : ITransformer {
-    override var className: Array<String> = arrayOf()
-        /**
-         * [net.minecraft.client.gui.inventory.GuiContainer]
-         */
-        get() = arrayOf(TransformerClass.GuiContainer.transformerName)
+    /**
+     * [net.minecraft.client.gui.inventory.GuiContainer]
+     */
+    override fun getClassName(): Array<String> {
+        return  arrayOf(TransformerClass.GuiContainer.getTransformerName())
+    }
 
     override fun transform(classNode: ClassNode?, name: String?) {
         for (methodNode in classNode!!.methods) {
@@ -47,7 +48,7 @@ class GuiContainerTransformer : ITransformer {
                         }
                     } else if (abstractNode is MethodInsnNode && abstractNode.getOpcode() == Opcodes.INVOKEVIRTUAL) {
                         val methodInsnNode = abstractNode
-                        if (methodInsnNode.owner == TransformerClass.GuiContainer.nameRaw &&
+                        if (methodInsnNode.owner == TransformerClass.GuiContainer.getNameRaw() &&
                             TransformerMethod.drawGradientRect.matches(methodInsnNode)
                         ) {
                             methodNode.instructions.insertBefore(abstractNode, VarInsnNode(Opcodes.ALOAD, 0))
@@ -70,7 +71,7 @@ class GuiContainerTransformer : ITransformer {
                         }
                     } else if (abstractNode is MethodInsnNode && abstractNode.getOpcode() == Opcodes.INVOKESPECIAL) {
                         val methodInsnNode = abstractNode
-                        if (methodInsnNode.owner == TransformerClass.GuiContainer.nameRaw && TransformerMethod.drawSlot.matches(
+                        if (methodInsnNode.owner == TransformerClass.GuiContainer.getNameRaw() && TransformerMethod.drawSlot.matches(
                                 methodInsnNode
                             )
                         ) {
@@ -106,7 +107,7 @@ class GuiContainerTransformer : ITransformer {
                     val abstractNode = iterator.next()
                     if (abstractNode is MethodInsnNode && abstractNode.getOpcode() == Opcodes.INVOKEVIRTUAL) {
                         val methodInsnNode = abstractNode
-                        if (methodInsnNode.owner == TransformerClass.GuiContainer.nameRaw &&
+                        if (methodInsnNode.owner == TransformerClass.GuiContainer.getNameRaw() &&
                             TransformerMethod.checkHotbarKeys.matches(methodInsnNode)
                         ) {
                             methodNode.instructions.insertBefore(abstractNode.getPrevious().previous, insertKeyTyped())

@@ -1,18 +1,19 @@
 package moe.ruruke.skyblock.asm
 
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerClass
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerField
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerMethod
+import moe.ruruke.skyblock.asm.utils.TransformerClass
+import moe.ruruke.skyblock.asm.utils.TransformerField
+import moe.ruruke.skyblock.asm.utils.TransformerMethod
 import moe.ruruke.skyblock.tweaker.transformer.ITransformer
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.*
 
 class EntityLivingBaseTransformer : ITransformer {
-    override var className: Array<String> = arrayOf()
-        /**
-         * [net.minecraft.entity.EntityLivingBase]
-         */
-        get() = arrayOf(TransformerClass.EntityLivingBase.transformerName)
+    /**
+     * [net.minecraft.entity.EntityLivingBase]
+     */
+    override fun getClassName(): Array<String> {
+        return arrayOf(TransformerClass.EntityLivingBase.getTransformerName())
+    }
 
     override fun transform(classNode: ClassNode?, name: String?) {
         for (methodNode in classNode!!.methods) {
@@ -26,7 +27,7 @@ class EntityLivingBaseTransformer : ITransformer {
                     val abstractNode = iterator.next()
                     if (abstractNode is FieldInsnNode && abstractNode.getOpcode() == Opcodes.PUTFIELD) {
                         val fieldInsnNode = abstractNode
-                        if (fieldInsnNode.owner == TransformerClass.EntityLivingBase.nameRaw &&
+                        if (fieldInsnNode.owner == TransformerClass.EntityLivingBase.getNameRaw() &&
                             TransformerField.hurtTime.matches(fieldInsnNode)
                         ) {
                             methodNode.instructions.insert(

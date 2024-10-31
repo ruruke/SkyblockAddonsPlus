@@ -65,7 +65,7 @@ class NewConfig {
                 1 -> return config.dropConfirm
                 7 -> return config.fullInventoryWarning
                 45 -> return config.replaceRomanNumeralsWithNumbers
-
+                96 -> return config.changeZealotColor
             }
             return false
         }

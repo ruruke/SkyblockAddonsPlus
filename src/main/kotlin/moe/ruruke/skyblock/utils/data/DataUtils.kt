@@ -106,7 +106,7 @@ object DataUtils {
      * This is set to `true` if the mod is running in production or if it's running in a dev environment that has
      * the environment variable `FETCH_DATA_ONLINE`.
      */
-    val USE_ONLINE_DATA: Boolean = !SkyblockAddonsTransformer.isDeobfuscated ||
+    val USE_ONLINE_DATA: Boolean = !SkyblockAddonsTransformer.isDeobfuscated() ||
             System.getenv().containsKey("FETCH_DATA_ONLINE")
 
     private var path: String? = null

@@ -33,15 +33,15 @@ enum class BackpackColor(private val r: Int, private val g: Int, private val b: 
         return b.toFloat() / 255
     }
 
-    val inventoryTextColor: Int
-        get() {
-            var rgb = 4210752 // Default inventory grey.
 
-            if (darkColors.contains(this)) { // Dark colors need a contrasting lighter white color.
-                rgb = Color(219, 219, 219, 255).rgb
-            }
-            return rgb
+    fun getInventoryTextColor(): Int {
+        var rgb = 4210752 // Default inventory grey.
+
+        if (darkColors.contains(this)) { // Dark colors need a contrasting lighter white color.
+            rgb = Color(219, 219, 219, 255).rgb
         }
+        return rgb
+    }
 
     companion object {
         private val darkColors: Set<BackpackColor> = EnumSet.of(

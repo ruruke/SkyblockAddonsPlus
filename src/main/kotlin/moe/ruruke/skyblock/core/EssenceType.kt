@@ -16,9 +16,12 @@ enum class EssenceType {
         WordUtils.capitalizeFully(this.name)
 
     private val resourceLocation = ResourceLocation(
-        "skyblockaddons",
+        "skyblockaddonsplus",
         "essences/" + name.lowercase() + ".png"
     )
+    fun getResourceLocation(): ResourceLocation {
+        return resourceLocation
+    }
 
     companion object {
         fun fromName(name: String): EssenceType? {

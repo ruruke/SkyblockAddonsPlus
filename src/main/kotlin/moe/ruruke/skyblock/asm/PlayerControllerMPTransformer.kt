@@ -6,11 +6,13 @@
 //import org.objectweb.asm.tree.*
 //
 //class PlayerControllerMPTransformer : ITransformer {
-//    override var className: Array<String> = arrayOf()
+//    override fun getClassName(): Array<String> {
+//        return className
+//    }
 //        /**
 //         * [net.minecraft.client.multiplayer.PlayerControllerMP]
 //         */
-//        get() = arrayOf<String>(TransformerClass.PlayerControllerMP.transformerName)
+//        get() = arrayOf<String>(TransformerClass.PlayerControllerMP.getTransformerName())
 //
 //    override fun transform(classNode: ClassNode?, name: String?) {
 //        for (methodNode in classNode!!.methods) {

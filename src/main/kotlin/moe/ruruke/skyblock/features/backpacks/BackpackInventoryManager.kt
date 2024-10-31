@@ -6,7 +6,7 @@ package moe.ruruke.skyblock.features.backpacks
  */
 object BackpackInventoryManager {
     private var backpackColor: BackpackColor? = null
-    fun setBackpackColor(backpackColor: BackpackColor) {
+    fun setBackpackColor(backpackColor: BackpackColor?) {
         this.backpackColor = backpackColor
     }
     fun getBackpackColor(): BackpackColor? {

@@ -1,17 +1,18 @@
 package moe.ruruke.skyblock.asm
 
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerClass
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerMethod
+import moe.ruruke.skyblock.asm.utils.TransformerClass
+import moe.ruruke.skyblock.asm.utils.TransformerMethod
 import moe.ruruke.skyblock.tweaker.transformer.ITransformer
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.*
 
 class ItemTransformer : ITransformer {
-    override var className: Array<String> = arrayOf()
-        /**
-         * [net.minecraft.item.Item]
-         */
-        get() = arrayOf(TransformerClass.Item.transformerName)
+    /**
+     * [net.minecraft.item.Item]
+     */
+    override fun getClassName(): Array<String> {
+        return arrayOf(TransformerClass.Item.getTransformerName())
+    }
 
     override fun transform(classNode: ClassNode?, name: String?) {
         for (methodNode in classNode!!.methods) { // Loop through all methods inside of the class.
@@ -28,7 +29,7 @@ class ItemTransformer : ITransformer {
                     val abstractNode = iterator.next()
                     if (abstractNode is MethodInsnNode && abstractNode.getOpcode() == Opcodes.INVOKEVIRTUAL) {
                         val methodInsnNode = abstractNode
-                        if (methodInsnNode.owner == TransformerClass.ItemStack.nameRaw && TransformerMethod.isItemDamaged.matches(
+                        if (methodInsnNode.owner == TransformerClass.ItemStack.getNameRaw() && TransformerMethod.isItemDamaged.matches(
                                 methodInsnNode
                             )
                         ) {

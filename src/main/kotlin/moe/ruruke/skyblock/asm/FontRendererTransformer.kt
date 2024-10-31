@@ -5,12 +5,14 @@
 //import org.objectweb.asm.tree.*
 //
 //class FontRendererTransformer : ITransformer {
-//    override var className: Array<String> = arrayOf()
+//    override fun getClassName(): Array<String> {
+//        return className
+//    }
 //        /**
 //         * [net.minecraft.client.gui.FontRenderer]
 //         */
 //        get() = arrayOf<String>(
-//            TransformerClass.FontRenderer.transformerName,
+//            TransformerClass.FontRenderer.getTransformerName(),
 //            "club.sk1er.patcher.hooks.FontRendererHook"
 //        )
 //
@@ -59,7 +61,7 @@
 //                        abstractNode is FieldInsnNode && (abstractNode.also {
 //                            fieldInsnNode = it
 //                        }).opcode == Opcodes.PUTFIELD &&
-//                        fieldInsnNode.owner == TransformerClass.FontRenderer.nameRaw && fieldInsnNode.name == TransformerField.italicStyle.getName()
+//                        fieldInsnNode.owner == TransformerClass.FontRenderer.getNameRaw() && fieldInsnNode.name == TransformerField.italicStyle.getName()
 //                    ) {
 //                        italicStyleCount++
 //                        // Insert a chroma reset, as the new format code is between 0 and 15 (regular colors)
@@ -225,7 +227,7 @@
 //        list.add(
 //            MethodInsnNode(
 //                Opcodes.INVOKESPECIAL,
-//                TransformerClass.FontRenderer.nameRaw,
+//                TransformerClass.FontRenderer.getNameRaw(),
 //                TransformerMethod.resetStyles.getName(),
 //                TransformerMethod.resetStyles.description,
 //                false

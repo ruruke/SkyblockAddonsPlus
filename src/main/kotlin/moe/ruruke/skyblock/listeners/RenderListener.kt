@@ -1513,56 +1513,56 @@ class RenderListener {
 //            return if (builder.length == 0) null else builder.toString()
 //        }
 //
-//    fun drawCollectedEssences(x: Float, y: Float, usePlaceholders: Boolean, hideZeroes: Boolean) {
-//        val mc: Minecraft = Minecraft.getMinecraft()
-//
-//        var currentX = x
-//        var currentY: Float
-//
-//        val maxNumberWidth: Int = mc.fontRendererObj.getStringWidth("99")
-//
-//        val color: Int = main.configValues!!.getColor(Feature.DUNGEONS_COLLECTED_ESSENCES_DISPLAY)
-//
-//        var count = 0
-//        if (main.configValues!!.isEnabled(Feature.SHOW_SALVAGE_ESSENCES_COUNTER)) {
-//            for (essenceType in EssenceType.entries) {
-//                var value: Int
-//
-//                value = if (main.getInventoryUtils().getInventoryType() === InventoryType.SALVAGING) {
+    fun drawCollectedEssences(x: Float, y: Float, usePlaceholders: Boolean, hideZeroes: Boolean) {
+        val mc: Minecraft = Minecraft.getMinecraft()
+
+        var currentX = x
+        var currentY: Float
+
+        val maxNumberWidth: Int = mc.fontRendererObj.getStringWidth("99")
+
+        val color: Int = main.configValues!!.getColor(Feature.DUNGEONS_COLLECTED_ESSENCES_DISPLAY)
+
+        var count = 0
+        if (main.configValues!!.isEnabled(Feature.SHOW_SALVAGE_ESSENCES_COUNTER)) {
+            for (essenceType in EssenceType.entries) {
+                var value: Int = 0
+
+//                value = if (main.inventoryUtils.getInventoryType() === InventoryType.SALVAGING) {
 //                    main.getDungeonManager().getSalvagedEssences().getOrDefault(essenceType, 0)
 //                } else {
 //                    main.getDungeonManager().getCollectedEssences().getOrDefault(essenceType, 0)
 //                }
-//
-//                if (usePlaceholders) {
-//                    value = 99
-//                } else if (value <= 0 && hideZeroes) {
-//                    continue
-//                }
-//
-//                val column = count % 2
-//                val row = count / 2
-//
-//                if (column == 0) {
-//                    currentX = x
-//                } else if (column == 1) {
-//                    currentX = x + 18 + 2 + maxNumberWidth + 5
-//                }
-//                currentY = y + row * 18
-//
-//                GlStateManager.color(1f, 1f, 1f, 1f)
-//                mc.getTextureManager().bindTexture(essenceType.getResourceLocation())
-//                DrawUtils.drawModalRectWithCustomSizedTexture(currentX, currentY, 0f, 0f, 16f, 16f, 16f, 16f)
-//
-//                FontRendererHook.setupFeatureFont(Feature.DUNGEONS_COLLECTED_ESSENCES_DISPLAY)
-//                DrawUtils.drawText(value.toString(), currentX + 18 + 2, currentY + 5, color)
-//                FontRendererHook.endFeatureFont()
-//
-//                count++
-//            }
-//        }
-//    }
-//
+
+                if (usePlaceholders) {
+                    value = 99
+                } else if (value <= 0 && hideZeroes) {
+                    continue
+                }
+
+                val column = count % 2
+                val row = count / 2
+
+                if (column == 0) {
+                    currentX = x
+                } else if (column == 1) {
+                    currentX = x + 18 + 2 + maxNumberWidth + 5
+                }
+                currentY = y + row * 18
+
+                GlStateManager.color(1f, 1f, 1f, 1f)
+                mc.getTextureManager().bindTexture(essenceType.getResourceLocation())
+                DrawUtils.drawModalRectWithCustomSizedTexture(currentX, currentY, 0f, 0f, 16f, 16f, 16f, 16f)
+
+                FontRendererHook.setupFeatureFont(Feature.DUNGEONS_COLLECTED_ESSENCES_DISPLAY)
+                DrawUtils.drawText(value.toString(), currentX + 18 + 2, currentY + 5, color)
+                FontRendererHook.endFeatureFont()
+
+                count++
+            }
+        }
+    }
+
 //    /**
 //     * Displays the bait list. Only shows bait with count > 0.
 //     */

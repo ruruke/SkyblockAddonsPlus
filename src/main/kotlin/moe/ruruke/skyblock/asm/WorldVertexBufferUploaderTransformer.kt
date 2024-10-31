@@ -5,11 +5,13 @@
 //import org.objectweb.asm.tree.ClassNode
 //
 //class WorldVertexBufferUploaderTransformer : ITransformer {
-//    override var className: Array<String> = arrayOf()
+//    override fun getClassName(): Array<String> {
+//        return className
+//    }
 //        /**
 //         * [net.minecraft.client.renderer.WorldVertexBufferUploader]
 //         */
-//        get() = arrayOf<String>(TransformerClass.WorldVertexBufferUploader.transformerName)
+//        get() = arrayOf<String>(TransformerClass.WorldVertexBufferUploader.getTransformerName())
 //
 //    override fun transform(classNode: ClassNode?, name: String?) {
 //        for (methodNode in classNode!!.methods) {

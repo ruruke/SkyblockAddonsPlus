@@ -43,8 +43,8 @@ class InventoryUtils {
     fun setInventoryWarningShown(value: Boolean){
         inventoryWarningShown = value
     }
-    fun getInventoryType(): InventoryType{
-        return inventoryType!!
+    fun getInventoryType(): InventoryType? {
+        return inventoryType
     }
     /**
      * Whether the player is wearing a Skeleton Helmet.

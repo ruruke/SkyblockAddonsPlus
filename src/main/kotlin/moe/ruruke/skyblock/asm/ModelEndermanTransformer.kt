@@ -1,17 +1,18 @@
 package moe.ruruke.skyblock.asm
 
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerClass
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerMethod
+import moe.ruruke.skyblock.asm.utils.TransformerClass
+import moe.ruruke.skyblock.asm.utils.TransformerMethod
 import moe.ruruke.skyblock.tweaker.transformer.ITransformer
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.*
 
 class ModelEndermanTransformer : ITransformer {
-    override var className: Array<String> = arrayOf()
-        /**
-         * [net.minecraft.client.model.ModelEnderman]
-         */
-        get() = arrayOf(TransformerClass.ModelEnderman.transformerName)
+    /**
+     * [net.minecraft.client.model.ModelEnderman]
+     */
+    override fun getClassName(): Array<String> {
+        return arrayOf(TransformerClass.ModelEnderman.getTransformerName())
+    }
 
     override fun transform(classNode: ClassNode?, name: String?) {
         // Objective: Add:
@@ -44,7 +45,7 @@ class ModelEndermanTransformer : ITransformer {
         }
         list.add(
             MethodInsnNode(
-                Opcodes.INVOKESPECIAL, TransformerClass.ModelBiped.nameRaw, TransformerMethod.render.getName(),
+                Opcodes.INVOKESPECIAL, TransformerClass.ModelBiped.getNameRaw(), TransformerMethod.render.getName(),
                 TransformerMethod.render.description, false
             )
         ) // super.render(entityIn, p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, scale);

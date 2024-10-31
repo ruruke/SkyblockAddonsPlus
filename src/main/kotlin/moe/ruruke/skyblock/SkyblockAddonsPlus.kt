@@ -1,7 +1,6 @@
 package moe.ruruke.skyblock
 
 import cc.polyfrost.oneconfig.events.EventManager
-import cc.polyfrost.oneconfig.events.event.TimerUpdateEvent
 import cc.polyfrost.oneconfig.libs.eventbus.Subscribe
 import com.google.common.util.concurrent.ThreadFactoryBuilder
 import com.google.gson.Gson
@@ -35,7 +34,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
-import org.lwjgl.input.Keyboard
 import java.util.*
 import java.util.concurrent.LinkedBlockingDeque
 import java.util.concurrent.ThreadPoolExecutor
@@ -63,7 +61,7 @@ class SkyblockAddonsPlus() {
         fun getTimer(): Float {
             return elapsedPartialTicks;
         }
-        private var playerListener: PlayerListener? = null
+        private var playerListener: PlayerListener = PlayerListener()
         private var guiScreenListener: GuiScreenListener? = null
         @kotlin.jvm.JvmField
         var registeredFeatureIDs: MutableSet<Int> = HashSet()
@@ -196,10 +194,10 @@ class SkyblockAddonsPlus() {
         usingPatcher = utils!!.isModLoaded("patcher");
     }
 
-    @Subscribe
-    private fun onTick(event: TimerUpdateEvent) { // the parameter type specifies what event you are subscribing to
-        elapsedPartialTicks = event.timer.elapsedPartialTicks
-    }
+//    @Subscribe
+//    private fun onTick(event: TimerUpdateEvent) { // the parameter type specifies what event you are subscribing to
+//        elapsedPartialTicks = event.timer.elapsedPartialTicks
+//    }
     @Mod.EventHandler
     fun preInit(e: FMLPreInitializationEvent) {
         EventManager.INSTANCE.register(this);

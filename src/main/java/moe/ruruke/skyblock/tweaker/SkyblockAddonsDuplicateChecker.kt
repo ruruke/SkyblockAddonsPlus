@@ -67,13 +67,13 @@ class SkyblockAddonsDuplicateChecker : IFMLCallHook {
                 loggerName,
                 level,
                 throwable,
-                (if (SkyblockAddonsTransformer.isDeobfuscated) "" else "[$loggerName] ") + message
+                (if (SkyblockAddonsTransformer.isDeobfuscated()) "" else "[$loggerName] ") + message
             )
         } else {
             FMLRelaunchLog.log(
                 loggerName,
                 level,
-                (if (SkyblockAddonsTransformer.isDeobfuscated) "" else "[$loggerName] ") + message
+                (if (SkyblockAddonsTransformer.isDeobfuscated()) "" else "[$loggerName] ") + message
             )
         }
     }

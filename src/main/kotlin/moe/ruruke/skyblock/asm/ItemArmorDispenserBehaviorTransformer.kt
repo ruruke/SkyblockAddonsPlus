@@ -1,17 +1,18 @@
 package moe.ruruke.skyblock.asm
 
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerClass
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerMethod
+import moe.ruruke.skyblock.asm.utils.TransformerClass
+import moe.ruruke.skyblock.asm.utils.TransformerMethod
 import moe.ruruke.skyblock.tweaker.transformer.ITransformer
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.*
 
 class ItemArmorDispenserBehaviorTransformer : ITransformer {
-    override var className: Array<String> = arrayOf()
-        /**
-         * [net.minecraft.item.ItemArmor]#dispenserBehavior
-         */
-        get() = arrayOf(TransformerClass.ItemArmor.transformerName + "$1")
+    /**
+     * [net.minecraft.item.ItemArmor]#dispenserBehavior
+     */
+    override fun getClassName(): Array<String> {
+        return arrayOf(TransformerClass.ItemArmor.getTransformerName() + "$1")
+    }
 
     override fun transform(classNode: ClassNode?, name: String?) {
         for (methodNode in classNode!!.methods) {
@@ -46,7 +47,7 @@ class ItemArmorDispenserBehaviorTransformer : ITransformer {
         val list = InsnList()
 
         list.add(VarInsnNode(Opcodes.ALOAD, 9)) // entitylivingbase
-        list.add(TypeInsnNode(Opcodes.INSTANCEOF, TransformerClass.EntityPlayer.nameRaw))
+        list.add(TypeInsnNode(Opcodes.INSTANCEOF, TransformerClass.EntityPlayer.getNameRaw()))
         val notEqual = LabelNode() // if (entitylivingbase instanceof EntityPlayer) {
         list.add(JumpInsnNode(Opcodes.IFEQ, notEqual))
 

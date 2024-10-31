@@ -9,39 +9,44 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.player.EnumPlayerModelParts
 
 // cough nothing to see here
-object RendererLivingEntityHook {
-    // TODO: Convert this to UUIDs instead of names
-    // no don't ask to be added lol, for now these are just like my admins
-    private val coolPeople: Set<String> = Sets.newHashSet(
-        "Dinnerbone",
-        "Biscut",
-        "Pinpointed",
-        "Berded",
-        "Potat_owo",
-        "Pnda__",
-        "Throwpo",
-        "StopUsingSBE"
-    )
-    private var isCoolPerson = false
+class RendererLivingEntityHook {
+    companion object {
 
-    fun equals(string: String, otherString: Any?): Boolean {
-        isCoolPerson = coolPeople.contains(string)
-        return isCoolPerson
-    }
+        // TODO: Convert this to UUIDs instead of names
+        // no don't ask to be added lol, for now these are just like my admins
+        @JvmStatic
+        private val coolPeople: Set<String> = Sets.newHashSet(
+            "Dinnerbone",
+            "Biscut",
+            "Pinpointed",
+            "Berded",
+            "Potat_owo",
+            "Pnda__",
+            "Throwpo",
+            "StopUsingSBE"
+        )
+        @JvmStatic
+        private var isCoolPerson = false
 
-    fun isWearing(entityPlayer: EntityPlayer, p_175148_1_: EnumPlayerModelParts?): Boolean {
-        return (!isCoolPerson && entityPlayer.isWearing(p_175148_1_)) ||
-                (isCoolPerson && !entityPlayer.isWearing(p_175148_1_))
-    }
-
-    fun setOutlineColor(entity: EntityLivingBase, originalColor: Int): Int {
-        val main: SkyblockAddonsPlus.Companion = SkyblockAddonsPlus.instance
-        //TODO
-        val i: Int = EntityOutlineRenderer.getCustomOutlineColor(entity)!!
-        if (i != null) {
-            return i
+        @JvmStatic
+        fun equals(string: String, otherString: Any?): Boolean {
+            isCoolPerson = coolPeople.contains(string)
+            return isCoolPerson
         }
-        //TODO:
+        @JvmStatic
+        fun isWearing(entityPlayer: EntityPlayer, p_175148_1_: EnumPlayerModelParts?): Boolean {
+            return (!isCoolPerson && entityPlayer.isWearing(p_175148_1_)) ||
+                    (isCoolPerson && !entityPlayer.isWearing(p_175148_1_))
+        }
+        @JvmStatic
+        fun setOutlineColor(entity: EntityLivingBase, originalColor: Int): Int {
+            val main: SkyblockAddonsPlus.Companion = SkyblockAddonsPlus.instance
+            //TODO
+            val i: Int = EntityOutlineRenderer.getCustomOutlineColor(entity)!!
+            if (i != null) {
+                return i
+            }
+            //TODO:
 //        if (main.configValues!!.isEnabled(Feature.SHOW_CRITICAL_DUNGEONS_TEAMMATES) &&
 //            main.utils!!.isInDungeon() && main.getDungeonManager().getTeammates().containsKey(entity.getName())
 //        ) {
@@ -58,6 +63,7 @@ object RendererLivingEntityHook {
 //                return i
 //            }
 //        }
-        return originalColor
+            return originalColor
+        }
     }
 }

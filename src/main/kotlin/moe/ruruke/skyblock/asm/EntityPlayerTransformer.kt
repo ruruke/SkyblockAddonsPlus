@@ -1,9 +1,9 @@
 package moe.ruruke.skyblock.asm
 
-import moe.ruruke.skyblock.asm.hooks.utils.ASMUtils.getField
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerClass
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerField
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerMethod
+import moe.ruruke.skyblock.asm.utils.ASMUtils.getField
+import moe.ruruke.skyblock.asm.utils.TransformerClass
+import moe.ruruke.skyblock.asm.utils.TransformerField
+import moe.ruruke.skyblock.asm.utils.TransformerMethod
 import moe.ruruke.skyblock.tweaker.transformer.ITransformer
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.ClassNode
@@ -12,11 +12,12 @@ import org.objectweb.asm.tree.InsnNode
 import org.objectweb.asm.tree.VarInsnNode
 
 class EntityPlayerTransformer : ITransformer {
-    override var className: Array<String> = arrayOf()
-        /**
-         * [net.minecraft.entity.player.EntityPlayer]
-         */
-        get() = arrayOf(TransformerClass.EntityPlayer.transformerName)
+    /**
+     * [net.minecraft.entity.player.EntityPlayer]
+     */
+    override fun getClassName(): Array<String> {
+        return arrayOf(TransformerClass.EntityPlayer.getTransformerName())
+    }
 
     override fun transform(classNode: ClassNode?, name: String?) {
         for (methodNode in classNode!!.methods) {

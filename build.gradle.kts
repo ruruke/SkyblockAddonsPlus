@@ -2,7 +2,11 @@
 
 import org.polyfrost.gradle.util.noServerRunConfigs
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.codehaus.groovy.runtime.memoize.EvictableCache
 
+import org.polyfrost.gradle.multiversion.StripReferencesTransform.Companion.registerStripReferencesAttribute
+import org.polyfrost.gradle.util.RelocationTransform.Companion.registerRelocationAttribute
+import org.polyfrost.gradle.util.prebundle
 // Adds support for kotlin, and adds the Polyfrost Gradle Toolkit
 // which we use to prepare the environment.
 plugins {
@@ -51,19 +55,26 @@ loom {
     if (project.platform.isLegacyForge) {
         runConfigs {
             "client" {
-                programArgs("--tweakClass", "cc.polyfrost.oneconfig.loader.stage0.LaunchWrapperTweaker")
-                property("mixin.debug.export", "true") // Outputs all mixin changes to `versions/{mcVersion}/run/.mixin.out/class`
+
+//                property("Dfml.coreMods.load", "moe.ruruke.skyblock.tweaker.SkyblockAddonsLoadingPlugin")
+                property("devauth.enabled", "true")
+//                programArgs("--tweakClass", "cc.polyfrost.oneconfig.loader.stage0.LaunchWrapperTweaker")
+//                property("mixin.debug.export", "true") // Outputs all mixin changes to `versions/{mcVersion}/run/.mixin.out/class`
             }
         }
     }
-    // Configures the mixins if we are building for forge
-    if (project.platform.isForge) {
-        forge {
-            mixinConfig("mixins.${mod_id}.json")
-        }
+//    log4jConfigs.from(file("./../../log-config.xml"))
+    forge {
+        accessTransformer("./../../src/main/resources/META-INF/skyblockaddonsplus_at.cfg")
     }
-    // Configures the name of the mixin "refmap"
-    mixin.defaultRefmapName.set("mixins.${mod_id}.refmap.json")
+    // Configures the mixins if we are building for forge
+//    if (project.platform.isForge) {
+//        forge {
+//            mixinConfig("mixins.${mod_id}.json")
+//        }
+//    }
+//    // Configures the name of the mixin "refmap"
+//    mixin.defaultRefmapName.set("mixins.${mod_id}.refmap.json")
 }
 
 // Creates the shade/shadow configuration, so we can include libraries inside our mod, rather than having to add them separately.
@@ -78,13 +89,13 @@ val modShade: Configuration by configurations.creating {
 sourceSets {
     main {
         output.setResourcesDir(java.classesDirectory)
-        java.srcDir("./../../src/main/kotlin")
     }
 }
 
 // Adds the Polyfrost maven repository so that we can get the libraries necessary to develop the mod.
 repositories {
     maven("https://repo.polyfrost.org/releases")
+    maven ( "https://jitpack.io" )
 }
 
 // Configures the libraries/dependencies for your mod.
@@ -94,13 +105,15 @@ dependencies {
 
     // Adds DevAuth, which we can use to log in to Minecraft in development.
     modRuntimeOnly("me.djtheredstoner:DevAuth-${if (platform.isFabric) "fabric" else if (platform.isLegacyForge) "forge-legacy" else "forge-latest"}:1.2.0")
-
+    shade("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     // If we are building for legacy forge, includes the launch wrapper with `shade` as we configured earlier, as well as mixin 0.7.11
     if (platform.isLegacyForge) {
         compileOnly("org.spongepowered:mixin:0.7.11-SNAPSHOT")
         shade("cc.polyfrost:oneconfig-wrapper-launchwrapper:1.0.0-beta17")
     }
 }
+
+
 
 tasks {
     // Processes the `src/resources/mcmod.info`, `fabric.mod.json`, or `mixins.${mod_id}.json` and replaces
@@ -147,9 +160,9 @@ tasks {
             )
         }
     }
-
     // Configures the resources to include if we are building for forge or fabric.
     withType(Jar::class.java) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         if (project.platform.isFabric) {
             exclude("mcmod.info", "mods.toml")
         } else {
@@ -179,14 +192,26 @@ tasks {
         // Sets the jar manifest attributes.
         if (platform.isLegacyForge) {
             manifest.attributes += mapOf(
+
+                "Manifest-Version" to "2.0",
+                "Main-Class" to "SkyblockAddonsInstallerFrame",
+                "Implementation-Title" to project.name,
+                "Implementation-Version" to project.version,
+                "Implementation-Vendor" to "ruru",
+                "Specification-Title" to project.name,
+                "Specification-Vendor" to "ruru",
+                "Specification-Version" to project.version,
+                "FMLCorePlugin" to "moe.ruruke.skyblock.tweaker.SkyblockAddonsLoadingPlugin",
+                "ForceLoadAsMod" to true,
+                "FMLCorePluginContainsFMLMod" to true,
+                "ModSide" to "CLIENT",
+                "FMLAT" to "skyblockaddonsplus_at.cfg",
                 "ModSide" to "CLIENT", // We aren't developing a server-side mod
                 "ForceLoadAsMod" to true, // We want to load this jar as a mod, so we force Forge to do so.
                 "TweakOrder" to "0", // Makes sure that the OneConfig launch wrapper is loaded as soon as possible.
-                "MixinConfigs" to "mixins.${mod_id}.json", // We want to use our mixin configuration, so we specify it here.
-                "TweakClass" to "cc.polyfrost.oneconfig.loader.stage0.LaunchWrapperTweaker", // Loads the OneConfig launch wrapper.
-                "FMLAT" to  "accesstransformer.cfg",
-                "FMLCorePlugin" to "moe.ruruke.skyblock.tweaker.SkyBlockAddonLoadingPlugin",
-                )
+//                "MixinConfigs" to "mixins.${mod_id}.json", // We want to use our mixin configuration, so we specify it here.
+//                "TweakClass" to "cc.polyfrost.oneconfig.loader.stage0.LaunchWrapperTweaker" // Loads the OneConfig launch wrapper.
+            )
         }
         dependsOn(shadowJar)
         archiveClassifier.set("")

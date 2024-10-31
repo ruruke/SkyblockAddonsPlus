@@ -9,38 +9,41 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.IChatComponent
 
 
-object GuiScreenHook {
-    private const val MADDOX_BATPHONE_COOLDOWN = 20 * 1000
+class GuiScreenHook {
+    companion object {
+        private const val MADDOX_BATPHONE_COOLDOWN = 20 * 1000
+        @JvmStatic
+        fun onRenderTooltip(itemStack: ItemStack, x: Int, y: Int): Boolean {
+            val main: SkyblockAddonsPlus.Companion = SkyblockAddonsPlus.instance
 
-    fun onRenderTooltip(itemStack: ItemStack, x: Int, y: Int): Boolean {
-        val main: SkyblockAddonsPlus.Companion = SkyblockAddonsPlus.instance
+            if (main.configValues!!
+                    .isEnabled(moe.ruruke.skyblock.core.Feature.DISABLE_EMPTY_GLASS_PANES) && main.utils!!
+                    .isEmptyGlassPane(itemStack)
+            ) {
+                return true
+            }
 
-        if (main.configValues!!
-                .isEnabled(moe.ruruke.skyblock.core.Feature.DISABLE_EMPTY_GLASS_PANES) && main.utils!!
-                .isEmptyGlassPane(itemStack)
-        ) {
-            return true
+            if (main.configValues!!
+                    .isDisabled(moe.ruruke.skyblock.core.Feature.SHOW_EXPERIMENTATION_TABLE_TOOLTIPS) && (main.inventoryUtils!!
+                    .getInventoryType() === InventoryType.ULTRASEQUENCER || main.inventoryUtils!!
+                    .getInventoryType() === InventoryType.CHRONOMATRON)
+            ) {
+                return true
+            }
+
+            return ContainerPreviewManager.onRenderTooltip(itemStack, x, y)
         }
 
-        if (main.configValues!!
-                .isDisabled(moe.ruruke.skyblock.core.Feature.SHOW_EXPERIMENTATION_TABLE_TOOLTIPS) && (main.inventoryUtils!!
-                .getInventoryType() === InventoryType.ULTRASEQUENCER || main.inventoryUtils!!
-                .getInventoryType() === InventoryType.CHRONOMATRON)
-        ) {
-            return true
-        }
-
-        return ContainerPreviewManager.onRenderTooltip(itemStack, x, y)
-    }
-
-    //TODO: Fix for Hypixel localization
-    fun handleComponentClick(component: IChatComponent?) {
-        val main: SkyblockAddonsPlus.Companion = SkyblockAddonsPlus.instance
-        if (main.utils!!
-                .isOnSkyblock() && component != null && "§2§l[OPEN MENU]" == component.getUnformattedText() &&
-            !CooldownManager.isOnCooldown(InventoryUtils.MADDOX_BATPHONE_ID)
-        ) { // The prompt when Maddox picks up the phone.
-            CooldownManager.put(InventoryUtils.MADDOX_BATPHONE_ID)
+        @JvmStatic
+        //TODO: Fix for Hypixel localization
+        fun handleComponentClick(component: IChatComponent?) {
+            val main: SkyblockAddonsPlus.Companion = SkyblockAddonsPlus.instance
+            if (main.utils!!
+                    .isOnSkyblock() && component != null && "§2§l[OPEN MENU]" == component.getUnformattedText() &&
+                !CooldownManager.isOnCooldown(InventoryUtils.MADDOX_BATPHONE_ID)
+            ) { // The prompt when Maddox picks up the phone.
+                CooldownManager.put(InventoryUtils.MADDOX_BATPHONE_ID)
+            }
         }
     }
 }

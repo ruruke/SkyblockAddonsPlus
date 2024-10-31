@@ -1,17 +1,18 @@
 package moe.ruruke.skyblock.asm
 
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerClass
-import moe.ruruke.skyblock.asm.hooks.utils.TransformerMethod
+import moe.ruruke.skyblock.asm.utils.TransformerClass
+import moe.ruruke.skyblock.asm.utils.TransformerMethod
 import moe.ruruke.skyblock.tweaker.transformer.ITransformer
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.*
 
 class EntityPlayerSPTransformer : ITransformer {
-    override var className: Array<String> = arrayOf()
-        /**
-         * [net.minecraft.client.entity.EntityPlayerSP]
-         */
-        get() = arrayOf(TransformerClass.EntityPlayerSP.transformerName)
+    /**
+     * [net.minecraft.client.entity.EntityPlayerSP]
+     */
+    override fun getClassName(): Array<String> {
+        return arrayOf(TransformerClass.EntityPlayerSP.getTransformerName())
+    }
 
     override fun transform(classNode: ClassNode?, name: String?) {
         for (methodNode in classNode!!.methods) {

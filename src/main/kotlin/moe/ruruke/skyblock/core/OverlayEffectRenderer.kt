@@ -109,7 +109,7 @@ open class OverlayEffectRenderer {
      * Main method to render particles
      * @param info setup information used to render the particle overlay
      */
-    fun renderOverlayParticles(info: EffectRendererHook.OverlayInfo) {
+    fun renderOverlayParticles(info: EffectRendererHook.Companion.OverlayInfo) {
         if (!shouldRenderOverlay()) {
             return
         }

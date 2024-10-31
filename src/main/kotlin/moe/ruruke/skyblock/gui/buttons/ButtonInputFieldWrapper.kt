@@ -64,6 +64,7 @@ class ButtonInputFieldWrapper(
     }
 
     companion object {
+        @JvmStatic
         fun callKeyTyped(buttonList: List<GuiButton?>, typedChar: Char, keyCode: Int) {
             for (button in buttonList) {
                 if (button is ButtonInputFieldWrapper) {
@@ -72,6 +73,7 @@ class ButtonInputFieldWrapper(
             }
         }
 
+        @JvmStatic
         fun callUpdateScreen(buttonList: List<GuiButton?>) {
             for (button in buttonList) {
                 if (button is ButtonInputFieldWrapper) {

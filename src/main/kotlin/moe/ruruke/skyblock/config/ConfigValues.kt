@@ -390,7 +390,7 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
                 saveConfig.add("profileLockedSlots", profileSlotsObject)
 
                 val anchorObject = JsonObject()
-                for (feature in Feature.guiFeatures) {
+                for (feature in Feature.getGuiFeatures()) {
                     anchorObject.addProperty(java.lang.String.valueOf(feature.getId()), getAnchorPoint(feature).id)
                 }
                 saveConfig.add("anchorPoints", anchorObject)
@@ -1152,6 +1152,7 @@ class ConfigValues //    private final MutableObject<EnchantListLayout> enchantL
         private val main = instance
         private val logger = getLogger()
 
+        @JvmStatic
         fun normalizeValueNoStep(value: Float): Float {
             return MathHelper.clamp_float(
                 (snapNearDefaultValue(value) - GUI_SCALE_MINIMUM) /

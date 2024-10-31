@@ -436,8 +436,6 @@ class InventoryUtils {
         val inventory = guiChest.lowerChestInventory as IInventory
         if (inventory.displayName == null) {
             return null.also { inventoryType = it }
-        }else{
-            main.utils!!.sendMessage("Name > "+ inventory.name)
         }
         val chestName = TextUtils.stripColor(inventory.displayName.unformattedText)
 

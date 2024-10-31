@@ -60,6 +60,6 @@ class ButtonSettings(x: Double, y: Double, buttonText: String?, main: SkyblockAd
 
 
     companion object {
-        private val GEAR = ResourceLocation("skyblockaddons", "gui/gear.png")
+        private val GEAR = ResourceLocation("skyblockaddonsplus", "gui/gear.png")
     }
 }

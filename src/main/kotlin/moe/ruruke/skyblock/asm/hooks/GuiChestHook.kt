@@ -497,9 +497,7 @@ class GuiChestHook {
                 return
             }
 
-            if (main.configValues!!.isEnabled(Feature.SHOW_BACKPACK_PREVIEW) &&
-                main.configValues!!
-                    .isEnabled(Feature.MAKE_BACKPACK_INVENTORIES_COLORED) && lowerChestInventory.hasCustomName()
+            if (main.configValues!!.isEnabled(Feature.SHOW_BACKPACK_PREVIEW) && main.configValues!!.isEnabled(Feature.MAKE_BACKPACK_INVENTORIES_COLORED) && lowerChestInventory.hasCustomName()
             ) {
                 if (lowerChestInventory.getDisplayName().getUnformattedText().contains("Backpack")) {
                     if (BackpackInventoryManager.getBackpackColor() != null) {

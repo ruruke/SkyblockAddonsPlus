@@ -17,23 +17,19 @@ class EnumUtils {
 
         fun getX(maxX: Int): Int {
             var x = 0
-            when (this) {
-                TOP_RIGHT, BOTTOM_RIGHT -> x = maxX
-                BOTTOM_MIDDLE -> x = maxX / 2
-                TOP_LEFT -> TODO()
-                BOTTOM_LEFT -> TODO()
+            return when (this) {
+                TOP_RIGHT, BOTTOM_RIGHT -> maxX
+                BOTTOM_MIDDLE -> maxX / 2
+                else -> x
             }
-            return x
         }
 
         fun getY(maxY: Int): Int {
             var y = 0
-            when (this) {
-                BOTTOM_LEFT, BOTTOM_RIGHT, BOTTOM_MIDDLE -> y = maxY
-                TOP_LEFT -> TODO()
-                TOP_RIGHT -> TODO()
+            return when (this) {
+                BOTTOM_LEFT, BOTTOM_RIGHT, BOTTOM_MIDDLE -> maxY
+                else -> y
             }
-            return y
         }
 
         companion object {
@@ -404,7 +400,7 @@ class EnumUtils {
         // PATREON("patreon", "https://www.patreon.com/biscuitdev");
 
         private val resourceLocation = ResourceLocation(
-            "skyblockaddons",
+            "skyblockaddonsplus",
             "gui/$resourcePath.png"
         )
         fun getResourceLocation(): ResourceLocation {

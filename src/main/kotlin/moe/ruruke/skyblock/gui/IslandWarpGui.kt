@@ -344,7 +344,7 @@
 //        private var h: Int
 //
 //        private val resourceLocation =
-//            ResourceLocation("skyblockaddons", "islands/" + name.lowercase().replace("_", "") + ".png")
+//            ResourceLocation("skyblockaddonsplus", "islands/" + name.lowercase().replace("_", "") + ".png")
 //        private var bufferedImage: BufferedImage? = null
 //
 //        init {

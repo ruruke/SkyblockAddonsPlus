@@ -40,13 +40,13 @@ public class SkyblockAddonsTransformer implements IClassTransformer {
         registerTransformer(new EntityRendererTransformer());
         registerTransformer(new RenderManagerTransformer());
         registerTransformer(new MinecraftTransformer());
-//        registerTransformer(new PlayerControllerMPTransformer());
+        registerTransformer(new PlayerControllerMPTransformer());
         registerTransformer(new ItemTransformer());
-//        registerTransformer(new GuiScreenTransformer());
+        registerTransformer(new GuiScreenTransformer());
 //
-//        registerTransformer(new GuiContainerTransformer());
+        registerTransformer(new GuiContainerTransformer());
         registerTransformer(new GuiChestTransformer());
-//        registerTransformer(new GuiNewChatTransformer());
+        registerTransformer(new GuiNewChatTransformer());
         registerTransformer(new RendererLivingEntityTransformer());
         registerTransformer(new GuiDisconnectedTransformer());
 

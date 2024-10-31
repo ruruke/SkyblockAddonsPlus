@@ -5,6 +5,7 @@ import moe.ruruke.skyblock.SkyblockAddonsPlus
 import moe.ruruke.skyblock.config.NewConfig
 import moe.ruruke.skyblock.core.Attribute
 import moe.ruruke.skyblock.core.Feature
+import moe.ruruke.skyblock.core.Location
 import moe.ruruke.skyblock.core.npc.NPCUtils
 import moe.ruruke.skyblock.core.seacreatures.SeaCreatureManager
 import moe.ruruke.skyblock.events.SkyblockPlayerDeathEvent
@@ -15,6 +16,7 @@ import moe.ruruke.skyblock.features.enchants.EnchantManager
 import moe.ruruke.skyblock.features.fishParticles.FishParticleManager
 import moe.ruruke.skyblock.features.slayertracker.SlayerTracker
 import moe.ruruke.skyblock.features.tablist.TabListParser
+import moe.ruruke.skyblock.features.tabtimers.TabEffectManager
 import moe.ruruke.skyblock.misc.scheduler.Scheduler
 import moe.ruruke.skyblock.utils.*
 import moe.ruruke.skyblock.utils.RomanNumeralParser.replaceNumeralsWithIntegers
@@ -23,6 +25,7 @@ import net.minecraft.block.BlockPrismarine
 import net.minecraft.block.BlockStone
 import net.minecraft.client.Minecraft
 import net.minecraft.client.audio.PositionedSoundRecord
+import net.minecraft.client.entity.EntityOtherPlayerMP
 import net.minecraft.entity.Entity
 import net.minecraft.entity.item.EntityArmorStand
 import net.minecraft.entity.monster.EntityEnderman
@@ -32,6 +35,7 @@ import net.minecraft.util.*
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.EntityJoinWorldEvent
+import net.minecraftforge.event.entity.living.LivingEvent
 import net.minecraftforge.event.entity.player.AttackEntityEvent
 import net.minecraftforge.event.entity.player.ItemTooltipEvent
 import net.minecraftforge.fml.common.eventhandler.EventPriority
@@ -639,7 +643,7 @@ class PlayerListener {
 //                        // If above mana cap, do nothing
 //                    }
 //
-//                    this.parseTabList()
+                    this.parseTabList()
 //
 //                    if (main.configValues!!.isEnabled(Feature.DUNGEON_DEATH_COUNTER) && main.utils!!.isInDungeon()
 //                        && main.getDungeonManager().isPlayerListInfoEnabled()
@@ -732,99 +736,97 @@ class PlayerListener {
     }
 
 // TODO Feature Rewrite
-//    fun parseTabList() {
-//        val tabFooterChatComponent = Minecraft.getMinecraft().ingameGUI.tabList.footer
-//
-//        var tabFooterString: String? = null
-//        var strippedTabFooterString: String? = null
-//        if (tabFooterChatComponent != null) {
-//            tabFooterString = tabFooterChatComponent.formattedText
-//            strippedTabFooterString = TextUtils.stripColor(tabFooterString)
-//        }
-//        //TODO:
-////        if (main.utils!!.isOnSkyblock()) {
-////            if (main.configValues!!.isEnabled(Feature.TAB_EFFECT_TIMERS)) {
-////                TabEffectManager.getInstance().update(tabFooterString, strippedTabFooterString)
-////            }
-////        }
-//    }
+    fun parseTabList() {
+        val tabFooterChatComponent = Minecraft.getMinecraft().ingameGUI.tabList.footer
 
-//    @SubscribeEvent
-//    fun onEntityEvent(e: LivingUpdateEvent) {
-//        if (!main.utils!!.isOnSkyblock()) {
-//            return
-//        }
-//
-//        val entity = e.entity
-//
-//        if (entity.ticksExisted < 5) {
-//            if (main.configValues!!.isEnabled(Feature.HIDE_OTHER_PLAYERS_PRESENTS)) {
-//                if (!JerryPresent.getJerryPresents().containsKey(entity.uniqueID)) {
-//                    val present: JerryPresent = JerryPresent.getJerryPresent(entity)
-//                    if (present != null) {
-//                        JerryPresent.getJerryPresents().put(entity.uniqueID, present)
-//                        return
-//                    }
-//                }
-//            }
-//
-//            if (entity is EntityOtherPlayerMP && main.configValues!!
-//                    .isEnabled(Feature.HIDE_PLAYERS_NEAR_NPCS) && main.utils!!
-//                    .getLocation() !== Location.GUEST_ISLAND && main.utils!!.getLocation() !== Location.THE_CATACOMBS
-//            ) {
-//                val health = entity.health
-//
-//                if (NPCUtils.getNpcLocations().containsKey(entity.getUniqueID())) {
-//                    if (health != 20.0f) {
-//                        NPCUtils.getNpcLocations().remove(entity.getUniqueID())
-//                        return
-//                    }
-//                } else if (NPCUtils.isNPC(entity)) {
-//                    NPCUtils.getNpcLocations().put(entity.getUniqueID(), entity.getPositionVector())
-//                    return
-//                }
-//            }
-//        }
-//
-//        if (entity is EntityArmorStand && entity.hasCustomName()) {
+        var tabFooterString: String? = null
+        var strippedTabFooterString: String? = null
+        if (tabFooterChatComponent != null) {
+            tabFooterString = tabFooterChatComponent.formattedText
+            strippedTabFooterString = TextUtils.stripColor(tabFooterString)
+        }
+        //TODO:
+        if (main.utils!!.isOnSkyblock()) {
+            if (main.configValues!!.isEnabled(Feature.TAB_EFFECT_TIMERS)) {
+                TabEffectManager.getInstance().update(tabFooterString, strippedTabFooterString!!)
+            }
+        }
+    }
+
+    @SubscribeEvent
+    fun onEntityEvent(e: LivingEvent.LivingUpdateEvent) {
+        if (!main.utils!!.isOnSkyblock()) {
+            return
+        }
+
+        val entity = e.entity
+
+        if (entity.ticksExisted < 5) {
+            if (main.configValues!!.isEnabled(Feature.HIDE_OTHER_PLAYERS_PRESENTS)) {
+                if (!JerryPresent.getJerryPresents().containsKey(entity.uniqueID)) {
+                    val present: JerryPresent? = JerryPresent.getJerryPresent(entity)
+                    if (present != null) {
+                        JerryPresent.getJerryPresents().put(entity.uniqueID, present)
+                        return
+                    }
+                }
+            }
+
+            if (entity is EntityOtherPlayerMP && main.configValues!!.isEnabled(Feature.HIDE_PLAYERS_NEAR_NPCS) && main.utils!!.getLocation() !== Location.GUEST_ISLAND && main.utils!!.getLocation() !== Location.THE_CATACOMBS) {
+                val health = entity.health
+
+                if (NPCUtils.getNpcLocations().containsKey(entity.getUniqueID())) {
+                    if (health != 20.0f) {
+                        NPCUtils.getNpcLocations().remove(entity.getUniqueID())
+                        return
+                    }
+                } else if (NPCUtils.isNPC(entity)) {
+                    NPCUtils.getNpcLocations().put(entity.getUniqueID(), entity.getPositionVector())
+                    return
+                }
+            }
+        }
+
+        if (entity is EntityArmorStand && entity.hasCustomName()) {
+            //TODO:
 //            PowerOrbManager.getInstance().detectPowerOrb(entity)
-//
-//            if (main.utils!!.getLocation() === Location.ISLAND) {
-//                val cooldown: Int = main.configValues!!.getWarningSeconds() * 1000 + 5000
-//                if (main.configValues!!.isEnabled(Feature.MINION_FULL_WARNING) &&
-//                    entity.getCustomNameTag() == "§cMy storage is full! :("
-//                ) {
-//                    val now = System.currentTimeMillis()
-//                    if (now - lastMinionSound > cooldown) {
-//                        lastMinionSound = now
-//                        main.utils!!.playLoudSound("random.pop", 1)
-//                        main.renderListener!!.setSubtitleFeature(Feature.MINION_FULL_WARNING)
-//                        main.scheduler!!.schedule(
-//                            Scheduler.CommandType.RESET_SUBTITLE_FEATURE,
-//                            main.configValues!!.getWarningSeconds()
-//                        )
-//                    }
-//                } else if (main.configValues!!.isEnabled(Feature.MINION_STOP_WARNING)) {
-//                    val matcher = MINION_CANT_REACH_PATTERN.matcher(entity.getCustomNameTag())
-//                    if (matcher.matches()) {
-//                        val now = System.currentTimeMillis()
-//                        if (now - lastMinionSound > cooldown) {
-//                            lastMinionSound = now
-//                            main.utils!!.playLoudSound("random.orb", 1)
-//
-//                            val mobName = matcher.group("mobName")
-//                            main.renderListener!!.setCannotReachMobName(mobName)
-//                            main.renderListener!!.setSubtitleFeature(Feature.MINION_STOP_WARNING)
-//                            main.scheduler!!.schedule(
-//                                Scheduler.CommandType.RESET_SUBTITLE_FEATURE,
-//                                main.configValues!!.getWarningSeconds()
-//                            )
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
+
+            if (main.utils!!.getLocation() === Location.ISLAND) {
+                val cooldown: Int = main.configValues!!.getWarningSeconds() * 1000 + 5000
+                if (main.configValues!!.isEnabled(Feature.MINION_FULL_WARNING) &&
+                    entity.getCustomNameTag() == "§cMy storage is full! :("
+                ) {
+                    val now = System.currentTimeMillis()
+                    if (now - lastMinionSound > cooldown) {
+                        lastMinionSound = now
+                        main.utils!!.playLoudSound("random.pop", 1.0)
+                        main.renderListener!!.setSubtitleFeature(Feature.MINION_FULL_WARNING)
+                        main.scheduler!!.schedule(
+                            Scheduler.CommandType.RESET_SUBTITLE_FEATURE,
+                            main.configValues!!.getWarningSeconds()
+                        )
+                    }
+                } else if (main.configValues!!.isEnabled(Feature.MINION_STOP_WARNING)) {
+                    val matcher = MINION_CANT_REACH_PATTERN.matcher(entity.getCustomNameTag())
+                    if (matcher.matches()) {
+                        val now = System.currentTimeMillis()
+                        if (now - lastMinionSound > cooldown) {
+                            lastMinionSound = now
+                            main.utils!!.playLoudSound("random.orb", 1.0)
+
+                            val mobName = matcher.group("mobName")
+                            main.renderListener!!.setCannotReachMobName(mobName)
+                            main.renderListener!!.setSubtitleFeature(Feature.MINION_STOP_WARNING)
+                            main.scheduler!!.schedule(
+                                Scheduler.CommandType.RESET_SUBTITLE_FEATURE,
+                                main.configValues!!.getWarningSeconds()
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     @SubscribeEvent
     fun onAttack(e: AttackEntityEvent) {
@@ -1454,9 +1456,9 @@ class PlayerListener {
 //        return false
 //    }
 //
-//    fun getActionBarParser(): ActionBarParser {
-//        return actionBarParser
-//    }
+    fun getActionBarParser(): ActionBarParser {
+        return actionBarParser
+    }
 //
     companion object {
         private val logger: org.apache.logging.log4j.Logger = SkyblockAddonsPlus.instance.getLogger()

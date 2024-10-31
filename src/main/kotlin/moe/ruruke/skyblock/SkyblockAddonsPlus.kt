@@ -1,6 +1,8 @@
 package moe.ruruke.skyblock
 
 import cc.polyfrost.oneconfig.events.EventManager
+import cc.polyfrost.oneconfig.events.event.HudRenderEvent
+import cc.polyfrost.oneconfig.events.event.TimerUpdateEvent
 import cc.polyfrost.oneconfig.libs.eventbus.Subscribe
 import com.google.common.util.concurrent.ThreadFactoryBuilder
 import com.google.gson.Gson
@@ -27,6 +29,7 @@ import moe.ruruke.skyblock.utils.Utils
 import moe.ruruke.skyblock.utils.data.DataUtils
 import moe.ruruke.skyblock.utils.gson.GsonInitializableTypeAdapter
 import moe.ruruke.skyblock.utils.gson.PatternAdapter
+import net.minecraft.client.renderer.entity.RenderManager
 import net.minecraft.client.settings.KeyBinding
 import net.minecraftforge.client.ClientCommandHandler
 import net.minecraftforge.common.MinecraftForge
@@ -57,7 +60,7 @@ class SkyblockAddonsPlus() {
         const val MODID: String = "skyblockaddonsplus"
         const val NAME: String = "SkyblockAddonsPlus"
         const val VERSION: String = "1.0.0"
-        private val keyBindings: MutableList<SkyblockKeyBinding> = LinkedList()
+        private val keyBindings: MutableList<SkyblockKeyBinding> = mutableListOf()
         private var elapsedPartialTicks: Float = 0f
         fun getTimer(): Float {
             return elapsedPartialTicks;
@@ -195,18 +198,21 @@ class SkyblockAddonsPlus() {
         usingPatcher = utils!!.isModLoaded("patcher");
     }
 
-//    @Subscribe
-//    private fun onTick(event: TimerUpdateEvent) { // the parameter type specifies what event you are subscribing to
-//        elapsedPartialTicks = event.timer.elapsedPartialTicks
-//    }
+    @Subscribe
+    private fun onTick(event: TimerUpdateEvent) { // the parameter type specifies what event you are subscribing to
+        elapsedPartialTicks = event.timer.elapsedPartialTicks
+    }
+
+
+
     @Mod.EventHandler
     fun preInit(e: FMLPreInitializationEvent) {
         EventManager.INSTANCE.register(this);
         configValues = ConfigValues(e.suggestedConfigurationFile)
         persistentValuesManager = PersistentValuesManager(e.modConfigurationDirectory)
-//        configValues!!.loadValues()
+        configValues!!.loadValues()
         DataUtils.readLocalAndFetchOnline()
-//        persistentValuesManager.loadValues()
+        persistentValuesManager!!.loadValues();
     }
 
     init {

@@ -1,6 +1,7 @@
 package moe.ruruke.skyblock.features.backpacks
 
 import moe.ruruke.skyblock.SkyblockAddonsPlus
+import moe.ruruke.skyblock.config.NewConfig
 import moe.ruruke.skyblock.core.Feature
 import moe.ruruke.skyblock.core.InventoryType
 import moe.ruruke.skyblock.utils.ColorCode
@@ -30,8 +31,10 @@ import net.minecraftforge.common.util.Constants
 import org.apache.logging.log4j.Logger
 import org.lwjgl.input.Keyboard
 import java.io.ByteArrayInputStream
+import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import kotlin.collections.ArrayList
 import kotlin.math.ceil
 import kotlin.math.min
 
@@ -41,7 +44,7 @@ import kotlin.math.min
 object ContainerPreviewManager {
     private val logger: Logger = SkyblockAddonsPlus.getLogger()
 
-    private val CHEST_GUI_TEXTURE = ResourceLocation("skyblockaddons", "containerPreview.png")
+    private val CHEST_GUI_TEXTURE = ResourceLocation("skyblockaddonsplus", "containerPreview.png")
     private val BACKPACK_STORAGE_PATTERN: Pattern = Pattern.compile("Backpack Slot (?<slot>\\d+)")
     private val ENDERCHEST_STORAGE_PATTERN: Pattern = Pattern.compile("Ender Chest Page (?<page>\\d+)")
 
@@ -209,7 +212,7 @@ object ContainerPreviewManager {
                 GlStateManager.translate(0f, 0f, 300f)
                 var textColor = 4210752
                 if (main.configValues!!.isEnabled(Feature.MAKE_BACKPACK_INVENTORIES_COLORED)) {
-                    val color: BackpackColor = currentContainerPreview!!.getBackpackColor()
+                    val color: BackpackColor? = currentContainerPreview!!.getBackpackColor()
                     if (color != null) {
                         GlStateManager.color(color.getR(), color.getG(), color.getB(), 1f)
                         textColor = color.getInventoryTextColor()
@@ -377,19 +380,19 @@ object ContainerPreviewManager {
         }
 
         // Get the container color
-        val color: BackpackColor = ItemUtils.getBackpackColor(stack)!!
+        val color: BackpackColor? = ItemUtils.getBackpackColor(stack)
         // Relying on item lore here. Once hypixel settles on a standard for backpacks, we should figure out a better way
         val skyblockID: String =
             TextUtils.stripColor(ItemUtils.getItemLore(stack).get(0)).toUpperCase().replace(" ", "_").trim()
-        val containerData: ContainerData = ItemUtils.getContainerData(skyblockID)!!
+        val containerData: ContainerData? = ItemUtils.getContainerData(skyblockID)
         var rows = 6
         var cols = 9
         if (containerData != null) {
             // Hybrid system for jumbo backpacks means they get only 5 rows in the container (but old ones that haven't been converted get 6 outside of it)
             rows = Math.min(containerData.getNumRows(), 5)
             cols = containerData.getNumCols()
-        } else if (TextUtils.stripColor(stack.getDisplayName()).toUpperCase().startsWith("ENDER CHEST")) {
-            rows = min(5.0, (ceil((items.size / 9f).toDouble()) as Int).toDouble()).toInt()
+        } else if (TextUtils.stripColor(stack.getDisplayName()).uppercase(Locale.getDefault()).startsWith("ENDER CHEST")) {
+            rows = min(5.0, (ceil((items.size / 9f).toDouble()).toInt()).toDouble()).toInt()
         }
 
         return ContainerPreview(items, TextUtils.stripColor(stack.getDisplayName()), color, rows, cols)
@@ -397,9 +400,10 @@ object ContainerPreviewManager {
     private fun isFreezeKeyDown(): Boolean {
         val main: SkyblockAddonsPlus.Companion = SkyblockAddonsPlus.instance
 
-        if (main.getFreezeBackpackKey().isKeyDown()) return true
+//        if (main.getFreezeBackpackKey().isKeyDown()) return true      //TODO:
         try {
-            if (Keyboard.isKeyDown(main.getFreezeBackpackKey().getKeyCode())) return true
+            //TODO:
+//            if (Keyboard.isKeyDown(main.getFreezeBackpackKey().getKeyCode())) return true
         } catch (ignored: java.lang.Exception) {
         }
 
@@ -448,7 +452,7 @@ object ContainerPreviewManager {
             return true
         }
 
-        if (main.configValues!!.isEnabled(Feature.SHOW_BACKPACK_PREVIEW)) {
+        if (NewConfig.isEnabled(Feature.SHOW_BACKPACK_PREVIEW)) {
             // Don't show if we only want to show while holding shift, and the player isn't holding shift
             if (main.configValues!!.isEnabled(Feature.SHOW_BACKPACK_HOLDING_SHIFT) && !GuiScreen.isShiftKeyDown()) {
                 return false
@@ -467,7 +471,7 @@ object ContainerPreviewManager {
                 if ((BACKPACK_STORAGE_PATTERN.matcher(strippedName).also { m = it }).matches()) {
                     val pageNum = m.group("slot").toInt()
                     storageKey = InventoryType.STORAGE_BACKPACK.getInventoryName() + pageNum
-                } else if (main.configValues!!.isEnabled(Feature.SHOW_ENDER_CHEST_PREVIEW) &&
+                } else if (NewConfig.isEnabled(Feature.SHOW_ENDER_CHEST_PREVIEW) &&
                     (ENDERCHEST_STORAGE_PATTERN.matcher(strippedName).also { m = it }).matches()
                 ) {
                     val pageNum = m.group("page").toInt()
@@ -489,9 +493,9 @@ object ContainerPreviewManager {
             // Check for normal previews
             if (containerPreview == null) {
                 // Check the subfeature conditions
-                val extraAttributes: NBTTagCompound = ItemUtils.getExtraAttributes(itemStack)!!
-                val containerData: ContainerData =
-                    ItemUtils.getContainerData(ItemUtils.getSkyblockItemID(extraAttributes))!!
+                val extraAttributes: NBTTagCompound? = ItemUtils.getExtraAttributes(itemStack)
+                val containerData: ContainerData? =
+                    ItemUtils.getContainerData(ItemUtils.getSkyblockItemID(extraAttributes))
 
                 // TODO: Does checking menu item handle the baker inventory thing?
                 if (containerData == null || (containerData.isCakeBag() && main.configValues!!

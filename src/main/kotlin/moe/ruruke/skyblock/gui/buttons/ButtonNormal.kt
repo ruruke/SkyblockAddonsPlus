@@ -84,7 +84,7 @@ class ButtonNormal(
                 4
             )
 
-            val creditFeature: EnumUtils.FeatureCredit = EnumUtils.FeatureCredit.fromFeature(feature)!!
+            val creditFeature: EnumUtils.FeatureCredit? = EnumUtils.FeatureCredit.fromFeature(feature)
 
             // Wrap the feature name into 2 lines.
             var wrappedString: Array<String> = SkyblockAddonsPlus.utils!!.wrapSplitText(displayString, 28)
@@ -157,7 +157,7 @@ class ButtonNormal(
                     mc.getTextureManager()
                         .bindTexture(SkyblockAddonsPlus.configValues!!.getLanguage().getResourceLocation())
                     if (SkyblockAddonsPlus.utils!!.isHalloween()) {
-                        mc.getTextureManager().bindTexture(ResourceLocation("skyblockaddons", "flags/halloween.png"))
+                        mc.getTextureManager().bindTexture(ResourceLocation("skyblockaddonsplus", "flags/halloween.png"))
                     }
                     DrawUtils.drawModalRectWithCustomSizedTexture(
                         xPosition + width / 2f - 20,
@@ -176,7 +176,7 @@ class ButtonNormal(
             } else if (feature === Feature.EDIT_LOCATIONS) {
                 GlStateManager.color(1f, 1f, 1f, 1f)
                 try {
-                    mc.getTextureManager().bindTexture(ResourceLocation("skyblockaddons", "gui/move.png"))
+                    mc.getTextureManager().bindTexture(ResourceLocation("skyblockaddonsplus", "gui/move.png"))
                     DrawUtils.drawModalRectWithCustomSizedTexture(
                         xPosition + width / 2f - 12,
                         yPosition + 22f,

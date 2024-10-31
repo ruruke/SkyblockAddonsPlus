@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityEnderChestRenderer
 class TileEntityEnderChestRendererHook {
     companion object{
         @JvmStatic
-        private val BLANK_ENDERCHEST = net.minecraft.util.ResourceLocation("skyblockaddons", "blankenderchest.png")
+        private val BLANK_ENDERCHEST = net.minecraft.util.ResourceLocation("skyblockaddonsplus", "blankenderchest.png")
 
         @JvmStatic
         fun bindTexture(

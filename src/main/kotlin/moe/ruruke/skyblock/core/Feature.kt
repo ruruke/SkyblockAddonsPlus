@@ -586,14 +586,10 @@ enum class Feature(
 
 
     private val settings: List<EnumUtils.FeatureSetting>
-    fun getGuiFeatures(): Set<Feature> {
-        return guiFeatures
-    }
 
     fun getGuiFeatureData(): GuiFeatureData? {
         return guiFeatureData;
     }
-
     fun isDefaultDisabled(): Boolean {
         return defaultDisabled;
     }
@@ -660,40 +656,54 @@ enum class Feature(
             return guiFeatureData?.getDefaultColor() != null
         }
 
-    fun draw(scale: Float, mc: Minecraft?, buttonLocation: ButtonLocation?) {
+    fun draw(scale: Float, mc: Minecraft, buttonLocation: ButtonLocation?) {
+        //TODO:
         if (guiFeatureData != null) {
-            //TODO
-//            val main: SkyblockAddonsPlus = SkyblockAddonsPlus().instance
-//            if (guiFeatureData.getDrawType() === EnumUtils.DrawType.BAR) {
-//                main.getRenderListener().drawBar(this, scale, mc, buttonLocation)
-//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.SKELETON_BAR) {
-//                main.getRenderListener().drawSkeletonBar(mc, scale, buttonLocation)
-//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.TEXT) {
-//                main.getRenderListener().drawText(this, scale, mc, buttonLocation)
-//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.PICKUP_LOG) {
-//                main.getRenderListener().drawItemPickupLog(scale, buttonLocation)
-//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.DEFENCE_ICON) {
-//                main.getRenderListener().drawIcon(scale, mc, buttonLocation)
-//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.REVENANT_PROGRESS) {
-//                main.getRenderListener().drawRevenantIndicator(scale, mc, buttonLocation)
-//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.POWER_ORB_DISPLAY) {
-//                main.getRenderListener().drawPowerOrbStatus(mc, scale, buttonLocation)
-//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.TICKER) {
-//                main.getRenderListener().drawScorpionFoilTicker(mc, scale, buttonLocation)
-//            //TODO:
-////            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.PROXIMITY_INDICATOR) {
-////                FeatureTrackerQuest.drawTrackerLocationIndicator(mc, scale, buttonLocation)
-//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.TAB_EFFECT_TIMERS) {
-//                main.getRenderListener().drawPotionEffectTimers(scale, buttonLocation)
-//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.BAIT_LIST_DISPLAY) {
-//                main.getRenderListener().drawBaitList(mc, scale, buttonLocation)
-//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.DUNGEONS_MAP) {
-//                DungeonMapManager.drawDungeonsMap(mc, scale, buttonLocation)
-//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.SLAYER_TRACKERS) {
-//                main.getRenderListener().drawSlayerTrackers(this, mc, scale, buttonLocation)
-//            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.DRAGON_STATS_TRACKER) {
-//                main.getRenderListener().drawDragonTrackers(mc, scale, buttonLocation)
-//            }
+            val main: SkyblockAddonsPlus.Companion = SkyblockAddonsPlus.instance
+            when {
+                guiFeatureData.getDrawType() === EnumUtils.DrawType.BAR -> {
+                    main.renderListener!!.drawBar(this, scale, mc, buttonLocation)
+                }
+                guiFeatureData.getDrawType() === EnumUtils.DrawType.SKELETON_BAR -> {
+//                    main.renderListener!!.drawSkeletonBar(mc, scale, buttonLocation)
+                }
+                guiFeatureData.getDrawType() === EnumUtils.DrawType.TEXT -> {
+                    main.renderListener!!.drawText(this, scale, mc, buttonLocation)
+                }
+                guiFeatureData.getDrawType() === EnumUtils.DrawType.PICKUP_LOG -> {
+//                    main.renderListener!!.drawItemPickupLog(scale, buttonLocation)
+                }
+                guiFeatureData.getDrawType() === EnumUtils.DrawType.DEFENCE_ICON -> {
+//                    main.renderListener!!.drawIcon(scale, mc, buttonLocation)
+                }
+                guiFeatureData.getDrawType() === EnumUtils.DrawType.REVENANT_PROGRESS -> {
+//                    main.renderListener!!.drawRevenantIndicator(scale, mc, buttonLocation)
+                }
+                guiFeatureData.getDrawType() === EnumUtils.DrawType.POWER_ORB_DISPLAY -> {
+//                    main.renderListener!!.drawPowerOrbStatus(mc, scale, buttonLocation)
+                }
+                guiFeatureData.getDrawType() === EnumUtils.DrawType.TICKER -> {
+//                    main.renderListener!!.drawScorpionFoilTicker(mc, scale, buttonLocation)
+                    //TODO:
+        //            } else if (guiFeatureData.getDrawType() === EnumUtils.DrawType.PROXIMITY_INDICATOR) {
+        //                FeatureTrackerQuest.drawTrackerLocationIndicator(mc, scale, buttonLocation)
+                }
+                guiFeatureData.getDrawType() === EnumUtils.DrawType.TAB_EFFECT_TIMERS -> {
+//                    main.renderListener!!.drawPotionEffectTimers(scale, buttonLocation)
+                }
+                guiFeatureData.getDrawType() === EnumUtils.DrawType.BAIT_LIST_DISPLAY -> {
+//                    main.renderListener!!.drawBaitList(mc, scale, buttonLocation)
+                }
+                guiFeatureData.getDrawType() === EnumUtils.DrawType.DUNGEONS_MAP -> {
+//                    DungeonMapManager.drawDungeonsMap(mc, scale, buttonLocation)
+                }
+                guiFeatureData.getDrawType() === EnumUtils.DrawType.SLAYER_TRACKERS -> {
+//                    main.renderListener!!.drawSlayerTrackers(this, mc, scale, buttonLocation)
+                }
+                guiFeatureData.getDrawType() === EnumUtils.DrawType.DRAGON_STATS_TRACKER -> {
+//                    main.renderListener!!.drawDragonTrackers(mc, scale, buttonLocation)
+                }
+            }
         }
     }
 
@@ -752,6 +762,10 @@ enum class Feature(
         return false
     }
     companion object {
+        fun getGuiFeatures(): Set<Feature> {
+            return guiFeatures
+        }
+
         /**
          * These are "features" that are not actually features, but just hold the place of a setting. If you are adding any new settings and create
          * a feature here, make sure to add it!
@@ -824,57 +838,58 @@ enum class Feature(
          * Features that are considered gui ones. This is used for examnple when saving the config to ensure that these features'
          * coordinates and colors are handled properly.
          */
-        val guiFeatures: Set<Feature> = LinkedHashSet(
+        private val guiFeatures: Set<Feature> = LinkedHashSet(
             Arrays.asList(
-                DRILL_FUEL_BAR,
-                SKILL_PROGRESS_BAR,
+                //TODO:
+//                DRILL_FUEL_BAR,
+//                SKILL_PROGRESS_BAR,
                 MANA_BAR,
                 HEALTH_BAR,
                 MANA_TEXT,
-                OVERFLOW_MANA,
-                DEFENCE_ICON,
-                DEFENCE_TEXT,
-                EFFECTIVE_HEALTH_TEXT,
-                DEFENCE_PERCENTAGE,
+//                OVERFLOW_MANA,
+//                DEFENCE_ICON,
+//                DEFENCE_TEXT,
+//                EFFECTIVE_HEALTH_TEXT,
+//                DEFENCE_PERCENTAGE,
                 HEALTH_TEXT,
-                SKELETON_BAR,
-                HEALTH_UPDATES,
-                ITEM_PICKUP_LOG,
-                DARK_AUCTION_TIMER,
-                SKILL_DISPLAY,
-                SPEED_PERCENTAGE,
-                SLAYER_INDICATOR,
-                POWER_ORB_STATUS_DISPLAY,
-                ZEALOT_COUNTER,
-                TICKER_CHARGES_DISPLAY,
-                TAB_EFFECT_TIMERS,
-                SHOW_TOTAL_ZEALOT_COUNT,
-                SHOW_SUMMONING_EYE_COUNT,
-                SHOW_AVERAGE_ZEALOTS_PER_EYE,
-                BIRCH_PARK_RAINMAKER_TIMER,
-                ENDSTONE_PROTECTOR_DISPLAY,
-                BAIT_LIST,
-                DUNGEONS_MAP_DISPLAY,
-                SHOW_DUNGEON_MILESTONE,
-                DUNGEONS_COLLECTED_ESSENCES_DISPLAY,
-                REVENANT_SLAYER_TRACKER,
-                TARANTULA_SLAYER_TRACKER,
-                SVEN_SLAYER_TRACKER,
-                DRAGON_STATS_TRACKER,
-                DUNGEON_DEATH_COUNTER,
-                ROCK_PET_TRACKER,
-                DOLPHIN_PET_TRACKER,
-                DUNGEONS_SECRETS_DISPLAY,
-                CANDY_POINTS_COUNTER,
-                DRILL_FUEL_TEXT,
-                TREVOR_TRACKED_ENTITY_PROXIMITY_INDICATOR,
-                FETCHUR_TODAY,
-                VOIDGLOOM_SLAYER_TRACKER,
-                OTHER_DEFENCE_STATS,
-                SPIRIT_SCEPTRE_DISPLAY,
-                FARM_EVENT_TIMER,
-                CRIMSON_ARMOR_ABILITY_STACKS,
-                HIDE_TRUE_DEFENSE
+//                SKELETON_BAR,
+//                HEALTH_UPDATES,
+//                ITEM_PICKUP_LOG,
+//                DARK_AUCTION_TIMER,
+//                SKILL_DISPLAY,
+//                SPEED_PERCENTAGE,
+//                SLAYER_INDICATOR,
+//                POWER_ORB_STATUS_DISPLAY,
+//                ZEALOT_COUNTER,
+//                TICKER_CHARGES_DISPLAY,
+//                TAB_EFFECT_TIMERS,
+//                SHOW_TOTAL_ZEALOT_COUNT,
+//                SHOW_SUMMONING_EYE_COUNT,
+//                SHOW_AVERAGE_ZEALOTS_PER_EYE,
+//                BIRCH_PARK_RAINMAKER_TIMER,
+//                ENDSTONE_PROTECTOR_DISPLAY,
+//                BAIT_LIST,
+//                DUNGEONS_MAP_DISPLAY,
+//                SHOW_DUNGEON_MILESTONE,
+//                DUNGEONS_COLLECTED_ESSENCES_DISPLAY,
+//                REVENANT_SLAYER_TRACKER,
+//                TARANTULA_SLAYER_TRACKER,
+//                SVEN_SLAYER_TRACKER,
+//                DRAGON_STATS_TRACKER,
+//                DUNGEON_DEATH_COUNTER,
+//                ROCK_PET_TRACKER,
+//                DOLPHIN_PET_TRACKER,
+//                DUNGEONS_SECRETS_DISPLAY,
+//                CANDY_POINTS_COUNTER,
+//                DRILL_FUEL_TEXT,
+//                TREVOR_TRACKED_ENTITY_PROXIMITY_INDICATOR,
+//                FETCHUR_TODAY,
+//                VOIDGLOOM_SLAYER_TRACKER,
+//                OTHER_DEFENCE_STATS,
+//                SPIRIT_SCEPTRE_DISPLAY,
+//                FARM_EVENT_TIMER,
+//                CRIMSON_ARMOR_ABILITY_STACKS,
+//                HIDE_TRUE_DEFENSE
             )
         )
 

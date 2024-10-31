@@ -133,8 +133,8 @@ class ColorSelectionGui internal constructor(
                     defaultBlue, 1.5, 0
                 )
             } else {
-                val pickerWidth = COLOR_PICKER_IMAGE!!.width
-                val pickerHeight = COLOR_PICKER_IMAGE!!.height
+                val pickerWidth = COLOR_PICKER_IMAGE?.width ?: 300
+                val pickerHeight = COLOR_PICKER_IMAGE?.height ?: 300
 
                 imageX = width / 2 - 200
                 imageY = 90
@@ -203,7 +203,7 @@ class ColorSelectionGui internal constructor(
         run {
             val xPixel = mouseX - imageX
             val yPixel = mouseY - imageY
-
+            if( COLOR_PICKER_IMAGE == null ) return
             // If the mouse is over the color picker.
             if (xPixel > 0 && xPixel < COLOR_PICKER_IMAGE!!.width && yPixel > 0 && yPixel < COLOR_PICKER_IMAGE!!.height) {
                 // Get the color of the clicked pixel.
@@ -304,6 +304,6 @@ class ColorSelectionGui internal constructor(
     }
 
     companion object {
-        private val COLOR_PICKER = ResourceLocation("skyblockaddons", "gui/colorpicker.png")
+        private val COLOR_PICKER = ResourceLocation("skyblockaddonsplus", "gui/colorpicker.png")
     }
 }

@@ -110,6 +110,6 @@
 //    companion object {
 //        const val MAX_SELECT_RADIUS: Int = 90
 //
-//        private val PORTAL_ICON = ResourceLocation("skyblockaddons", "portal.png")
+//        private val PORTAL_ICON = ResourceLocation("skyblockaddonsplus", "portal.png")
 //    }
 //}

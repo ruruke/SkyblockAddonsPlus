@@ -214,122 +214,130 @@ class SkyblockAddonsGui(page: Int, tab: GuiTab) : GuiScreen() {
                 }
                 return
             }
-            if (feature === Feature.LANGUAGE) {
-                //TODO: Disabned Log
-//                SkyblockAddonsPlus.utils!!.setFadingIn(false)
-//                Minecraft.getMinecraft().displayGuiScreen(SettingsGui(Feature.LANGUAGE, 1, page, tab, null))
-            } else if (feature === Feature.EDIT_LOCATIONS) {
-                //TODO: Disabned Log
-//                SkyblockAddonsPlus.utils!!.setFadingIn(false)
-//                Minecraft.getMinecraft().displayGuiScreen(LocationEditGui(page, tab))
-            } else if (feature === Feature.GENERAL_SETTINGS) {
-                if (tab === EnumUtils.GuiTab.GENERAL_SETTINGS) {
-                    SkyblockAddonsPlus.utils!!.setFadingIn(false)
-                    Minecraft.getMinecraft().displayGuiScreen(SkyblockAddonsGui(1, EnumUtils.GuiTab.MAIN))
-                } else {
-                    SkyblockAddonsPlus.utils!!.setFadingIn(false)
-                    Minecraft.getMinecraft().displayGuiScreen(SkyblockAddonsGui(1, EnumUtils.GuiTab.GENERAL_SETTINGS))
+            when {
+                feature === Feature.LANGUAGE -> {
+                    //TODO: Disabned Log
+        //                SkyblockAddonsPlus.utils!!.setFadingIn(false)
+        //                Minecraft.getMinecraft().displayGuiScreen(SettingsGui(Feature.LANGUAGE, 1, page, tab, null))
                 }
-            } else if (abstractButton is ButtonToggle) {
-                if (NewConfig.isRemoteDisabled(feature)) return
-                if (NewConfig.isDisabled(feature))
-                run {
-                    feature.setEnabled(true)
-                    if (feature === Feature.DISCORD_RPC && SkyblockAddonsPlus.utils!!.isOnSkyblock())
+                feature === Feature.EDIT_LOCATIONS -> {
+                    //TODO: Disabned Log
+                        SkyblockAddonsPlus.utils!!.setFadingIn(false)
+                        Minecraft.getMinecraft().displayGuiScreen(LocationEditGui(page, tab))
+                }
+                feature === Feature.GENERAL_SETTINGS -> {
+                    if (tab === EnumUtils.GuiTab.GENERAL_SETTINGS) {
+                        SkyblockAddonsPlus.utils!!.setFadingIn(false)
+                        Minecraft.getMinecraft().displayGuiScreen(SkyblockAddonsGui(1, EnumUtils.GuiTab.MAIN))
+                    } else {
+                        SkyblockAddonsPlus.utils!!.setFadingIn(false)
+                        Minecraft.getMinecraft().displayGuiScreen(SkyblockAddonsGui(1, EnumUtils.GuiTab.GENERAL_SETTINGS))
+                    }
+                }
+                abstractButton is ButtonToggle -> {
+                    if (NewConfig.isRemoteDisabled(feature)) return
+                    if (NewConfig.isDisabled(feature))
+                        run {
+                            feature.setEnabled(true)
+                            if (feature === Feature.DISCORD_RPC && SkyblockAddonsPlus.utils!!.isOnSkyblock())
+                                run {
+                                    //TODO Disabled
+        //                        main.getDiscordRPCManager().start()
+                                }
+                            if (feature === Feature.ZEALOT_COUNTER_EXPLOSIVE_BOW_SUPPORT) {
+                                Feature.DISABLE_ENDERMAN_TELEPORTATION_EFFECT.setEnabled(true)
+                            }
+                        }
                     run {
-                        //TODO Disabled
-//                        main.getDiscordRPCManager().start()
+                        feature.setEnabled(false)
+                        if (feature === Feature.HIDE_FOOD_ARMOR_BAR) { // Reset the vanilla bars when disabling these two features.
+                            GuiIngameForge.renderArmor = true // The food gets automatically enabled, no need to include it.
+                        } else if (feature === Feature.HIDE_HEALTH_BAR) {
+                            GuiIngameForge.renderHealth = true
+                        } else if (feature === Feature.FULL_INVENTORY_WARNING) {
+                            main.inventoryUtils!!.setInventoryWarningShown(false)
+                            main.scheduler!!.removeQueuedFullInventoryWarnings()
+                        } else if (feature === Feature.DISCORD_RPC) {
+                            //TODO: DISABLED LOG.
+        //                        main.getDiscordRPCManager().stop()
+                        } else if (feature === Feature.DISABLE_ENDERMAN_TELEPORTATION_EFFECT) {
+                            Feature.ZEALOT_COUNTER_EXPLOSIVE_BOW_SUPPORT.setEnabled(true)
+                        }
                     }
-                    if (feature === Feature.ZEALOT_COUNTER_EXPLOSIVE_BOW_SUPPORT) {
-                        Feature.DISABLE_ENDERMAN_TELEPORTATION_EFFECT.setEnabled(true)
-                    }
+                    (abstractButton as ButtonToggle).onClick()
                 }
-                run {
-                    feature.setEnabled(false)
-                    if (feature === Feature.HIDE_FOOD_ARMOR_BAR) { // Reset the vanilla bars when disabling these two features.
-                        GuiIngameForge.renderArmor = true // The food gets automatically enabled, no need to include it.
-                    } else if (feature === Feature.HIDE_HEALTH_BAR) {
-                        GuiIngameForge.renderHealth = true
-                    } else if (feature === Feature.FULL_INVENTORY_WARNING) {
-                        main.inventoryUtils!!.setInventoryWarningShown(false)
-                        main.scheduler!!.removeQueuedFullInventoryWarnings()
-                    } else if (feature === Feature.DISCORD_RPC) {
-                        //TODO: DISABLED LOG.
-//                        main.getDiscordRPCManager().stop()
-                    } else if (feature === Feature.DISABLE_ENDERMAN_TELEPORTATION_EFFECT) {
-                        Feature.ZEALOT_COUNTER_EXPLOSIVE_BOW_SUPPORT.setEnabled(true)
-                    }
-                }
-                (abstractButton as ButtonToggle).onClick()
-            } else if (abstractButton is ButtonSolid) {
-                if (feature === Feature.TEXT_STYLE) {
-                    SkyblockAddonsPlus.configValues!!.setTextStyle(SkyblockAddonsPlus.configValues!!.getTextStyle().getNextType())
+                abstractButton is ButtonSolid -> {
+                    if (feature === Feature.TEXT_STYLE) {
+                        SkyblockAddonsPlus.configValues!!.setTextStyle(SkyblockAddonsPlus.configValues!!.getTextStyle().getNextType())
 
-                    cancelClose = true
-                    Minecraft.getMinecraft().displayGuiScreen(SkyblockAddonsGui(page, tab))
-                    cancelClose = false
-                } else if (feature === Feature.CHROMA_MODE) {
-                    //TODO:
-//                    SkyblockAddonsPlus.configValues!!.setChromaMode(SkyblockAddonsPlus.configValues)!!.getChromaMode().getNextType()
-//
-//                    cancelClose = true
-//                    Minecraft.getMinecraft().displayGuiScreen(SkyblockAddonsGui(page, tab))
-//                    cancelClose = false
-                } else if (feature === Feature.TURN_ALL_FEATURES_CHROMA) {
-                    //TODO:
-//                    var enable = false
-//
-//                    for (loopFeature in Feature.values()) {
-//                        if (loopFeature.getGuiFeatureData() != null && loopFeature.getGuiFeatureData()!!.getDefaultColor() != null
-//                        ) {
-//                            if (!SkyblockAddonsPlus.configValues!!.getChromaFeatures().contains(loopFeature))
-//                            run {
-//                                enable = true
-//                                break
-//                            }
-//                        }
-//                    }
-//
-//                    for (loopFeature in Feature.values()) {
-//                        if (loopFeature.getGuiFeatureData() != null && loopFeature.getGuiFeatureData()!!
-//                                .getDefaultColor() != null
-//                        ) {
-//                            if (enable) {
-//                                SkyblockAddonsPlus.configValues
-//                                !!
-//                                getChromaFeatures().add(loopFeature)
-//                            } else {
-//                                SkyblockAddonsPlus.configValues
-//                                !!
-//                                getChromaFeatures().remove(loopFeature)
-//                            }
-//                        }
-//                    }
-                }
-            } else if (abstractButton is ButtonModify) {
-                if (feature === Feature.ADD) {
-                    if (SkyblockAddonsPlus.configValues!!.getWarningSeconds() < 99)
-                    run {
-                        SkyblockAddonsPlus.configValues!!.setWarningSeconds(SkyblockAddonsPlus.configValues!!.getWarningSeconds() + 1)
-                    }
-                } else {
-                    if (SkyblockAddonsPlus.configValues!!.getWarningSeconds() > 1)
-                    run {
-                        SkyblockAddonsPlus.configValues!!.setWarningSeconds(SkyblockAddonsPlus.configValues!!.getWarningSeconds() - 1)
+                        cancelClose = true
+                        Minecraft.getMinecraft().displayGuiScreen(SkyblockAddonsGui(page, tab))
+                        cancelClose = false
+                    } else if (feature === Feature.CHROMA_MODE) {
+                        //TODO:
+        //                    SkyblockAddonsPlus.configValues!!.setChromaMode(SkyblockAddonsPlus.configValues)!!.getChromaMode().getNextType()
+        //
+        //                    cancelClose = true
+        //                    Minecraft.getMinecraft().displayGuiScreen(SkyblockAddonsGui(page, tab))
+        //                    cancelClose = false
+                    } else if (feature === Feature.TURN_ALL_FEATURES_CHROMA) {
+                        //TODO:
+        //                    var enable = false
+        //
+        //                    for (loopFeature in Feature.values()) {
+        //                        if (loopFeature.getGuiFeatureData() != null && loopFeature.getGuiFeatureData()!!.getDefaultColor() != null
+        //                        ) {
+        //                            if (!SkyblockAddonsPlus.configValues!!.getChromaFeatures().contains(loopFeature))
+        //                            run {
+        //                                enable = true
+        //                                break
+        //                            }
+        //                        }
+        //                    }
+        //
+        //                    for (loopFeature in Feature.values()) {
+        //                        if (loopFeature.getGuiFeatureData() != null && loopFeature.getGuiFeatureData()!!
+        //                                .getDefaultColor() != null
+        //                        ) {
+        //                            if (enable) {
+        //                                SkyblockAddonsPlus.configValues
+        //                                !!
+        //                                getChromaFeatures().add(loopFeature)
+        //                            } else {
+        //                                SkyblockAddonsPlus.configValues
+        //                                !!
+        //                                getChromaFeatures().remove(loopFeature)
+        //                            }
+        //                        }
+        //                    }
                     }
                 }
-            } else if (abstractButton is ButtonCredit) {
-                if (SkyblockAddonsPlus.configValues!!.isRemoteDisabled(feature))
-                return
-                val credit: FeatureCredit = (abstractButton as ButtonCredit).getCredit()
-                try {
-                    Desktop.getDesktop().browse(URI(credit.getUrl()))
-                } catch (ignored: Exception) {
+                abstractButton is ButtonModify -> {
+                    if (feature === Feature.ADD) {
+                        if (SkyblockAddonsPlus.configValues!!.getWarningSeconds() < 99)
+                            run {
+                                SkyblockAddonsPlus.configValues!!.setWarningSeconds(SkyblockAddonsPlus.configValues!!.getWarningSeconds() + 1)
+                            }
+                    } else {
+                        if (SkyblockAddonsPlus.configValues!!.getWarningSeconds() > 1)
+                            run {
+                                SkyblockAddonsPlus.configValues!!.setWarningSeconds(SkyblockAddonsPlus.configValues!!.getWarningSeconds() - 1)
+                            }
+                    }
+                }
+                abstractButton is ButtonCredit -> {
+                    if (SkyblockAddonsPlus.configValues!!.isRemoteDisabled(feature))
+                        return
+                    val credit: FeatureCredit = (abstractButton as ButtonCredit).getCredit()
+                    try {
+                        Desktop.getDesktop().browse(URI(credit.getUrl()))
+                    } catch (ignored: Exception) {
+                    }
                 }
             }
         } else if (abstractButton is ButtonArrow) {
             val arrow: ButtonArrow = abstractButton as ButtonArrow
-            if (arrow.isNotMax) {
+            if (arrow.isNotMax()) {
                 SkyblockAddonsPlus.utils!!.setFadingIn(false)
                 if (arrow.getArrowType() === ButtonArrow.ArrowType.RIGHT) {
                     mc.displayGuiScreen(SkyblockAddonsGui(++page, tab))
@@ -586,8 +594,8 @@ class SkyblockAddonsGui(page: Int, tab: GuiTab) : GuiScreen() {
     }
 
     companion object {
-        val LOGO: ResourceLocation = ResourceLocation("skyblockaddons", "logo.png")
-        val LOGO_GLOW: ResourceLocation = ResourceLocation("skyblockaddons", "logoglow.png")
+        val LOGO: ResourceLocation = ResourceLocation("skyblockaddonsplus", "logo.png")
+        val LOGO_GLOW: ResourceLocation = ResourceLocation("skyblockaddonsplus", "logoglow.png")
 
         const val BUTTON_MAX_WIDTH: Int = 140
 

@@ -6,6 +6,7 @@ import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.configValues
 import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.getLogger
 import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.instance
 import moe.ruruke.skyblock.SkyblockAddonsPlus.Companion.utils
+import moe.ruruke.skyblock.config.NewConfig
 import moe.ruruke.skyblock.core.*
 import org.apache.commons.lang3.StringUtils
 import java.text.NumberFormat
@@ -93,6 +94,10 @@ class ActionBarParser {
     private var currentSkillXP = 0f
     private var totalSkillXP = 0
     private var percent = 0f
+    fun getPercent(): Float {
+        return percent
+
+    }
     private var healthLock = false
     private var otherDefense: String? = null
 
@@ -273,8 +278,7 @@ class ActionBarParser {
     private fun parseHealth(healthSection: String): String {
         // Normal:      §c1390/1390❤
         // With Wand:   §c1390/1390❤+§c30▅
-        val separateDisplay =
-            configValues!!.isEnabled(Feature.HEALTH_BAR) || configValues!!.isEnabled(Feature.HEALTH_TEXT)
+        val separateDisplay = NewConfig.isEnabled(Feature.HEALTH_BAR) || configValues!!.isEnabled(Feature.HEALTH_TEXT)
         var returnString = healthSection
         val newHealth: Float
         val maxHealth: Float

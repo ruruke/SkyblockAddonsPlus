@@ -25,7 +25,7 @@ class NewScheduler {
             }
 
             if (Minecraft.getMinecraft() != null) {
-                pendingTasks.removeIf { obj: ScheduledTask -> obj.isCanceled }
+                pendingTasks.removeIf { obj: ScheduledTask -> obj.isCanceled() }
 
                 pendingTasks.addAll(queuedTasks)
                 queuedTasks.clear()
@@ -36,7 +36,7 @@ class NewScheduler {
                             scheduledTask.start()
 
                             if (scheduledTask.isRepeating) {
-                                if (!scheduledTask.isCanceled) {
+                                if (!scheduledTask.isCanceled()) {
                                     scheduledTask.setDelay(scheduledTask.period)
                                 }
                             } else {

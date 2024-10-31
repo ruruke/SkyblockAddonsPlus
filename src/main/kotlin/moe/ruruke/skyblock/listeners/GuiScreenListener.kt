@@ -2,14 +2,18 @@ package moe.ruruke.skyblock.listeners
 
 
 import moe.ruruke.skyblock.SkyblockAddonsPlus
+import moe.ruruke.skyblock.asm.hooks.GuiChestHook
+import moe.ruruke.skyblock.config.NewConfig
 import moe.ruruke.skyblock.core.Feature
 import moe.ruruke.skyblock.core.InventoryType
 import moe.ruruke.skyblock.events.InventoryLoadingDoneEvent
+import moe.ruruke.skyblock.features.backpacks.ContainerPreviewManager
 import moe.ruruke.skyblock.misc.scheduler.ScheduledTask
 import moe.ruruke.skyblock.misc.scheduler.SkyblockRunnable
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.gui.inventory.GuiChest
+import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.inventory.InventoryBasic
 import net.minecraftforge.client.event.GuiOpenEvent
 import net.minecraftforge.client.event.GuiScreenEvent
@@ -73,39 +77,38 @@ class GuiScreenListener {
                 }
             }
 
-            //TODO:
-//            if (main.configValues!!.isEnabled(Feature.SHOW_BACKPACK_PREVIEW)) {
-//                if (inventoryType === InventoryType.STORAGE_BACKPACK || inventoryType === InventoryType.ENDER_CHEST) {
-//                    ContainerPreviewManager.onContainerOpen(chestInventory)
-//                }
-//            }
+            if (NewConfig.isEnabled(Feature.SHOW_BACKPACK_PREVIEW)) {
+                if (inventoryType === InventoryType.STORAGE_BACKPACK || inventoryType === InventoryType.ENDER_CHEST) {
+                    ContainerPreviewManager.onContainerOpen(chestInventory)
+                }
+            }
         }
     }
-//
-//    @SubscribeEvent
-//    fun onGuiOpen(e: GuiOpenEvent) {
-//        if (!main.utils!!.isOnSkyblock()) {
-//            return
-//        }
-//
-//        val guiScreen = e.gui
-//        val oldGuiScreen = Minecraft.getMinecraft().currentScreen
-//
-//        // Closing a container
-//        if (guiScreen == null && oldGuiScreen is GuiContainer) {
-//            lastContainerCloseMs = System.currentTimeMillis()
-//        }
-//
-//        // Closing or switching to a different GuiChest
-//        if (oldGuiScreen is GuiChest) {
-//            if (inventoryChangeListener != null) {
-//                removeInventoryChangeListener(listenedInventory!!)
-//            }
-//
-//            ContainerPreviewManager.onContainerClose()
-//            GuiChestHook.onGuiClosed()
-//        }
-//    }
+
+    @SubscribeEvent
+    fun onGuiOpen(e: GuiOpenEvent) {
+        if (!main.utils!!.isOnSkyblock()) {
+            return
+        }
+
+        val guiScreen = e.gui
+        val oldGuiScreen = Minecraft.getMinecraft().currentScreen
+
+        // Closing a container
+        if (guiScreen == null && oldGuiScreen is GuiContainer) {
+            lastContainerCloseMs = System.currentTimeMillis()
+        }
+
+        // Closing or switching to a different GuiChest
+        if (oldGuiScreen is GuiChest) {
+            if (inventoryChangeListener != null) {
+                removeInventoryChangeListener(listenedInventory!!)
+            }
+
+            ContainerPreviewManager.onContainerClose()
+            GuiChestHook.onGuiClosed()
+        }
+    }
 //
 //    /**
 //     * Listens for key presses while a GUI is open
@@ -249,35 +252,35 @@ class GuiScreenListener {
             }
         }
     }
-//
-//    /**
-//     * Removes [.inventoryChangeListener] from a given [InventoryBasic].
-//     *
-//     * @param inventory the `InventoryBasic` to remove the listener from
-//     */
-//    private fun removeInventoryChangeListener(inventory: InventoryBasic) {
-//        if (inventory == null) {
-//            throw NullPointerException("Tried to remove listener from null inventory.")
-//        }
-//
-//        if (inventoryChangeListener != null) {
-//            try {
-//                inventory.removeInventoryChangeListener(inventoryChangeListener)
-//            } catch (e: NullPointerException) {
-//                SkyblockAddons.getInstance().utils!!.sendErrorMessage(
-//                    "Tried to remove an inventory listener from a container that has no listeners."
-//                )
-//            }
-//
-//            if (inventoryChangeTimeCheckTask != null) {
-//                if (!inventoryChangeTimeCheckTask.isCanceled()) {
-//                    inventoryChangeTimeCheckTask.cancel()
-//                }
-//            }
-//
-//            inventoryChangeListener = null
-//            listenedInventory = null
-//            inventoryChangeTimeCheckTask = null
-//        }
-//    }
+
+    /**
+     * Removes [.inventoryChangeListener] from a given [InventoryBasic].
+     *
+     * @param inventory the `InventoryBasic` to remove the listener from
+     */
+    private fun removeInventoryChangeListener(inventory: InventoryBasic) {
+        if (inventory == null) {
+            throw NullPointerException("Tried to remove listener from null inventory.")
+        }
+
+        if (inventoryChangeListener != null) {
+            try {
+                inventory.removeInventoryChangeListener(inventoryChangeListener)
+            } catch (e: NullPointerException) {
+                SkyblockAddonsPlus.utils!!.sendErrorMessage(
+                    "Tried to remove an inventory listener from a container that has no listeners."
+                )
+            }
+
+            if (inventoryChangeTimeCheckTask != null) {
+                if (!inventoryChangeTimeCheckTask!!.isCanceled()) {
+                    inventoryChangeTimeCheckTask!!.cancel()
+                }
+            }
+
+            inventoryChangeListener = null
+            listenedInventory = null
+            inventoryChangeTimeCheckTask = null
+        }
+    }
 }

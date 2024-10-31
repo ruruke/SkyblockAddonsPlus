@@ -77,15 +77,16 @@ class ButtonArrow(x: Double, y: Double, main: SkyblockAddonsPlus.Companion, arro
         }
     }
 
-    val isNotMax: Boolean
-        get() = !max
+    fun isNotMax(): Boolean {
+        return !max
+    }
 
     enum class ArrowType {
         LEFT, RIGHT
     }
 
     companion object {
-        private val ARROW_RIGHT = ResourceLocation("skyblockaddons", "gui/arrowright.png")
-        private val ARROW_LEFT = ResourceLocation("skyblockaddons", "gui/arrowleft.png")
+        private val ARROW_RIGHT = ResourceLocation("skyblockaddonsplus", "gui/arrowright.png")
+        private val ARROW_LEFT = ResourceLocation("skyblockaddonsplus", "gui/arrowleft.png")
     }
 }

@@ -6,7 +6,7 @@ import kotlin.math.min
 class ContainerPreview(
     items: List<ItemStack>,
     private val name: String?,
-    private val backpackColor: BackpackColor, rows: Int, cols: Int
+    private val backpackColor: BackpackColor?, rows: Int, cols: Int
 ) {
     private var x = 0
     fun setX(x: Int) {
@@ -25,7 +25,7 @@ class ContainerPreview(
     fun getName(): String? {
         return name
     }
-    fun getBackpackColor(): BackpackColor{
+    fun getBackpackColor(): BackpackColor?{
         return backpackColor
     }
     private val numRows = min(rows.toDouble(), 6.0).toInt()

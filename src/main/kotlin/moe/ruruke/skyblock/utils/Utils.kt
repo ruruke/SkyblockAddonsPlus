@@ -116,7 +116,6 @@ class Utils {
      */
     private var profileName = "Unknown"
     fun setProfileName(name: String){
-        main.utils!!.sendMessage("Debug > setProfineName > "+name)
         profileName = name
     }
 

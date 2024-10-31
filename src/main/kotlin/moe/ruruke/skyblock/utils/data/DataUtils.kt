@@ -378,6 +378,7 @@ object DataUtils {
      *
      * @param loadOnlineStrings Loads local and online strings if `true`, loads only local strings if `false`
      */
+    @JvmStatic
     fun loadLocalizedStrings(loadOnlineStrings: Boolean) {
         loadLocalizedStrings(main.configValues!!.getLanguage(), loadOnlineStrings)
     }

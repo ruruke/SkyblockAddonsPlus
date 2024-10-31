@@ -19,7 +19,6 @@ class ButtonColorWheel(x: Float, y: Float, feature: Feature?) : ButtonFeature(0,
         this.x = x
         this.y = y
     }
-
     override fun drawButton(mc: Minecraft, mouseX: Int, mouseY: Int) {
         val scale: Float = SkyblockAddonsPlus.configValues!!.getGuiScale(feature!!)
         this.hovered =
@@ -39,7 +38,11 @@ class ButtonColorWheel(x: Float, y: Float, feature: Feature?) : ButtonFeature(0,
     }
 
     companion object {
-        private val COLOR_WHEEL = ResourceLocation("skyblockaddons", "gui/colorwheel.png")
+        fun getSize(): Int {
+            return size
+        }
+
+        private val COLOR_WHEEL = ResourceLocation("skyblockaddonsplus", "gui/colorwheel.png")
         const val size: Int = 10
     }
 }

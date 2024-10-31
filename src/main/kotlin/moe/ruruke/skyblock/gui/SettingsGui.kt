@@ -1,12 +1,15 @@
 //package moe.ruruke.skyblock.gui
 //
-//import moe.ruruke.skyblock.SkyblockAddons
+//import moe.ruruke.skyblock.SkyblockAddonsPlus
 //import moe.ruruke.skyblock.core.Feature
 //import moe.ruruke.skyblock.core.Language
 //import moe.ruruke.skyblock.gui.buttons.ButtonArrow
+//import moe.ruruke.skyblock.utils.EnumUtils
 //import org.apache.logging.log4j.Logger
 //import org.lwjgl.input.Keyboard
+//import moe.ruruke.skyblock.gui.buttons.*
 //import moe.ruruke.skyblock.utils.EnumUtils.*
+//import net.minecraft.client.Minecraft
 //import net.minecraft.client.gui.GuiScreen
 //import java.awt.Color
 //import java.io.IOException
@@ -36,9 +39,7 @@
 //        column = 1
 //        buttonList.clear()
 //        if (feature === Feature.LANGUAGE) {
-//            val currentLanguage: Language = Language.getFromPath(SkyblockAddonsPlus.configValues)
-//            !!
-//            getLanguage().getPath()
+//            val currentLanguage: Language? = Language.getFromPath(SkyblockAddonsPlus.configValues!!.getLanguage().getPath())
 //
 //
 //            displayCount = findDisplayCount()
@@ -47,7 +48,7 @@
 //
 //            var max = page == 1
 //            buttonList.add(ButtonArrow(width / 2.0 - 15.0 - 50.0, height - 70.0, main, ButtonArrow.ArrowType.LEFT, max))
-//            max = Language.values().length - skip - displayCount <= 0
+//            max = Language.entries.size - skip - displayCount <= 0
 //            buttonList.add(ButtonArrow(width / 2.0 - 15.0 + 50.0, height - 70.0, main, ButtonArrow.ArrowType.RIGHT, max))
 //
 //            for (language in Language.values()) {
@@ -180,75 +181,81 @@
 //     * Code to perform the button toggles, openings of other gui's/pages, and language changes.
 //     */
 //    override fun actionPerformed(abstractButton: GuiButton) {
-//        if (abstractButton is ButtonLanguage) {
-//            val language: Language = (abstractButton as ButtonLanguage).getLanguage()
-//            DataUtils.loadLocalizedStrings(language, false)
-//            main.setKeyBindingDescriptions()
-//            returnToGui()
-//        } else if (abstractButton is ButtonSwitchTab) {
-//            val tab: ButtonSwitchTab = abstractButton as ButtonSwitchTab
-//            mc.displayGuiScreen(SkyblockAddonsGui(1, tab.getTab()))
-//        } else if (abstractButton is ButtonOpenColorMenu) {
-//            closingGui = true
-//            // Temp fix until feature re-write. Open a color selection panel specific to the color setting
-//            val f: Feature = (abstractButton as ButtonOpenColorMenu).feature
-//            if (f === Feature.ENCHANTMENT_PERFECT_COLOR || f === Feature.ENCHANTMENT_GREAT_COLOR || f === Feature.ENCHANTMENT_GOOD_COLOR || f === Feature.ENCHANTMENT_POOR_COLOR || f === Feature.ENCHANTMENT_COMMA_COLOR) {
-//                mc.displayGuiScreen(ColorSelectionGui(f, EnumUtils.GUIType.SETTINGS, lastTab, lastPage))
-//            } else {
-//                mc.displayGuiScreen(ColorSelectionGui(feature, EnumUtils.GUIType.SETTINGS, lastTab, lastPage))
+//        when {
+//            abstractButton is ButtonLanguage -> {
+//                val language: Language = (abstractButton as ButtonLanguage).getLanguage()
+//                DataUtils.loadLocalizedStrings(language, false)
+//                main.setKeyBindingDescriptions()
+//                returnToGui()
 //            }
-//        } else if (abstractButton is ButtonToggleTitle) {
-//            val button: ButtonFeature = abstractButton as ButtonFeature
-//            val feature: Feature = button.getFeature() ?: return
-//            if (SkyblockAddonsPlus.configValues);
-//            !!
-//            isDisabled(feature)
-//            run {
-//                feature.setEnabled(true)
+//            abstractButton is ButtonSwitchTab -> {
+//                val tab: ButtonSwitchTab = abstractButton as ButtonSwitchTab
+//                mc.displayGuiScreen(SkyblockAddonsGui(1, tab.getTab()))
 //            }
-//            run {
-//                feature.setEnabled(false)
-//                if (feature === Feature.HIDE_FOOD_ARMOR_BAR) { // Reset the vanilla bars when disabling these two features.
-//                    GuiIngameForge.renderArmor = true // The food gets automatically enabled, no need to include it.
-//                } else if (feature === Feature.HIDE_HEALTH_BAR) {
-//                    GuiIngameForge.renderHealth = true
-//                } else if (feature === Feature.REPEAT_FULL_INVENTORY_WARNING) {
-//                    // Remove queued warnings when the repeat setting is turned off.
-//                    main.getScheduler().removeQueuedFullInventoryWarnings()
+//            abstractButton is ButtonOpenColorMenu -> {
+//                closingGui = true
+//                // Temp fix until feature re-write. Open a color selection panel specific to the color setting
+//                val f: Feature = (abstractButton as ButtonOpenColorMenu).feature!!
+//                if (f === Feature.ENCHANTMENT_PERFECT_COLOR || f === Feature.ENCHANTMENT_GREAT_COLOR || f === Feature.ENCHANTMENT_GOOD_COLOR || f === Feature.ENCHANTMENT_POOR_COLOR || f === Feature.ENCHANTMENT_COMMA_COLOR) {
+//                    mc.displayGuiScreen(ColorSelectionGui(f, EnumUtils.GUIType.SETTINGS, lastTab, lastPage))
+//                } else {
+//                    mc.displayGuiScreen(ColorSelectionGui(feature, EnumUtils.GUIType.SETTINGS, lastTab, lastPage))
 //                }
 //            }
-//        } else if (feature === Feature.SHOW_BACKPACK_PREVIEW) {
-//            SkyblockAddonsPlus.configValues
-//            !!
-//            setBackpackStyle(SkyblockAddonsPlus.configValues)
-//            !!
-//            getBackpackStyle().getNextType()
-//
-//            closingGui = true
-//            Minecraft.getMinecraft().displayGuiScreen(SettingsGui(feature, page, lastPage, lastTab, settings))
-//            closingGui = false
-//        } else if (feature === Feature.POWER_ORB_STATUS_DISPLAY && abstractButton is ButtonSolid) {
-//            SkyblockAddonsPlus.configValues
-//            !!
-//            setPowerOrbDisplayStyle(SkyblockAddonsPlus.configValues)
-//            !!
-//            getPowerOrbDisplayStyle().getNextType()
-//
-//            closingGui = true
-//            Minecraft.getMinecraft().displayGuiScreen(SettingsGui(feature, page, lastPage, lastTab, settings))
-//            closingGui = false
-//        } else if (abstractButton is ButtonArrow) {
-//            val arrow: ButtonArrow = abstractButton as ButtonArrow
-//            if (arrow.isNotMax()) {
-//                SkyblockAddonsPlus.utils
-//                !!
-//                setFadingIn(false)
-//                if (arrow.getArrowType() === ButtonArrow.ArrowType.RIGHT) {
-//                    closingGui = true
-//                    mc.displayGuiScreen(SettingsGui(feature, ++page, lastPage, lastTab, settings))
-//                } else {
-//                    closingGui = true
-//                    mc.displayGuiScreen(SettingsGui(feature, --page, lastPage, lastTab, settings))
+////            abstractButton is ButtonToggleTitle -> {
+////                val button: ButtonFeature = abstractButton as ButtonFeature
+////                val feature: Feature = button.feature ?: return
+////                if (SkyblockAddonsPlus.configValues!!.isDisabled(feature))
+////                run {
+////                    feature.setEnabled(true)
+////                }
+////                run {
+////                    feature.setEnabled(false)
+////                    if (feature === Feature.HIDE_FOOD_ARMOR_BAR) { // Reset the vanilla bars when disabling these two features.
+////                        GuiIngameForge.renderArmor = true // The food gets automatically enabled, no need to include it.
+////                    } else if (feature === Feature.HIDE_HEALTH_BAR) {
+////                        GuiIngameForge.renderHealth = true
+////                    } else if (feature === Feature.REPEAT_FULL_INVENTORY_WARNING) {
+////                        // Remove queued warnings when the repeat setting is turned off.
+////                        main.getScheduler().removeQueuedFullInventoryWarnings()
+////                    }
+////                }
+////            }
+////            feature === Feature.SHOW_BACKPACK_PREVIEW -> {
+////                SkyblockAddonsPlus.configValues
+////                !!
+////                setBackpackStyle(SkyblockAddonsPlus.configValues)
+////                !!
+////                getBackpackStyle().getNextType()
+////
+////                closingGui = true
+////                Minecraft.getMinecraft().displayGuiScreen(SettingsGui(feature, page, lastPage, lastTab, settings))
+////                closingGui = false
+////            }
+////            feature === Feature.POWER_ORB_STATUS_DISPLAY && abstractButton is ButtonSolid -> {
+////                SkyblockAddonsPlus.configValues
+////                !!
+////                setPowerOrbDisplayStyle(SkyblockAddonsPlus.configValues)
+////                !!
+////                getPowerOrbDisplayStyle().getNextType()
+////
+////                closingGui = true
+////                Minecraft.getMinecraft().displayGuiScreen(SettingsGui(feature, page, lastPage, lastTab, settings))
+////                closingGui = false
+////            }
+//            abstractButton is ButtonArrow -> {
+//                val arrow: ButtonArrow = abstractButton as ButtonArrow
+//                if (arrow.isNotMax()) {
+//                    SkyblockAddonsPlus.utils
+//                    !!
+//                    setFadingIn(false)
+//                    if (arrow.getArrowType() === ButtonArrow.ArrowType.RIGHT) {
+//                        closingGui = true
+//                        mc.displayGuiScreen(SettingsGui(feature, ++page, lastPage, lastTab, settings))
+//                    } else {
+//                        closingGui = true
+//                        mc.displayGuiScreen(SettingsGui(feature, --page, lastPage, lastTab, settings))
+//                    }
 //                }
 //            }
 //        }
@@ -432,69 +439,70 @@
 //                    this@SettingsGui.reInit = true
 //                })
 //
-//            if (currentStatus === DiscordStatus.AUTO_STATUS) {
-//                row++
-//                row += 0.4.toFloat()
-//                x = halfWidth - (boxWidth / 2)
-//                y = getRowHeightSetting(row.toDouble())
+////            if (currentStatus === DiscordStatus.AUTO_STATUS) {
+////                row++
+////                row += 0.4.toFloat()
+////                x = halfWidth - (boxWidth / 2)
+////                y = getRowHeightSetting(row.toDouble())
+////
+////                buttonList.add(
+////                    ButtonTextNew(
+////                        halfWidth,
+////                        y.toInt() - 10,
+////                        Translations.getMessage("messages.fallbackStatus"),
+////                        true,
+////                        -0x1
+////                    )
+////                )
+////                currentStatus = SkyblockAddonsPlus.configValues
+////                !!
+////                getDiscordAutoDefault()
+////                buttonList.add(
+////                    ButtonSelect(
+////                        x,
+////                        y.toInt(),
+////                        boxWidth,
+////                        20,
+////                        Arrays.asList(DiscordStatus.values()),
+////                        currentStatus.ordinal()
+////                    ) { index ->
+////                        val selectedStatus: DiscordStatus = DiscordStatus.values().get(index)
+////                        SkyblockAddonsPlus.configValues
+////                        !!
+////                        setDiscordAutoDefault(selectedStatus)
+////                        this@SettingsGui.reInit = true
+////                    })
+////            }
 //
-//                buttonList.add(
-//                    ButtonTextNew(
-//                        halfWidth,
-//                        y.toInt() - 10,
-//                        Translations.getMessage("messages.fallbackStatus"),
-//                        true,
-//                        -0x1
-//                    )
-//                )
-//                currentStatus = SkyblockAddonsPlus.configValues
-//                !!
-//                getDiscordAutoDefault()
-//                buttonList.add(
-//                    ButtonSelect(
-//                        x,
-//                        y.toInt(),
-//                        boxWidth,
-//                        20,
-//                        Arrays.asList(DiscordStatus.values()),
-//                        currentStatus.ordinal()
-//                    ) { index ->
-//                        val selectedStatus: DiscordStatus = DiscordStatus.values().get(index)
-//                        SkyblockAddonsPlus.configValues
-//                        !!
-//                        setDiscordAutoDefault(selectedStatus)
-//                        this@SettingsGui.reInit = true
-//                    })
-//            }
-//
-//            if (currentStatus === DiscordStatus.CUSTOM) {
-//                row++
-//                halfWidth = width / 2
-//                boxWidth = 200
-//                x = halfWidth - (boxWidth / 2)
-//                y = getRowHeightSetting(row.toDouble())
-//
-//                var discordStatusEntry: DiscordStatusEntry = EnumUtils.DiscordStatusEntry.DETAILS
-//                if (setting === EnumUtils.FeatureSetting.DISCORD_RP_STATE) {
-//                    discordStatusEntry = EnumUtils.DiscordStatusEntry.STATE
-//                }
-//                val finalDiscordStatusEntry: DiscordStatusEntry = discordStatusEntry
-//                val inputField: ButtonInputFieldWrapper =
-//                    ButtonInputFieldWrapper(x, y.toInt(), 200, 20, SkyblockAddonsPlus.configValues)
-//                !!
-//                TODO(
-//                    """
-//                    |Cannot convert element
-//                    |With text:
-//                    |getCustomStatus(discordStatusEntry),
-//                    |                        null, 100, false, updatedValue -> SkyblockAddonsPlus.configValues
-//                    """.trimMargin()
-//                )
-//                !!
-//                setCustomStatus(finalDiscordStatusEntry, updatedValue)
-//
-//                buttonList.add(inputField)
-//            }
+//            //TODO:
+////            if (currentStatus === DiscordStatus.CUSTOM) {
+////                row++
+////                halfWidth = width / 2
+////                boxWidth = 200
+////                x = halfWidth - (boxWidth / 2)
+////                y = getRowHeightSetting(row.toDouble())
+////
+////                var discordStatusEntry: DiscordStatusEntry = EnumUtils.DiscordStatusEntry.DETAILS
+////                if (setting === EnumUtils.FeatureSetting.DISCORD_RP_STATE) {
+////                    discordStatusEntry = EnumUtils.DiscordStatusEntry.STATE
+////                }
+////                val finalDiscordStatusEntry: DiscordStatusEntry = discordStatusEntry
+////                val inputField: ButtonInputFieldWrapper =
+////                    ButtonInputFieldWrapper(x, y.toInt(), 200, 20, SkyblockAddonsPlus.configValues)
+////                !!
+////                TODO(
+////                    """
+////                    |Cannot convert element
+////                    |With text:
+////                    |getCustomStatus(discordStatusEntry),
+////                    |                        null, 100, false, updatedValue -> SkyblockAddonsPlus.configValues
+////                    """.trimMargin()
+////                )
+////                !!
+////                setCustomStatus(finalDiscordStatusEntry, updatedValue)
+////
+////                buttonList.add(inputField)
+////            }
 //
 //            row += 0.4.toFloat()
 //        } else if (setting === EnumUtils.FeatureSetting.MAP_ZOOM) {
@@ -581,7 +589,7 @@
 //                settingFeature = Feature.SHOW_SUMMONING_EYE_COUNT_ZEALOT_SPAWN_AREAS_ONLY
 //            }
 //
-//            buttonList.add(ButtonToggleTitle(x, y, setting.getMessage(), main, settingFeature))
+//            buttonList.add(ButtonToggleTitle(x.toFloat(), y, setting.getMessage()!!, main, settingFeature))
 //        } else if (setting === EnumUtils.FeatureSetting.DISABLE_SPIRIT_SCEPTRE_MESSAGES) {
 //            boxWidth = 31
 //            x = halfWidth - (boxWidth / 2)

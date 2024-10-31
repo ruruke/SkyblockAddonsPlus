@@ -18,17 +18,39 @@ class NewConfigValue : Config(Mod(SkyblockAddonsPlus.NAME, ModType.SKYBLOCK), Sk
     init {
         initialize()
     }
+
     @Switch(name = "Replace Roman Numerals on Items", size = OptionSize.SINGLE)
     var replaceRomanNumeralsWithNumbers: Boolean = false // The default value for the boolean Switch.
 
     //            WIP           //
-    @Switch(name = "Full Inventory Warning", size = OptionSize.SINGLE, category = "WIP")
-    var fullInventoryWarning: Boolean = false // The default value for the boolean Switch.
-    @Switch(name = "Drop Confirm(DummyName)", size = OptionSize.SINGLE, category = "WIP")
-    var dropConfirm: Boolean = false // The default value for the boolean Switch.
+    @Switch(name = "Hide Food and Armor Bar", size = OptionSize.SINGLE, category = "QoL")
+    var hideFoodAndArmorBar: Boolean = false
+    @Switch(name = "Hide Health Bar", size = OptionSize.SINGLE, category = "QoL")
+    var hideHealthBar: Boolean = false
 
-    @Switch(name = "CHANGE_ZEALOT_COLOR(DummyName)", size = OptionSize.SINGLE, category = "WIP")
-    var changeZealotColor: Boolean = false // The default value for the boolean Switch.
+    @Switch(name = "Custom Health Bar", size = OptionSize.SINGLE, category = "QoL")
+    var healthBar: Boolean = false
+    @Switch(name = "Health Text", size = OptionSize.SINGLE, category = "QoL")
+    var healthText: Boolean = false
+    @Switch(name = "Custom Mana Bar", size = OptionSize.SINGLE, category = "QoL")
+    var manaBar: Boolean = false
+    @Switch(name = "Mana Text", size = OptionSize.SINGLE, category = "QoL")
+    var manaText: Boolean = false
+
+    @Switch(name = "Full Inventory Warning", size = OptionSize.SINGLE, category = "QoL")
+    var fullInventoryWarning: Boolean = false
+
+    @Switch(name = "Drop Confirm(DummyName)", size = OptionSize.SINGLE, category = "QoL")
+    var dropConfirm: Boolean = false
+
+    @Switch(name = "CHANGE_ZEALOT_COLOR(DummyName)", size = OptionSize.SINGLE, category = "QoL")
+    var changeZealotColor: Boolean = false
+
+    @Switch(name = "Backpack Preview (DummyName)", size = OptionSize.SINGLE, category = "Interface")
+    var backpackPreview: Boolean = false
+
+    @Switch(name = "EnderChest Preview (DummyName)", size = OptionSize.SINGLE, category = "Interface")
+    var enderChestPreview: Boolean = false
 //    @Switch(name = "Full Inventory Warning", size = OptionSize.SINGLE, category = "WIP")
 //    var fullInventoryWarning: Boolean = false // The default value for the boolean Switch.
     //            WIP           //
@@ -40,7 +62,7 @@ class NewConfigValue : Config(Mod(SkyblockAddonsPlus.NAME, ModType.SKYBLOCK), Sk
 
     @Dropdown(
         name = "Force Location",        // name of the component
-        options = ["None","Island", "DRAGONS_NEST"],
+        options = ["None", "Island", "DRAGONS_NEST"],
         category = "Debug"
     )
     var forceLocation: Int = 0 // default option (here "Another Option")

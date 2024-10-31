@@ -62,7 +62,7 @@ class ShaderLoader private constructor(
 
             if (shaderLoader == null) {
                 val resourceLocation =
-                    ResourceLocation("skyblockaddons", "shaders/program/" + fileName + type.getShaderExtension())
+                    ResourceLocation("skyblockaddonsplus", "shaders/program/" + fileName + type.getShaderExtension())
                 val bufferedInputStream =
                     BufferedInputStream(Minecraft.getMinecraft().resourceManager.getResource(resourceLocation).inputStream)
                 val bytes: ByteArray = Utils.toByteArray(bufferedInputStream)

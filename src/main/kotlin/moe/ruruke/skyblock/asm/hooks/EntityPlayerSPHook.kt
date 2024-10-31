@@ -2,6 +2,7 @@ package moe.ruruke.skyblock.asm.hooks
 
 import moe.ruruke.skyblock.SkyblockAddonsPlus
 import moe.ruruke.skyblock.asm.utils.ReturnValue
+import moe.ruruke.skyblock.config.NewConfig
 import moe.ruruke.skyblock.core.Feature.*
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.item.EntityItem
@@ -78,8 +79,7 @@ class EntityPlayerSPHook {
                 }
             }
 
-            if (heldItemStack != null && main.configValues!!
-                    .isEnabled(DROP_CONFIRMATION) && !main.utils!!
+            if (heldItemStack != null && NewConfig.isEnabled(DROP_CONFIRMATION) && !main.utils!!
                     .isInDungeon() && (main.utils!!.isOnSkyblock() || main.getPlayerListener()
                     .aboutToJoinSkyblockServer()
                         || main.configValues!!.isEnabled(DOUBLE_DROP_IN_OTHER_GAMES))

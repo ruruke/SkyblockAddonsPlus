@@ -1,8 +1,11 @@
 package moe.ruruke.skyblock.command
 
 import moe.ruruke.skyblock.SkyblockAddonsPlus
+import moe.ruruke.skyblock.gui.LocationEditGui
+import moe.ruruke.skyblock.utils.EnumUtils
 import moe.ruruke.skyblock.utils.Test
 import moe.ruruke.skyblock.utils.Utils
+import net.minecraft.client.Minecraft
 import net.minecraft.command.CommandBase
 import net.minecraft.command.ICommandSender
 
@@ -32,8 +35,8 @@ public class SkyblockAddonsPlusCommand : CommandBase() {
     }
 
     override fun processCommand(sender: ICommandSender?, args: Array<out String>?) {
-        var s = Utils.getPlayerViewPosition()
-        main.utils!!.sendMessage("skyblockaddonsplus  Skyblock? > ${main.utils!!.isOnSkyblock()} Hypixel? > ${main.utils!!.isOnHypixel} ProfileName > ${main.utils!!.getProfileName()}")
-        Test().a()
+
+        main.utils!!.setFadingIn(true);
+        main.renderListener!!.setGuiToOpen(EnumUtils.GUIType.EDIT_LOCATIONS, 1, EnumUtils.GuiTab.MAIN);
     }
 }

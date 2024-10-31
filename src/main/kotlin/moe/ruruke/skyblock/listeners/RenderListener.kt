@@ -9,7 +9,14 @@ import moe.ruruke.skyblock.features.ItemDiff
 import moe.ruruke.skyblock.features.SlayerArmorProgress
 import moe.ruruke.skyblock.features.spookyevent.CandyType
 import moe.ruruke.skyblock.features.spookyevent.SpookyEventManager
+import moe.ruruke.skyblock.features.tablist.TabListParser
+import moe.ruruke.skyblock.features.tablist.TabListRenderer
+import moe.ruruke.skyblock.gui.LocationEditGui
+import moe.ruruke.skyblock.gui.SettingsGui
+import moe.ruruke.skyblock.gui.SkyblockAddonsGui
 import moe.ruruke.skyblock.gui.buttons.ButtonLocation
+import moe.ruruke.skyblock.shader.ShaderManager
+import moe.ruruke.skyblock.shader.chroma.ChromaScreenTexturedShader
 import moe.ruruke.skyblock.utils.*
 import net.minecraft.client.Minecraft
 import net.minecraft.client.entity.EntityPlayerSP
@@ -30,9 +37,11 @@ import net.minecraft.util.ResourceLocation
 import net.minecraftforge.client.GuiIngameForge
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent
 import java.awt.Color
 import java.util.*
 import kotlin.math.ceil
+import kotlin.math.max
 import kotlin.math.min
 
 
@@ -88,9 +97,12 @@ class RenderListener {
         return arrowsLeft
     }
 
-    private val cannotReachMobName: String? = null
+    private var cannotReachMobName: String? = null
     fun getCannotReachMobName(): String {
         return cannotReachMobName!!
+    }
+    fun setCannotReachMobName(name: String?) {
+        cannotReachMobName = name
     }
 
     private val skillFadeOutTime: Long = -1
@@ -323,10 +335,10 @@ class RenderListener {
     private fun renderOverlays() {
         val mc: Minecraft = Minecraft.getMinecraft()
         //TODO:
-//        if (mc.currentScreen !is LocationEditGui && mc.currentScreen !is GuiNotification) {
+        if (mc.currentScreen !is LocationEditGui /* && mc.currentScreen !is GuiNotification */) {
             GlStateManager.disableBlend()
 
-            for (feature in Feature.guiFeatures) {
+            for (feature in Feature.getGuiFeatures()) {
                 if (NewConfig.isEnabled(feature)) {
                     if (feature == Feature.SKELETON_BAR && !main.inventoryUtils!!.isWearingSkeletonHelmet()) continue
                     if (feature == Feature.HEALTH_UPDATES && main.getPlayerListener().getHealthUpdate() == null
@@ -340,80 +352,81 @@ class RenderListener {
                 }
             }
         }
-//    }
+    }
 //
-//    /**
-//     * This draws all Skyblock Addons Bars, including the Health, Mana, Drill, and Skill XP bars
-//     *
-//     * @param feature        for which to render the bars
-//     * @param scale          the scale of the feature
-//     * @param mc             link to the minecraft session
-//     * @param buttonLocation the resizing gui, if present
-//     */
-//    fun drawBar(feature: Feature, scale: Float, mc: Minecraft, buttonLocation: ButtonLocation?) {
-//        // The fill of the bar from 0 to 1
-//        var fill: Float
-//        // Whether the player has absorption hearts
-//        var hasAbsorption = false
-//        if (feature == Feature.MANA_BAR) {
-//            fill = getAttribute(Attribute.MANA) / getAttribute(Attribute.MAX_MANA)
-//        } else if (feature == Feature.DRILL_FUEL_BAR) {
-//            fill = getAttribute(Attribute.FUEL) / getAttribute(Attribute.MAX_FUEL)
-//        } else if (feature == Feature.SKILL_PROGRESS_BAR) {
-//            val parser: ActionBarParser = main.getPlayerListener().getActionBarParser()
-//            fill = if (buttonLocation == null) {
-//                if (parser.getPercent() === 0 || parser.getPercent() === 100) {
-//                    return
-//                } else {
-//                    parser.getPercent() / 100
-//                }
-//            } else {
-//                0.40f
-//            }
-//        } else {
-//            fill = getAttribute(Attribute.HEALTH) / getAttribute(Attribute.MAX_HEALTH)
-//        }
-//        if (fill > 1) fill = 1f
-//
-//        var x: Float = main.configValues!!.getActualX(feature)
-//        var y: Float = main.configValues!!.getActualY(feature)
-//        val scaleX: Float = main.configValues!!.getSizesX(feature)
-//        val scaleY: Float = main.configValues!!.getSizesY(feature)
-//        GlStateManager.scale(scaleX, scaleY, 1f)
-//
-//        x = transformXY(x, 71, scale * scaleX)
-//        y = transformXY(y, 5, scale * scaleY)
-//
-//        // Render the button resize box if necessary
-//        if (buttonLocation != null) {
-//            buttonLocation.checkHoveredAndDrawBox(x, x + 71, y, y + 5, scale, scaleX, scaleY)
-//        }
-//
-//        var color: SkyblockColor = ColorUtils.getDummySkyblockColor(
-//            main.configValues!!.getColor(feature),
-//            main.configValues!!.getChromaFeatures().contains(feature)
-//        )
-//
-//        if (feature == Feature.SKILL_PROGRESS_BAR && buttonLocation == null) {
-//            val remainingTime = (skillFadeOutTime - System.currentTimeMillis()).toInt()
-//
-//            if (remainingTime < 0) {
-//                if (remainingTime < -2000) {
-//                    return  // Will be invisible, no need to render.
-//                }
-//
-//                val textAlpha = Math.round(255 - (-remainingTime / 2000f * 255f))
-//                color = ColorUtils.getDummySkyblockColor(
-//                    main.configValues!!.getColor(feature, textAlpha),
-//                    main.configValues!!.getChromaFeatures().contains(feature)
-//                ) // so it fades out, 0.016 is the minimum alpha
-//            }
-//        }
-//
-//        if (feature == Feature.DRILL_FUEL_BAR && buttonLocation == null && !ItemUtils.isDrill(mc.thePlayer.getHeldItem())) {
-//            return
-//        }
-//
+    /**
+     * This draws all Skyblock Addons Bars, including the Health, Mana, Drill, and Skill XP bars
+     *
+     * @param feature        for which to render the bars
+     * @param scale          the scale of the feature
+     * @param mc             link to the minecraft session
+     * @param buttonLocation the resizing gui, if present
+     */
+    fun drawBar(feature: Feature, scale: Float, mc: Minecraft, buttonLocation: ButtonLocation?) {
+        // The fill of the bar from 0 to 1
+        var fill: Float
+        // Whether the player has absorption hearts
+        var hasAbsorption = false
+        if (feature == Feature.MANA_BAR) {
+            fill = getAttribute(Attribute.MANA) / getAttribute(Attribute.MAX_MANA)
+        } else if (feature == Feature.DRILL_FUEL_BAR) {
+            fill = getAttribute(Attribute.FUEL) / getAttribute(Attribute.MAX_FUEL)
+        } else if (feature == Feature.SKILL_PROGRESS_BAR) {
+            val parser: ActionBarParser = main.getPlayerListener().getActionBarParser()
+            fill = if (buttonLocation == null) {
+                if (parser.getPercent() === 0f || parser.getPercent() === 100f) {
+                    return
+                } else {
+                    parser.getPercent() / 100
+                }
+            } else {
+                0.40f
+            }
+        } else {
+            fill = getAttribute(Attribute.HEALTH) / getAttribute(Attribute.MAX_HEALTH)
+        }
+        if (fill > 1) fill = 1f
+
+        var x: Float = main.configValues!!.getActualX(feature)
+        var y: Float = main.configValues!!.getActualY(feature)
+        val scaleX: Float = main.configValues!!.getSizesX(feature)
+        val scaleY: Float = main.configValues!!.getSizesY(feature)
+        GlStateManager.scale(scaleX, scaleY, 1f)
+
+        x = transformXY(x, 71, scale * scaleX)
+        y = transformXY(y, 5, scale * scaleY)
+
+        // Render the button resize box if necessary
+        if (buttonLocation != null) {
+            buttonLocation.checkHoveredAndDrawBox(x, x + 71, y, y + 5, scale, scaleX, scaleY)
+        }
+
+        var color: SkyblockColor = ColorUtils.getDummySkyblockColor(
+            main.configValues!!.getColor(feature),
+            main.configValues!!.getChromaFeatures().contains(feature)
+        )
+
+        if (feature == Feature.SKILL_PROGRESS_BAR && buttonLocation == null) {
+            val remainingTime = (skillFadeOutTime - System.currentTimeMillis()).toInt()
+
+            if (remainingTime < 0) {
+                if (remainingTime < -2000) {
+                    return  // Will be invisible, no need to render.
+                }
+
+                val textAlpha = Math.round(255 - (-remainingTime / 2000f * 255f))
+                color = ColorUtils.getDummySkyblockColor(
+                    main.configValues!!.getColor(feature, textAlpha),
+                    main.configValues!!.getChromaFeatures().contains(feature)
+                ) // so it fades out, 0.016 is the minimum alpha
+            }
+        }
+
+        if (feature == Feature.DRILL_FUEL_BAR && buttonLocation == null && !ItemUtils.isDrill(mc.thePlayer.getHeldItem())) {
+            return
+        }
+
+//TODO:
 //        if (feature == Feature.HEALTH_BAR && main.configValues!!.isEnabled(Feature.CHANGE_BAR_COLOR_FOR_POTIONS)) {
 //            if (mc.thePlayer.isPotionActive(19 /* Poison */)) {
 //                color = ColorUtils.getDummySkyblockColor(
@@ -432,102 +445,102 @@ class RenderListener {
 //                }
 //            }
 //        }
-//
-//        main.getUtils().enableStandardGLOptions()
-//        // Draw the actual bar
-//        drawMultiLayeredBar(mc, color, x, y, fill, hasAbsorption)
-//
-//        main.getUtils().restoreGLOptions()
-//    }
-//
-//    /**
-//     * Draws a multitextured bar:
-//     * Begins by coloring and rendering the empty bar.
-//     * Then, colors and renders the full bar up to the fraction {@param fill}.
-//     * Then, overlays the absorption portion of the bar in gold if the player has absorption hearts
-//     * Then, overlays (and does not color) an additional texture centered on the current progress of the bar.
-//     * Then, overlays (and does not color) a final style texture over the bar
-//     * @param mc link to the current minecraft session
-//     * @param color the color with which to render the bar
-//     * @param x the x position of the bar
-//     * @param y the y position of the bar
-//     * @param fill the fraction (from 0 to 1) of the bar that's full
-//     * @param hasAbsorption `true` if the player has absorption hearts
-//     */
-//    private fun drawMultiLayeredBar(
-//        mc: Minecraft,
-//        color: SkyblockColor,
-//        x: Float,
-//        y: Float,
-//        fill: Float,
-//        hasAbsorption: Boolean
-//    ) {
-//        val barHeight = 5
-//        val barWidth = 71
-//        val barFill = barWidth * fill
-//        mc.getTextureManager().bindTexture(BARS)
-//        if (color.color == ColorCode.BLACK.getColor()) {
-//            GlStateManager.color(0.25f, 0.25f, 0.25f, ColorUtils.getAlpha(color.color) / 255f) // too dark normally
-//        } else { // A little darker for contrast...
-//            ColorUtils.bindColor(color.color, 0.9f)
-//        }
-//        // If chroma, draw the empty bar much darker than the filled bar
-//        if (color.drawMulticolorUsingShader()) {
-//            GlStateManager.color(.5f, .5f, .5f)
-//            ShaderManager.getInstance().enableShader(ChromaScreenTexturedShader::class.java)
-//        }
-//        // Empty bar first
-//        DrawUtils.drawModalRectWithCustomSizedTexture(x, y, 1, 1, barWidth, barHeight, 80, 50)
-//
-//        if (color.drawMulticolorUsingShader()) {
-//            ColorUtils.bindWhite()
-//            ShaderManager.getInstance().enableShader(ChromaScreenTexturedShader::class.java)
-//        }
-//
-//        // Filled bar next
-//        if (fill != 0f) {
-//            DrawUtils.drawModalRectWithCustomSizedTexture(x, y, 1, 7, barFill, barHeight, 80, 50)
-//        }
-//        // Disable coloring
-//        if (color.drawMulticolorUsingShader()) {
-//            ShaderManager.getInstance().disableShader()
-//        }
-//
-//        // Overlay absorption health if needed
-//        if (hasAbsorption) {
-//            ColorUtils.bindColor(ColorCode.GOLD.getColor())
-//            DrawUtils.drawModalRectWithCustomSizedTexture(
-//                x + barFill,
-//                y,
-//                barFill + 1,
-//                7,
-//                barWidth - barFill,
-//                barHeight,
-//                80,
-//                50
-//            )
-//        }
-//        ColorUtils.bindWhite()
-//
-//        // Overlay uncolored progress indicator next (texture packs can use this to overlay their own static bar colors)
-//        if (fill > 0 && fill < 1) {
-//            // Make sure that the overlay doesn't go outside the bounds of the bar.
-//            // It's 4 pixels wide, so ensure we only render the texture between 0 <= x <= barWidth
-//            // Start rendering at x => 0 (for small fill values, also don't render before the bar starts)
-//            // Adding padding ensures that no green bar gets rendered from the texture...?
-//            val padding = .01f
-//            val oneSide = 2 - padding
-//            val startX = max(0.0, (barFill - oneSide).toDouble()).toFloat()
-//            // Start texture at x >= 0 (for small fill values, also start the texture so indicator is always centered)
-//            val startTexX = max(padding.toDouble(), (oneSide - barFill).toDouble()).toFloat()
-//            // End texture at x <= barWidth and 4 <= startTexX + endTexX (total width of overlay texture). Cut off for large fill values.
-//            val endTexX =
-//                min((2 * oneSide - startTexX).toDouble(), (barWidth - barFill + oneSide).toDouble()).toFloat()
-//            DrawUtils.drawModalRectWithCustomSizedTexture(x + startX, y, 1 + startTexX, 24, endTexX, barHeight, 80, 50)
-//        }
-//        // Overlay uncolored bar display next (texture packs can use this to overlay their own static bar colors)
-//        DrawUtils.drawModalRectWithCustomSizedTexture(x, y, 1, 13, barWidth, barHeight, 80, 50)
-//    }
+
+        main.utils!!.enableStandardGLOptions()
+        // Draw the actual bar
+        drawMultiLayeredBar(mc, color, x, y, fill, hasAbsorption)
+
+        main.utils!!.restoreGLOptions()
+    }
+
+    /**
+     * Draws a multitextured bar:
+     * Begins by coloring and rendering the empty bar.
+     * Then, colors and renders the full bar up to the fraction {@param fill}.
+     * Then, overlays the absorption portion of the bar in gold if the player has absorption hearts
+     * Then, overlays (and does not color) an additional texture centered on the current progress of the bar.
+     * Then, overlays (and does not color) a final style texture over the bar
+     * @param mc link to the current minecraft session
+     * @param color the color with which to render the bar
+     * @param x the x position of the bar
+     * @param y the y position of the bar
+     * @param fill the fraction (from 0 to 1) of the bar that's full
+     * @param hasAbsorption `true` if the player has absorption hearts
+     */
+    private fun drawMultiLayeredBar(
+        mc: Minecraft,
+        color: SkyblockColor,
+        x: Float,
+        y: Float,
+        fill: Float,
+        hasAbsorption: Boolean
+    ) {
+        val barHeight = 5
+        val barWidth = 71
+        val barFill = barWidth * fill
+        mc.getTextureManager().bindTexture(BARS)
+        if (color.color == ColorCode.BLACK.getColor()) {
+            GlStateManager.color(0.25f, 0.25f, 0.25f, ColorUtils.getAlpha(color.color) / 255f) // too dark normally
+        } else { // A little darker for contrast...
+            ColorUtils.bindColor(color.color, 0.9f)
+        }
+        // If chroma, draw the empty bar much darker than the filled bar
+        if (color.drawMulticolorUsingShader()) {
+            GlStateManager.color(.5f, .5f, .5f)
+            ShaderManager.instance.enableShader(ChromaScreenTexturedShader::class.java)
+        }
+        // Empty bar first
+        DrawUtils.drawModalRectWithCustomSizedTexture(x, y, 1f, 1f, barWidth.toFloat(), barHeight.toFloat(), 80f, 50f)
+
+        if (color.drawMulticolorUsingShader()) {
+            ColorUtils.bindWhite()
+            ShaderManager.instance.enableShader(ChromaScreenTexturedShader::class.java)
+        }
+
+        // Filled bar next
+        if (fill != 0f) {
+            DrawUtils.drawModalRectWithCustomSizedTexture(x, y, 1f, 7f, barFill.toFloat(), barHeight.toFloat(), 80f, 50f)
+        }
+        // Disable coloring
+        if (color.drawMulticolorUsingShader()) {
+            ShaderManager.instance.disableShader()
+        }
+
+        // Overlay absorption health if needed
+        if (hasAbsorption) {
+            ColorUtils.bindColor(ColorCode.GOLD.getColor())
+            DrawUtils.drawModalRectWithCustomSizedTexture(
+                x + barFill,
+                y,
+                barFill + 1,
+                7f,
+                barWidth - barFill,
+                barHeight.toFloat(),
+                80f,
+                50f
+            )
+        }
+        ColorUtils.bindWhite()
+
+        // Overlay uncolored progress indicator next (texture packs can use this to overlay their own static bar colors)
+        if (fill > 0 && fill < 1) {
+            // Make sure that the overlay doesn't go outside the bounds of the bar.
+            // It's 4 pixels wide, so ensure we only render the texture between 0 <= x <= barWidth
+            // Start rendering at x => 0 (for small fill values, also don't render before the bar starts)
+            // Adding padding ensures that no green bar gets rendered from the texture...?
+            val padding = .01f
+            val oneSide = 2 - padding
+            val startX = max(0.0, (barFill - oneSide).toDouble()).toFloat()
+            // Start texture at x >= 0 (for small fill values, also start the texture so indicator is always centered)
+            val startTexX = max(padding.toDouble(), (oneSide - barFill).toDouble()).toFloat()
+            // End texture at x <= barWidth and 4 <= startTexX + endTexX (total width of overlay texture). Cut off for large fill values.
+            val endTexX =
+                min((2 * oneSide - startTexX).toDouble(), (barWidth - barFill + oneSide).toDouble()).toFloat()
+            DrawUtils.drawModalRectWithCustomSizedTexture(x + startX, y, 1 + startTexX, 24f, endTexX, barHeight.toFloat(), 80f, 50f)
+        }
+        // Overlay uncolored bar display next (texture packs can use this to overlay their own static bar colors)
+        DrawUtils.drawModalRectWithCustomSizedTexture(x, y, 1f, 13f, barWidth.toFloat(), barHeight.toFloat(), 80f, 50f)
+    }
 //
 //    /**
 //     * Renders the messages from the SkyblockAddons Updater
@@ -689,13 +702,13 @@ class RenderListener {
         var text: String = ""
         var color: Int = main.configValues!!.getColor(feature)
         when (feature) {
-//            Feature.MANA_TEXT -> {
-//                text = NUMBER_FORMAT.format(getAttribute(Attribute.MANA)) + "/" + NUMBER_FORMAT.format(
-//                    getAttribute(
-//                        Attribute.MAX_MANA
-//                    )
-//                )
-//            }
+            Feature.MANA_TEXT -> {
+                text = TextUtils.NUMBER_FORMAT.format(getAttribute(Attribute.MANA)) + "/" + TextUtils.NUMBER_FORMAT.format(
+                    getAttribute(
+                        Attribute.MAX_MANA
+                    )
+                )
+            }
 //            Feature.OVERFLOW_MANA -> {
 //                if (getAttribute(Attribute.OVERFLOW_MANA) != 0f || buttonLocation != null) {
 //                    text = getAttribute(Attribute.OVERFLOW_MANA).toString() + "ʬ"
@@ -703,13 +716,13 @@ class RenderListener {
 //                    return
 //                }
 //            }
-//            Feature.HEALTH_TEXT -> {
-//                text = NUMBER_FORMAT.format(getAttribute(Attribute.HEALTH)) + "/" + NUMBER_FORMAT.format(
-//                    getAttribute(
-//                        Attribute.MAX_HEALTH
-//                    )
-//                )
-//            }
+            Feature.HEALTH_TEXT -> {
+                text = TextUtils.NUMBER_FORMAT.format(getAttribute(Attribute.HEALTH)) + "/" + TextUtils.NUMBER_FORMAT.format(
+                    getAttribute(
+                        Attribute.MAX_HEALTH
+                    )
+                )
+            }
 //            Feature.CRIMSON_ARMOR_ABILITY_STACKS -> {
 //                text = crimsonArmorAbilityStacks
 //                if (text == null) return
@@ -2534,49 +2547,57 @@ class RenderListener {
     fun getAttribute(attribute: Attribute): Float {
         return main.utils!!.getAttributes().get(attribute)!!.getValue()
     }
-//
-//    @SubscribeEvent
-//    fun onRenderRemoveBars(e: RenderGameOverlayEvent.Pre) {
-//        if (main.getUtils().isOnSkyblock() && main.configValues!!.isEnabled(Feature.COMPACT_TAB_LIST)) {
-//            if (e.type == RenderGameOverlayEvent.ElementType.PLAYER_LIST) {
-//                if (TabListParser.getRenderColumns() != null) {
-//                    e.setCanceled(true)
-//                    TabListRenderer.render()
-//                }
-//            }
-//        }
-//
-//        if (e.type == RenderGameOverlayEvent.ElementType.ALL) {
-//            if (main.getUtils().isOnSkyblock()) {
-//                if (main.configValues!!.isEnabled(Feature.HIDE_FOOD_ARMOR_BAR)) {
-//                    GuiIngameForge.renderFood = false
-//                    GuiIngameForge.renderArmor = false
-//                }
-//                if (main.configValues!!.isEnabled(Feature.HIDE_HEALTH_BAR)) {
-//                    GuiIngameForge.renderHealth = false
-//                }
-//                if (main.configValues!!.isEnabled(Feature.HIDE_PET_HEALTH_BAR)) {
-//                    GuiIngameForge.renderHealthMount = false
-//                }
-//            } else {
-//                if (main.configValues!!.isEnabled(Feature.HIDE_HEALTH_BAR)) {
-//                    GuiIngameForge.renderHealth = true
-//                }
-//                if (main.configValues!!.isEnabled(Feature.HIDE_FOOD_ARMOR_BAR)) {
-//                    GuiIngameForge.renderArmor = true
-//                }
-//            }
-//        }
-//    }
-//
-//    @SubscribeEvent
-//    fun onRender(e: RenderTickEvent?) {
-//        if (guiToOpen == EnumUtils.GUIType.MAIN) {
-//            Minecraft.getMinecraft().displayGuiScreen(SkyblockAddonsGui(guiPageToOpen, guiTabToOpen))
-//        } else if (guiToOpen == EnumUtils.GUIType.EDIT_LOCATIONS) {
-//            Minecraft.getMinecraft().displayGuiScreen(LocationEditGui(guiPageToOpen, guiTabToOpen))
-//        } else if (guiToOpen == EnumUtils.GUIType.SETTINGS) {
-//            if (guiFeatureToOpen == Feature.ENCHANTMENT_LORE_PARSING) {
+
+    @SubscribeEvent
+    fun onRenderRemoveBars(e: RenderGameOverlayEvent.Pre) {
+        if (main.utils!!.isOnSkyblock() && main.configValues!!.isEnabled(Feature.COMPACT_TAB_LIST)) {
+            if (e.type == RenderGameOverlayEvent.ElementType.PLAYER_LIST) {
+                if (TabListParser.getRenderColumns() != null) {
+                    e.setCanceled(true)
+                    TabListRenderer.render()
+                }
+            }
+        }
+
+        if (e.type == RenderGameOverlayEvent.ElementType.ALL) {
+            if (main.utils!!.isOnSkyblock()) {
+                if (NewConfig.isEnabled(Feature.HIDE_FOOD_ARMOR_BAR)) {
+                    GuiIngameForge.renderFood = false
+                    GuiIngameForge.renderArmor = false
+                }else {
+                    GuiIngameForge.renderFood = true
+                    GuiIngameForge.renderArmor = true
+                }
+                if (NewConfig.isEnabled(Feature.HIDE_HEALTH_BAR)) {
+                    GuiIngameForge.renderHealth = false
+                }else{
+                    GuiIngameForge.renderHealth = true
+                }
+                if (NewConfig.isEnabled(Feature.HIDE_PET_HEALTH_BAR)) {
+                    GuiIngameForge.renderHealthMount = false
+                }else{
+                    GuiIngameForge.renderHealthMount = true
+                }
+            } else {
+                if (NewConfig.isEnabled(Feature.HIDE_HEALTH_BAR)) {
+                    GuiIngameForge.renderHealth = true
+                }
+                if (NewConfig.isEnabled(Feature.HIDE_FOOD_ARMOR_BAR)) {
+                    GuiIngameForge.renderArmor = true
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    fun onRender(e: RenderTickEvent?) {
+        if (guiToOpen == EnumUtils.GUIType.MAIN) {
+            Minecraft.getMinecraft().displayGuiScreen(SkyblockAddonsGui(guiPageToOpen, guiTabToOpen))
+        } else if (guiToOpen == EnumUtils.GUIType.EDIT_LOCATIONS) {
+            Minecraft.getMinecraft().displayGuiScreen(LocationEditGui(guiPageToOpen, guiTabToOpen))
+        } else if (guiToOpen == EnumUtils.GUIType.SETTINGS) {
+            if (guiFeatureToOpen == Feature.ENCHANTMENT_LORE_PARSING) {
+                main.utils!!.sendErrorMessage("Sorry. Ommited Gui...");
 //                Minecraft.getMinecraft().displayGuiScreen(
 //                    EnchantmentSettingsGui(
 //                        guiFeatureToOpen,
@@ -2586,24 +2607,25 @@ class RenderListener {
 //                        guiFeatureToOpen!!.getSettings()
 //                    )
 //                )
-//            } else {
-//                Minecraft.getMinecraft().displayGuiScreen(
-//                    SettingsGui(
-//                        guiFeatureToOpen,
-//                        1,
-//                        guiPageToOpen,
-//                        guiTabToOpen,
-//                        guiFeatureToOpen!!.getSettings()
-//                    )
-//                )
-//            }
-//        } else if (guiToOpen == EnumUtils.GUIType.WARP) {
+            } else {
+                Minecraft.getMinecraft().displayGuiScreen(
+                    SettingsGui(
+                        guiFeatureToOpen,
+                        1,
+                        guiPageToOpen,
+                        guiTabToOpen,
+                        guiFeatureToOpen!!.getSettings()
+                    )
+                )
+            }
+        } else if (guiToOpen == EnumUtils.GUIType.WARP) {
+            main.utils!!.sendErrorMessage("Sorry. Ommited Gui...");
 //            Minecraft.getMinecraft().displayGuiScreen(IslandWarpGui())
-//        }
-//        guiToOpen = null
-//    }
-//
-//
+        }
+        guiToOpen = null
+    }
+
+
     fun setGuiToOpen(guiToOpen: EnumUtils.GUIType?) {
         this.guiToOpen = guiToOpen
     }
@@ -2859,20 +2881,20 @@ class RenderListener {
 //
     companion object {
         private val BONE_ITEM: ItemStack = ItemStack(Items.bone)
-        private val BARS = ResourceLocation("skyblockaddons", "barsV2.png")
-        private val DEFENCE_VANILLA = ResourceLocation("skyblockaddons", "defence.png")
-        private val TICKER_SYMBOL = ResourceLocation("skyblockaddons", "ticker.png")
+        private val BARS = ResourceLocation("skyblockaddonsplus", "barsV2.png")
+        private val DEFENCE_VANILLA = ResourceLocation("skyblockaddonsplus", "defence.png")
+        private val TICKER_SYMBOL = ResourceLocation("skyblockaddonsplus", "ticker.png")
 
-        private val ENDERMAN_ICON = ResourceLocation("skyblockaddons", "icons/enderman.png")
-        private val ENDERMAN_GROUP_ICON = ResourceLocation("skyblockaddons", "icons/endermangroup.png")
-        private val SIRIUS_ICON = ResourceLocation("skyblockaddons", "icons/sirius.png")
-        private val SUMMONING_EYE_ICON = ResourceLocation("skyblockaddons", "icons/summoningeye.png")
-        private val ZEALOTS_PER_EYE_ICON = ResourceLocation("skyblockaddons", "icons/zealotspereye.png")
-        private val SLASH_ICON = ResourceLocation("skyblockaddons", "icons/slash.png")
-        private val IRON_GOLEM_ICON = ResourceLocation("skyblockaddons", "icons/irongolem.png")
-        private val FARM_ICON = ResourceLocation("skyblockaddons", "icons/farm.png")
+        private val ENDERMAN_ICON = ResourceLocation("skyblockaddonsplus", "icons/enderman.png")
+        private val ENDERMAN_GROUP_ICON = ResourceLocation("skyblockaddonsplus", "icons/endermangroup.png")
+        private val SIRIUS_ICON = ResourceLocation("skyblockaddonsplus", "icons/sirius.png")
+        private val SUMMONING_EYE_ICON = ResourceLocation("skyblockaddonsplus", "icons/summoningeye.png")
+        private val ZEALOTS_PER_EYE_ICON = ResourceLocation("skyblockaddonsplus", "icons/zealotspereye.png")
+        private val SLASH_ICON = ResourceLocation("skyblockaddonsplus", "icons/slash.png")
+        private val IRON_GOLEM_ICON = ResourceLocation("skyblockaddonsplus", "icons/irongolem.png")
+        private val FARM_ICON = ResourceLocation("skyblockaddonsplus", "icons/farm.png")
 
-        private val CRITICAL = ResourceLocation("skyblockaddons", "critical.png")
+        private val CRITICAL = ResourceLocation("skyblockaddonsplus", "critical.png")
 
         private val WATER_BUCKET: ItemStack = ItemStack(Items.water_bucket)
         private val IRON_SWORD: ItemStack = ItemStack(Items.iron_sword)

@@ -156,8 +156,8 @@ class ButtonToggleNew(
     }
 
     companion object {
-        private val TOGGLE_INSIDE_CIRCLE = ResourceLocation("skyblockaddons", "gui/toggleinsidecircle.png")
-        private val TOGGLE_BORDER = ResourceLocation("skyblockaddons", "gui/toggleborder.png")
-        private val TOGGLE_INSIDE_BACKGROUND = ResourceLocation("skyblockaddons", "gui/toggleinsidebackground.png")
+        private val TOGGLE_INSIDE_CIRCLE = ResourceLocation("skyblockaddonsplus", "gui/toggleinsidecircle.png")
+        private val TOGGLE_BORDER = ResourceLocation("skyblockaddonsplus", "gui/toggleborder.png")
+        private val TOGGLE_INSIDE_BACKGROUND = ResourceLocation("skyblockaddonsplus", "gui/toggleinsidebackground.png")
     }
 }

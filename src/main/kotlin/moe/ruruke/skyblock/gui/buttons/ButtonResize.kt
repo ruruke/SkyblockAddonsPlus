@@ -12,10 +12,12 @@ import org.lwjgl.input.Mouse
 
 
 
-class ButtonResize(var x: Float, var y: Float, feature: Feature?, private val corner: Corner) :
+class ButtonResize( var x: Float, var y: Float, feature: Feature?, private val corner: Corner) :
     ButtonFeature(0, 0, 0, "", feature) {
     private val main: SkyblockAddonsPlus.Companion = SkyblockAddonsPlus.instance
-
+    fun getCorner(): Corner {
+        return corner
+    }
     private var cornerOffsetX = 0f
     private var cornerOffsetY = 0f
 

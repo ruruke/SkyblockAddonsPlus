@@ -49,13 +49,15 @@ open class ScheduledTask {
     var isRunning: Boolean = false
         private set
 
+
     /**
      * Gets if the current task is canceled.
      *
      * @return True if the task is canceled.
      */
-    var isCanceled: Boolean = false
-        private set
+    fun isCanceled(): Boolean {
+        return this.canceled
+    }
 
     /**
      * Gets if the current task is a repeating task.
@@ -65,6 +67,7 @@ open class ScheduledTask {
     var isRepeating: Boolean
         private set
     private var task: Runnable? = null
+    private var canceled = false
 
     /**
      * Creates a new Scheduled Task.
@@ -117,7 +120,7 @@ open class ScheduledTask {
     fun cancel() {
         this.isRepeating = false
         this.isRunning = false
-        this.isCanceled = true
+        this.canceled = true
     }
 
     /**

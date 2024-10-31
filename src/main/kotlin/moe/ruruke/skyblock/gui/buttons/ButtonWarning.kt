@@ -65,6 +65,6 @@ class ButtonWarning(x: Double, y: Double, warningText: String?) :
     }
 
     companion object {
-        private val WEB = ResourceLocation("skyblockaddons", "gui/web.png")
+        private val WEB = ResourceLocation("skyblockaddonsplus", "gui/web.png")
     }
 }

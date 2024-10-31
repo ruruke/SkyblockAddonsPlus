@@ -21,7 +21,7 @@ import net.minecraft.util.ResourceLocation
 class GuiContainerHook {
     companion object {
         @JvmStatic
-        val LOCK = ResourceLocation("skyblockaddons", "lock.png")
+        val LOCK = ResourceLocation("skyblockaddonsplus", "lock.png")
         @JvmStatic
         val OVERLAY_RED = ColorCode.RED.getColor(127)
         @JvmStatic

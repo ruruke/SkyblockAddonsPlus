@@ -55,7 +55,7 @@ enum class Language(private val path: String) {
 
     init {
         this.resourceLocation =
-            ResourceLocation("skyblockaddons", "flags/" + path.lowercase(Locale.getDefault()) + ".png")
+            ResourceLocation("skyblockaddonsplus", "flags/" + path.lowercase(Locale.getDefault()) + ".png")
     }
 
     fun getResourceLocation(): ResourceLocation {

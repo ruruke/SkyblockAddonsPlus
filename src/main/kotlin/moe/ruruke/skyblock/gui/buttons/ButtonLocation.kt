@@ -21,11 +21,26 @@ class ButtonLocation
     private val main: SkyblockAddonsPlus.Companion = SkyblockAddonsPlus.instance
 
     private var boxXOne = 0f
+    fun getBoxXOne(): Float{
+        return boxXOne
+    }
     private var boxXTwo = 0f
+    fun getBoxXTwo(): Float{
+        return boxXTwo
+    }
     private var boxYOne = 0f
+    fun getBoxYOne(): Float{
+        return boxYOne
+    }
     private var boxYTwo = 0f
+    fun getBoxYTwo(): Float{
+        return boxYTwo
+    }
 
     private var scale = 0f
+    fun getScale(): Float {
+        return scale
+    }
 
 
     override fun drawButton(mc: Minecraft?, mouseX: Int, mouseY: Int) {
@@ -38,7 +53,7 @@ class ButtonLocation
 //        if (feature == Feature.DEFENCE_ICON) { // this one is just a little different
 //            main.getRenderListener().drawIcon(scale, mc, this)
         } else {
-            feature!!.draw(scale, mc, this)
+            feature!!.draw(scale, mc!!, this)
         }
         GlStateManager.popMatrix()
 
@@ -129,5 +144,8 @@ class ButtonLocation
         // So we know the latest hovered feature (used for arrow key movement).
         
         private var lastHoveredFeature: Feature? = null
+        fun getLastHoveredFeature(): Feature? {
+            return lastHoveredFeature
+        }
     }
 }

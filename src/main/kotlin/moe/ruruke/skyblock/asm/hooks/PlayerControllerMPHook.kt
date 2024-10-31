@@ -134,8 +134,7 @@ class PlayerControllerMPHook {
 
             val main: SkyblockAddonsPlus.Companion = SkyblockAddonsPlus.instance
             val slotId = slotNum
-            val itemStack: ItemStack = player.inventory.getItemStack()
-
+            val itemStack: ItemStack = player.inventory.getItemStack() ?: return
             if (main.utils!!.isOnSkyblock()) {
                 // Prevent dropping rare items
                 if (main.configValues!!

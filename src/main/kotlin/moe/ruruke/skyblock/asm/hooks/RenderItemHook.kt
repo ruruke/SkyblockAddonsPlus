@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack
 class RenderItemHook {
     companion object {
         @JvmStatic
-        private val BLANK = net.minecraft.util.ResourceLocation("skyblockaddons", "blank.png")
+        private val BLANK = net.minecraft.util.ResourceLocation("skyblockaddonsplus", "blank.png")
 
         @JvmStatic
         fun renderToxicArrowPoisonEffect(model: IBakedModel, stack: ItemStack) {

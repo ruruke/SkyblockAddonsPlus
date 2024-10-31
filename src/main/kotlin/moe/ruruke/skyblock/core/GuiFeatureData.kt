@@ -13,8 +13,8 @@ class GuiFeatureData {
         return defaultColor
     }
 
-    fun getDrawType(): EnumUtils.DrawType {
-        return drawType!!
+    fun getDrawType(): EnumUtils.DrawType? {
+        return drawType
     }
     /**
      * This represents whether the color selection is restricted to the minecraft color codes only

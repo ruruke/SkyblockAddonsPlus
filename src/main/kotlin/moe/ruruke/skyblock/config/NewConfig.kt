@@ -63,9 +63,17 @@ class NewConfig {
             val config = SkyblockAddonsPlus.config!!
             when(feature.getId()) {
                 1 -> return config.dropConfirm
+                3 -> return config.backpackPreview
+                6 -> return config.hideFoodAndArmorBar
                 7 -> return config.fullInventoryWarning
+                19 -> return config.manaBar
+                20 -> return config.manaText
+                21 -> return config.healthBar
+                22 -> return config.healthText
+                13 -> return config.hideHealthBar
                 45 -> return config.replaceRomanNumeralsWithNumbers
                 96 -> return config.changeZealotColor
+                185 -> return config.enderChestPreview
                 212 -> return config.forceOnSkyblock
             }
             return false

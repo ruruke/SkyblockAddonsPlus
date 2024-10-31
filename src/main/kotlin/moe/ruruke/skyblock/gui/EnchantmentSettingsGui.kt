@@ -174,7 +174,7 @@
 //            }
 //        } else if (abstractButton is ButtonToggleTitle) {
 //            val button: ButtonFeature = abstractButton as ButtonFeature
-//            val feature: Feature = button.getFeature() ?: return
+//            val feature: Feature = button.feature ?: return
 //            feature.setEnabled(!SkyblockAddonsPlus.configValues)
 //            !!
 //            isEnabled(feature)

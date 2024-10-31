@@ -90,7 +90,7 @@ enum class CraftingPattern(val index: Int, val pattern: IntArray?) {
     }
 
     companion object {
-        val ICONS: ResourceLocation = ResourceLocation("skyblockaddons", "craftingpatterns.png")
+        val ICONS: ResourceLocation = ResourceLocation("skyblockaddonsplus", "craftingpatterns.png")
 
         /**
          * Displayname of the SkyBlock crafting table

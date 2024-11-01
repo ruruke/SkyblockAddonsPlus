@@ -66,13 +66,17 @@ class NewConfig {
                 3 -> return config.backpackPreview
                 6 -> return config.hideFoodAndArmorBar
                 7 -> return config.fullInventoryWarning
+                13 -> return config.hideHealthBar
                 19 -> return config.manaBar
                 20 -> return config.manaText
                 21 -> return config.healthBar
                 22 -> return config.healthText
-                13 -> return config.hideHealthBar
+                23 -> return config.defenceIcon
+                24 -> return config.defenceText
+                29 -> return false//config.itemPickupLog //なんか動かない
                 45 -> return config.replaceRomanNumeralsWithNumbers
                 96 -> return config.changeZealotColor
+                102 -> return config.makeDroppingItemsGlow
                 185 -> return config.enderChestPreview
                 212 -> return config.forceOnSkyblock
             }

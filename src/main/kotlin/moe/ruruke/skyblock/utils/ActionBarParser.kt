@@ -354,7 +354,7 @@ class ActionBarParser {
             val defense = parseFloat(m.group("defense"))
             setAttribute(Attribute.DEFENCE, defense)
             otherDefense = TextUtils.getFormattedString(defenseSection, m.group("other").trim { it <= ' ' })
-            if (configValues!!.isEnabled(Feature.DEFENCE_TEXT) || configValues!!.isEnabled(Feature.DEFENCE_PERCENTAGE)) {
+            if (NewConfig.isEnabled(Feature.DEFENCE_TEXT) || configValues!!.isEnabled(Feature.DEFENCE_PERCENTAGE)) {
                 return null
             }
         }

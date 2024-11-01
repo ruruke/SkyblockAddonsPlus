@@ -14,7 +14,9 @@ import moe.ruruke.skyblock.config.PersistentValuesManager
 import moe.ruruke.skyblock.core.OnlineData
 import moe.ruruke.skyblock.core.SkillXpManager
 import moe.ruruke.skyblock.features.EntityOutlines.EntityOutlineRenderer
+import moe.ruruke.skyblock.features.EntityOutlines.FeatureDungeonTeammateOutlines
 import moe.ruruke.skyblock.features.EntityOutlines.FeatureItemOutlines
+import moe.ruruke.skyblock.features.EntityOutlines.FeatureTrackerQuest
 import moe.ruruke.skyblock.listeners.GuiScreenListener
 import moe.ruruke.skyblock.listeners.NetworkListener
 import moe.ruruke.skyblock.listeners.PlayerListener
@@ -172,9 +174,9 @@ class SkyblockAddonsPlus() {
         MinecraftForge.EVENT_BUS.register(scheduler)
         MinecraftForge.EVENT_BUS.register(newScheduler)
         MinecraftForge.EVENT_BUS.register(FeatureItemOutlines())
-//        MinecraftForge.EVENT_BUS.register(FeatureDungeonTeammateOutlines())
+        MinecraftForge.EVENT_BUS.register(FeatureDungeonTeammateOutlines())
         MinecraftForge.EVENT_BUS.register(EntityOutlineRenderer())
-//        MinecraftForge.EVENT_BUS.register(FeatureTrackerQuest())
+        MinecraftForge.EVENT_BUS.register(FeatureTrackerQuest())
 //        (Minecraft.getMinecraft().resourceManager as SimpleReloadableResourceManager).registerReloadListener(
 //            resourceManagerReloadListener
 //        )

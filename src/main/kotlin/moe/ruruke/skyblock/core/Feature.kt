@@ -671,10 +671,10 @@ enum class Feature(
                     main.renderListener!!.drawText(this, scale, mc, buttonLocation)
                 }
                 guiFeatureData.getDrawType() === EnumUtils.DrawType.PICKUP_LOG -> {
-//                    main.renderListener!!.drawItemPickupLog(scale, buttonLocation)
+                    main.renderListener!!.drawItemPickupLog(scale, buttonLocation)
                 }
                 guiFeatureData.getDrawType() === EnumUtils.DrawType.DEFENCE_ICON -> {
-//                    main.renderListener!!.drawIcon(scale, mc, buttonLocation)
+                    main.renderListener!!.drawIcon(scale, mc, buttonLocation)
                 }
                 guiFeatureData.getDrawType() === EnumUtils.DrawType.REVENANT_PROGRESS -> {
 //                    main.renderListener!!.drawRevenantIndicator(scale, mc, buttonLocation)
@@ -847,14 +847,14 @@ enum class Feature(
                 HEALTH_BAR,
                 MANA_TEXT,
 //                OVERFLOW_MANA,
-//                DEFENCE_ICON,
-//                DEFENCE_TEXT,
+                DEFENCE_ICON,
+                DEFENCE_TEXT,
 //                EFFECTIVE_HEALTH_TEXT,
 //                DEFENCE_PERCENTAGE,
                 HEALTH_TEXT,
 //                SKELETON_BAR,
 //                HEALTH_UPDATES,
-//                ITEM_PICKUP_LOG,
+                ITEM_PICKUP_LOG,
 //                DARK_AUCTION_TIMER,
 //                SKILL_DISPLAY,
 //                SPEED_PERCENTAGE,

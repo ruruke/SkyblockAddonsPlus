@@ -20,6 +20,7 @@ import moe.ruruke.skyblock.shader.chroma.ChromaScreenTexturedShader
 import moe.ruruke.skyblock.utils.*
 import net.minecraft.client.Minecraft
 import net.minecraft.client.entity.EntityPlayerSP
+import net.minecraft.client.gui.Gui
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.RenderHelper
@@ -40,6 +41,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent
 import java.awt.Color
 import java.util.*
+import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min
@@ -663,37 +665,37 @@ class RenderListener {
 //        }
 //    }
 //
-//    /**
-//     * This renders the defence icon.
-//     */
-//    fun drawIcon(scale: Float, mc: Minecraft, buttonLocation: ButtonLocation?) {
-//        if (main.configValues!!.isDisabled(Feature.USE_VANILLA_TEXTURE_DEFENCE)) {
-//            mc.getTextureManager().bindTexture(Gui.icons)
-//        } else {
-//            mc.getTextureManager().bindTexture(DEFENCE_VANILLA)
-//        }
-//        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
-//        // The height and width of this element (box not included)
-//        val height = 9
-//        val width = 9
-//        var x: Float = main.configValues!!.getActualX(Feature.DEFENCE_ICON)
-//        var y: Float = main.configValues!!.getActualY(Feature.DEFENCE_ICON)
-//        x = main.getRenderListener().transformXY(x, width, scale)
-//        y = main.getRenderListener().transformXY(y, height, scale)
-//
-//        main.getUtils().enableStandardGLOptions()
-//
-//        if (buttonLocation == null) {
-//            mc.ingameGUI.drawTexturedModalRect(x, y, 34, 9, width, height)
-//        } else {
-//            buttonLocation.checkHoveredAndDrawBox(x, x + width, y, y + height, scale)
-//            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
-//            buttonLocation.drawTexturedModalRect(x, y, 34, 9, width, height)
-//        }
-//
-//        main.getUtils().restoreGLOptions()
-//    }
-//
+    /**
+     * This renders the defence icon.
+     */
+    fun drawIcon(scale: Float, mc: Minecraft, buttonLocation: ButtonLocation?) {
+        if (NewConfig.isDisabled(Feature.USE_VANILLA_TEXTURE_DEFENCE)) {
+            mc.getTextureManager().bindTexture(Gui.icons)
+        } else {
+            mc.getTextureManager().bindTexture(DEFENCE_VANILLA)
+        }
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
+        // The height and width of this element (box not included)
+        val height = 9
+        val width = 9
+        var x: Float = main.configValues!!.getActualX(Feature.DEFENCE_ICON)
+        var y: Float = main.configValues!!.getActualY(Feature.DEFENCE_ICON)
+        x = main.renderListener!!.transformXY(x, width, scale)
+        y = main.renderListener!!.transformXY(y, height, scale)
+
+        main.utils!!.enableStandardGLOptions()
+
+        if (buttonLocation == null) {
+            mc.ingameGUI.drawTexturedModalRect(x, y, 34, 9, width, height)
+        } else {
+            buttonLocation.checkHoveredAndDrawBox(x, x + width, y, y + height, scale)
+            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
+            buttonLocation.drawTexturedModalRect(x, y, 34, 9, width, height)
+        }
+
+        main.utils!!.restoreGLOptions()
+    }
+
     /**
      * This renders all the different types gui text elements.
      */
@@ -727,9 +729,9 @@ class RenderListener {
 //                text = crimsonArmorAbilityStacks
 //                if (text == null) return
 //            }
-//            Feature.DEFENCE_TEXT -> {
-//                text = NUMBER_FORMAT.format(getAttribute(Attribute.DEFENCE))
-//            }
+            Feature.DEFENCE_TEXT -> {
+                text = TextUtils.NUMBER_FORMAT.format(getAttribute(Attribute.DEFENCE))
+            }
 //            Feature.OTHER_DEFENCE_STATS -> {
 //                text = main.getPlayerListener().getActionBarParser().getOtherDefense()
 //                if (buttonLocation != null && (text == null || text.length == 0)) {
@@ -2314,48 +2316,45 @@ class RenderListener {
 //        GlStateManager.disableRescaleNormal()
 //    }
 //
-//    fun drawItemPickupLog(scale: Float, buttonLocation: ButtonLocation?) {
-//        var x: Float = main.configValues!!.getActualX(Feature.ITEM_PICKUP_LOG)
-//        var y: Float = main.configValues!!.getActualY(Feature.ITEM_PICKUP_LOG)
-//
-//        val anchorPoint: AnchorPoint = main.configValues!!.getAnchorPoint(Feature.ITEM_PICKUP_LOG)
-//        val downwards = anchorPoint == EnumUtils.AnchorPoint.TOP_RIGHT || anchorPoint == EnumUtils.AnchorPoint.TOP_LEFT
-//
-//        val lineHeight = 8 + 1 // 1 pixel spacer
-//        val height = lineHeight * 3 - 1
-//        val width: Int = Minecraft.getMinecraft().fontRendererObj.getStringWidth("+ 1x Forceful Ember Chestplate")
-//
-//        x = transformXY(x, width, scale)
-//        y = transformXY(y, height, scale)
-//
-//        if (buttonLocation != null) {
-//            buttonLocation.checkHoveredAndDrawBox(x, x + width, y, y + height, scale)
-//            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
-//        }
-//
-//        main.getUtils().enableStandardGLOptions()
-//
-//        var i = 0
-//        var log: Collection<ItemDiff?> = main.getInventoryUtils().getItemPickupLog()
-//        if (buttonLocation != null) {
-//            log = DUMMY_PICKUP_LOG
-//        }
-//        for (itemDiff in log) {
-//            val text = String.format(
-//                "%s %sx §r%s", if (itemDiff.getAmount() > 0) "§a+" else "§c-",
-//                abs(itemDiff.getAmount().toDouble()), itemDiff.getDisplayName()
-//            )
-//            var stringY = y + (i * lineHeight)
-//            if (!downwards) {
-//                stringY = y + height - (i * lineHeight) - 8
-//            }
-//
-//            DrawUtils.drawText(text, x, stringY, -0x1)
-//            i++
-//        }
-//
-//        main.getUtils().restoreGLOptions()
-//    }
+    fun drawItemPickupLog(scale: Float, buttonLocation: ButtonLocation?) {
+        var x: Float = main.configValues!!.getActualX(Feature.ITEM_PICKUP_LOG)
+        var y: Float = main.configValues!!.getActualY(Feature.ITEM_PICKUP_LOG)
+
+        val anchorPoint: EnumUtils.AnchorPoint = main.configValues!!.getAnchorPoint(Feature.ITEM_PICKUP_LOG)
+        val downwards = anchorPoint == EnumUtils.AnchorPoint.TOP_RIGHT || anchorPoint == EnumUtils.AnchorPoint.TOP_LEFT
+
+        val lineHeight = 8 + 1 // 1 pixel spacer
+        val height = lineHeight * 3 - 1
+        val width: Int = Minecraft.getMinecraft().fontRendererObj.getStringWidth("+ 1x Forceful Ember Chestplate")
+
+        x = transformXY(x, width, scale)
+        y = transformXY(y, height, scale)
+
+        if (buttonLocation != null) {
+            buttonLocation.checkHoveredAndDrawBox(x, x + width, y, y + height, scale)
+            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f)
+        }
+
+        main.utils!!.enableStandardGLOptions()
+
+    var log: Collection<ItemDiff?> = main.inventoryUtils!!.getItemPickupLog()
+        if (buttonLocation != null) {
+            log = DUMMY_PICKUP_LOG
+        }
+        for ((i, itemDiff) in log.withIndex()) {
+            val text = String.format(
+                "%s %sx §r%s", if (itemDiff!!.getAmount() > 0) "§a+" else "§c-",
+                abs(itemDiff.getAmount().toDouble()), itemDiff.getDisplayName()
+            )
+            var stringY = y + (i * lineHeight)
+            if (!downwards) {
+                stringY = y + height - (i * lineHeight) - 8
+            }
+            DrawUtils.drawText(text, x, stringY, -0x1)
+        }
+
+        main.utils!!.restoreGLOptions()
+    }
 //
 //    fun drawPowerOrbStatus(mc: Minecraft, scale: Float, buttonLocation: ButtonLocation?) {
 //        var activePowerOrb: PowerOrbManager.PowerOrbEntry = PowerOrbManager.getInstance().getActivePowerOrb()

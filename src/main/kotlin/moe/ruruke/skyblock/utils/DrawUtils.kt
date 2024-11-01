@@ -530,6 +530,7 @@ class DrawUtils {
 
         fun drawText(text: String?, x: Float, y: Float, color: Int) {
             if (text == null) {
+                println("return")
                 return
             }
             val fontRenderer: FontRenderer = Minecraft.getMinecraft().fontRendererObj

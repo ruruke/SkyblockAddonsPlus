@@ -220,7 +220,7 @@ class InventoryUtils {
 
             // Add changes to already logged changes of the same item, so it will increase/decrease the amount
             // instead of displaying the same item twice
-            if (configValues!!.isEnabled(Feature.ITEM_PICKUP_LOG)) {
+            if (NewConfig.isEnabled(Feature.ITEM_PICKUP_LOG)) {
                 for (diff in inventoryDifference) {
                     val itemDiffs = itemPickupLog[diff.getDisplayName()]
                     if (itemDiffs.size <= 0) {

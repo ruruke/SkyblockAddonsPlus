@@ -2,6 +2,7 @@ package moe.ruruke.skyblock.features.EntityOutlines
 
 import moe.ruruke.skyblock.SkyblockAddonsPlus
 import moe.ruruke.skyblock.config.ConfigValues
+import moe.ruruke.skyblock.config.NewConfig
 import moe.ruruke.skyblock.core.Feature
 import moe.ruruke.skyblock.core.Location
 import moe.ruruke.skyblock.events.RenderEntityOutlineEvent
@@ -67,7 +68,7 @@ class FeatureItemOutlines {
          * Return `null` if the entity should not be outlined, or the integer color of the entity to be outlined iff the entity should be outlined
          */
         private val OUTLINE_COLOR =
-            Function<Entity?, Int?> { e: Entity? ->
+            Function<Entity, Int?> { e: Entity? ->
                 // Only accept items that aren't showcase items
                 if (e is EntityItem && (!SHOWCASE_ITEM_LOCATIONS.contains(location) || !isShopShowcaseItem(
                         e
@@ -94,7 +95,7 @@ class FeatureItemOutlines {
          * @return `false` iff no entities should be outlined (i.e., accept if the player has item outlines enabled for the current skyblock location)
          */
         private fun GLOBAL_TEST(): Boolean {
-            return config!!.isEnabled(Feature.MAKE_DROPPED_ITEMS_GLOW) && (config!!.isEnabled(Feature.SHOW_GLOWING_ITEMS_ON_ISLAND) || location != Location.ISLAND)
+            return NewConfig.isEnabled(Feature.MAKE_DROPPED_ITEMS_GLOW) //&& (NewConfig.isEnabled(Feature.SHOW_GLOWING_ITEMS_ON_ISLAND) || location != Location.ISLAND)
         }
 
         /**

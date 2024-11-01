@@ -25,23 +25,39 @@ class NewConfigValue : Config(Mod(SkyblockAddonsPlus.NAME, ModType.SKYBLOCK), Sk
     //            WIP           //
     @Switch(name = "Hide Food and Armor Bar", size = OptionSize.SINGLE, category = "QoL")
     var hideFoodAndArmorBar: Boolean = false
+
     @Switch(name = "Hide Health Bar", size = OptionSize.SINGLE, category = "QoL")
     var hideHealthBar: Boolean = false
 
     @Switch(name = "Custom Health Bar", size = OptionSize.SINGLE, category = "QoL")
     var healthBar: Boolean = false
+
     @Switch(name = "Health Text", size = OptionSize.SINGLE, category = "QoL")
     var healthText: Boolean = false
+
     @Switch(name = "Custom Mana Bar", size = OptionSize.SINGLE, category = "QoL")
     var manaBar: Boolean = false
+
+    @Switch(name = "Def Text (DummyName)", size = OptionSize.SINGLE, category = "QoL")
+    var defenceText: Boolean = false
+
+    @Switch(name = "Def Icon (DummyName)", size = OptionSize.SINGLE, category = "QoL")
+    var defenceIcon: Boolean = false
+
     @Switch(name = "Mana Text", size = OptionSize.SINGLE, category = "QoL")
     var manaText: Boolean = false
+
+    @Switch(name = "Item Pickup Log", size = OptionSize.SINGLE, category = "QoL")
+    var itemPickupLog: Boolean = false
 
     @Switch(name = "Full Inventory Warning", size = OptionSize.SINGLE, category = "QoL")
     var fullInventoryWarning: Boolean = false
 
     @Switch(name = "Drop Confirm(DummyName)", size = OptionSize.SINGLE, category = "QoL")
     var dropConfirm: Boolean = false
+
+    @Switch(name = "Dropping Item Glow", size = OptionSize.SINGLE, category = "QoL")
+    var makeDroppingItemsGlow: Boolean = false
 
     @Switch(name = "CHANGE_ZEALOT_COLOR(DummyName)", size = OptionSize.SINGLE, category = "QoL")
     var changeZealotColor: Boolean = false

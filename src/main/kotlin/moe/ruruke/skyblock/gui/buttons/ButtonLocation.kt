@@ -49,9 +49,8 @@ class ButtonLocation
         GlStateManager.scale(scale, scale, 1f)
 
         //TODO:
-        if (false) {
-//        if (feature == Feature.DEFENCE_ICON) { // this one is just a little different
-//            main.getRenderListener().drawIcon(scale, mc, this)
+        if (feature == Feature.DEFENCE_ICON) { // this one is just a little different
+            main.renderListener!!.drawIcon(scale, mc!!, this)
         } else {
             feature!!.draw(scale, mc!!, this)
         }

@@ -66,7 +66,7 @@ class RenderEntityOutlineEvent(
      *
      * @param outlineColor a function to test
      */
-    fun queueEntitiesToOutline(outlineColor: Function<Entity?, Int?>?) {
+    fun queueEntitiesToOutline(outlineColor: Function<Entity, Int?>) {
         if (outlineColor == null) {
             return
         }

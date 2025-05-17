@@ -1,6 +1,7 @@
 name: Create Release
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - 'v*' # 'v'で始まるタグがプッシュされたときにトリガー (例: v1.0.0, v0.1.2-alpha)

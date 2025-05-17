@@ -1,0 +1,144 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*' # 'v'で始まるタグがプッシュされたときにトリガー (例: v1.0.0, v0.1.2-alpha)
+
+concurrency:
+  group: ${{ github.ref }} # タグ名でグループ化
+  cancel-in-progress: false # 同じリリースタグでのジョブキャンセルは通常不要
+
+jobs:
+  build:
+    name: Build Project
+    runs-on: ubuntu-latest
+    outputs:
+      tag_name: ${{ steps.get_tag.outputs.tag }} # タグ全体 (例: v1.0.0)
+      mod_version: ${{ steps.get_gradle_props.outputs.mod_version }} # gradle.propertiesから (例: 1.0.0)
+      mod_archives_name: ${{ steps.get_gradle_props.outputs.mod_archives_name }} # gradle.propertiesから (例: my-mod-archive-name)
+      # 成果物のパターンを定義: ルートビルドの場合、サブプロジェクトのlibsを見に行く
+      artifact_glob_pattern: "versions/**/build/libs/${{ steps.get_gradle_props.outputs.mod_archives_name }}-*-${{ steps.get_gradle_props.outputs.mod_version }}.jar"
+      # ルートディレクトリの build/libs も含める場合 (プロジェクト構成による)
+      # artifact_glob_pattern_root: "build/libs/${{ steps.get_gradle_props.outputs.mod_archives_name }}-*-${{ steps.get_gradle_props.outputs.mod_version }}.jar"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4 # 最新のv4を使用 (または元のv2のままにする場合は @v2)
+        with:
+          fetch-depth: 0 # タグやコミット履歴全体を取得
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4 # 最新のv4を使用 (または元のv2のままにする場合は @v2)
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4 # 最新のv4を使用 (または元のv2のままにする場合は @v2)
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            **/loom-cache
+            **/versions/**/.gradle # マルチプロジェクトの .gradle キャッシュ
+            **/versions/**/build/loom-cache # マルチプロジェクトの loom-cache
+            **/prebundled-jars
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/versions/**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Chmod Gradle
+        run: chmod +x ./gradlew
+
+      - name: Get Gradle Properties
+        id: get_gradle_props
+        run: |
+          # gradle.propertiesから直接読み込む方が確実な場合もある
+          # MOD_VERSION_OUTPUT=$(grep -oP '(?<=mod_version=).*' gradle.properties || echo "unknown_version")
+          # MOD_ARCHIVES_NAME_OUTPUT=$(grep -oP '(?<=mod_archives_name=).*' gradle.properties || echo "unknown_archive_name")
+
+          # Gradleのpropertiesタスクから取得する
+          # (注: propertiesタスクは全てのプロジェクトプロパティを出力するため、正確なキーで grep する必要があります)
+          # また、サブプロジェクトのプロパティではなく、ルートプロジェクトのプロパティを参照するようにしてください。
+          # ここでは、gradle.propertiesに定義されていることを前提とします。
+          if [ -f gradle.properties ]; then
+            MOD_VERSION_LINE=$(grep "^mod_version=" gradle.properties)
+            MOD_ARCHIVES_NAME_LINE=$(grep "^mod_archives_name=" gradle.properties)
+            if [ -n "$MOD_VERSION_LINE" ]; then
+              echo "mod_version=$(echo "$MOD_VERSION_LINE" | cut -d'=' -f2)" >> $GITHUB_OUTPUT
+            else
+              echo "mod_version=unknown_version_from_props" >> $GITHUB_OUTPUT
+            fi
+            if [ -n "$MOD_ARCHIVES_NAME_LINE" ]; then
+              echo "mod_archives_name=$(echo "$MOD_ARCHIVES_NAME_LINE" | cut -d'=' -f2)" >> $GITHUB_OUTPUT
+            else
+              echo "mod_archives_name=unknown_archive_from_props" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "mod_version=gradle_properties_not_found" >> $GITHUB_OUTPUT
+            echo "mod_archives_name=gradle_properties_not_found" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Get tag name
+        id: get_tag
+        run: echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Build with Gradle
+        # gradle.properties の mod_version がタグと同期していることを期待
+        # プロジェクトのルートで build を実行することで、各サブプロジェクト (versions/*) がビルドされるはず
+        run: ./gradlew build --no-daemon --stacktrace
+
+      - name: List build artifacts for debugging
+        run: |
+          echo "Looking for artifacts with pattern: ${{ steps.get_gradle_props.outputs.mod_archives_name }}-*-${{ steps.get_gradle_props.outputs.mod_version }}.jar"
+          find versions -name "${{ steps.get_gradle_props.outputs.mod_archives_name }}-*-${{ steps.get_gradle_props.outputs.mod_version }}.jar"
+          find build/libs -name "${{ steps.get_gradle_props.outputs.mod_archives_name }}-*-${{ steps.get_gradle_props.outputs.mod_version }}.jar" -print 2>/dev/null || echo "No artifacts in root build/libs"
+
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4 # 最新のv4を使用 (または元のv2のままにする場合は @v2)
+        with:
+          name: build-artifacts-${{ steps.get_tag.outputs.tag }}
+          path: | # 成果物が存在する可能性のあるパスを複数指定
+            versions/**/build/libs/${{ steps.get_gradle_props.outputs.mod_archives_name }}-*-${{ steps.get_gradle_props.outputs.mod_version }}.jar
+            build/libs/${{ steps.get_gradle_props.outputs.mod_archives_name }}-*-${{ steps.get_gradle_props.outputs.mod_version }}.jar
+          if-no-files-found: warn # ファイルが見つからなくても警告のみで継続
+
+  create_release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # GitHub Releaseを作成・編集するために必要
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4 # 最新のv4を使用 (または元のv2のままにする場合は @v2)
+        with:
+          name: build-artifacts-${{ needs.build.outputs.tag_name }}
+          path: ./artifacts # ダウンロード先のディレクトリ (この直下に各JARファイルが配置される想定)
+
+      - name: Display downloaded artifacts
+        run: ls -R ./artifacts
+
+      - name: Create GitHub Release and Upload Assets
+        uses: ncipollo/release-action@v1
+        with:
+          # artifacts のパスは download-artifact で展開された構造に合わせる
+          # download-artifact は通常、アップロード時のディレクトリ構造を保持せずにファイルをフラットに展開するか、
+          # アーティファクト名と同じ名前のサブディレクトリを作成します。
+          # ここでは、'artifacts' ディレクトリ直下にJARファイルがあると仮定します。
+          artifacts: "./artifacts/${{ needs.build.outputs.mod_archives_name }}-*-${{ needs.build.outputs.mod_version }}.jar"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ needs.build.outputs.tag_name }}
+          name: Release ${{ needs.build.outputs.tag_name }}
+          body: | # リリースノートの内容。必要に応じて変更・自動生成してください。
+            New release for ${{ needs.build.outputs.mod_archives_name }} version ${{ needs.build.outputs.mod_version }} (Tag: ${{ needs.build.outputs.tag_name }})
+
+            **Files:**
+            (List of files will be automatically generated by the release action)
+
+            *Auto-generated release by GitHub Actions.*
+          draft: false
+          prerelease: ${{ contains(needs.build.outputs.tag_name, '-') }} # タグ名にハイフンが含まれていればプレリリース扱い
+          # allowUpdates: true # trueにすると、同じタグの既存リリースを更新します
